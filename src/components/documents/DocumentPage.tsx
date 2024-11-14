@@ -13,6 +13,7 @@ import { $convertToMarkdownString, TRANSFORMERS } from "@lexical/markdown";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { useWindowEvent } from "@mantine/hooks";
 import dynamic from "next/dynamic";
+import { TagInput } from "../ui/tag-input";
 
 type DocumentPageProps = {
   document: Document;
@@ -25,20 +26,21 @@ const Editor = dynamic(() => import("@/components/editor/editor"), {
 
 const DocumentPage: FC<DocumentPageProps> = ({ document }) => {
   const [data, setData] = useState<Document>(document!);
+  const [tags, setTags] = useState<string[]>(document?.tags! || []);
   const [editor] = useLexicalComposerContext();
-
+  console.log({ tags });
   const onSave = useCallback(async () => {
     editor?.read(() => {
       const html = $generateHtmlFromNodes(editor);
-      console.log("saving document", html);
       const md = $convertToMarkdownString(TRANSFORMERS);
       const payload = {
         id: data?.id!,
         title: data?.title!,
         markdown: md!,
         content: html!,
+        tags: tags,
       };
-      console.log(payload);
+      console.log({ tags: payload?.tags });
       (async () => {
         const { error } = await updateDocument(payload);
         if (error) {
@@ -73,6 +75,7 @@ const DocumentPage: FC<DocumentPageProps> = ({ document }) => {
             setData((prev) => ({ ...prev, title: e?.target?.value as string }))
           }
         />
+        <TagInput tags={tags!} setTags={(tags) => setTags(tags)} />
         <div className="w-full flex mt-1 items-center justify-start">
           <span className="text-sm opacity-75">
             {new Date(data?.createdAt!).toLocaleDateString("en-US", {

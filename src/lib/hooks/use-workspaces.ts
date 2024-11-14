@@ -22,7 +22,7 @@ export const useWorkspaces = () => {
     cache(async () => await getUserWorkspaces(user?.user?.id!)),
     { enabled: false }
   );
-  console.log({ data });
+  // console.log({ data });
   useEffect(() => {
     refetch();
     (async () => {

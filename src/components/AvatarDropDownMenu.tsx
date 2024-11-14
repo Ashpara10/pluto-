@@ -16,9 +16,7 @@ import { FC, PropsWithChildren } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import UserAvatar from "./UserAvatar";
@@ -40,7 +38,9 @@ const AvatarDropDownMenu: FC<AvatarDropDownMenuProps> = ({ children }) => {
     {
       icon: <Network className="mr-2 h-4 w-4" />,
       text: "Workspaces",
-      handleClick: () => {},
+      handleClick: () => {
+        router.push("/workspace");
+      },
       separator: false,
     },
     {
@@ -57,13 +57,15 @@ const AvatarDropDownMenu: FC<AvatarDropDownMenuProps> = ({ children }) => {
     },
     {
       icon:
-        theme === "dark" ? (
+        theme === "light" ? (
           <Sun className="mr-2 h-4 w-4" />
         ) : (
           <Moon className="mr-2 h-4 w-4" />
         ),
       text: "Switch Theme",
-      handleClick: () => {},
+      handleClick: () => {
+        setTheme(theme === "dark" ? "light" : "dark");
+      },
       separator: false,
     },
     {
@@ -85,45 +87,19 @@ const AvatarDropDownMenu: FC<AvatarDropDownMenuProps> = ({ children }) => {
           isLoading={status === "loading"}
         />
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="mr-10 w-52 translate-y-2 rounded-xl bg-white/70 px-4 py-2 shadow-black/10 dark:shadow-black/30 drop-shadow-xl backdrop-blur-lg dark:bg-neutral-900">
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <User className="mr-2 h-4 w-4" />
-            <span>Profile</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router?.push("/workspace")}>
-            <Network className="mr-2 h-4 w-4" />
-            <span>Workspaces</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Keyboard className="mr-2 h-4 w-4" />
-            <span>Keyboard shortcuts</span>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuItem
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-        >
-          {theme === "dark" ? (
-            <Sun className="mr-2 h-4 w-4" />
-          ) : (
-            <Moon className="mr-2 h-4 w-4" />
-          )}
-          <span>Switch Theme</span>
-        </DropdownMenuItem>
-
-        <DropdownMenuItem
-          onClick={() => {
-            deleteCookie("active-workspace");
-            signOut({ redirect: true, callbackUrl: "/login" });
-          }}
-        >
-          <LogOut className="mr-2 h-4 w-4" />
-          <span>Log out</span>
-        </DropdownMenuItem>
+      <DropdownMenuContent className="md:mr-10 mr-3  translate-y-2 p-0 rounded-xl border  order-neutral-200/60 dark:border-lightGray/10 bg-white/30 shadow-black/10 dark:shadow-black/30 drop-shadow-xl backdrop-blur-lg dark:bg-neutral-900">
+        {items.map((item, index) => {
+          return (
+            <DropdownMenuItem
+              key={index}
+              onClick={item.handleClick}
+              className="w-full border-t [&>svg]:size-5 hover:bg-white hover:dark:bg-lightGray/10  [&>svg]:opacity-75 first:border-none px-3 py-2 border-neutral-300 dark:border-light-dark-border flex items-center justify-start gap-0"
+            >
+              {item.icon}
+              <span className="tracking-tight ml-1 ">{item.text}</span>
+            </DropdownMenuItem>
+          );
+        })}
       </DropdownMenuContent>
     </DropdownMenu>
   );

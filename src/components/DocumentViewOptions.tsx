@@ -1,6 +1,7 @@
 import { Filter, MoreVertical, Settings2 } from "lucide-react";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { Button } from "./ui/button";
+import DocumentFilterOptions from "./documents/DocumentFilterOptions";
 
 type DocumentViewOptionsProps = {
   children?: React.ReactNode;
@@ -11,6 +12,7 @@ const DocumentViewOptions: FC<DocumentViewOptionsProps> = ({
   children,
   title,
 }) => {
+  const [displayOptions, setDisplayOptions] = useState(false);
   return (
     <div className="mt-6 block w-full px-3">
       <div className="flex w-full items-center justify-between">
@@ -26,10 +28,15 @@ const DocumentViewOptions: FC<DocumentViewOptionsProps> = ({
           </Button>
           {/* <PopoverWrapper
             trigger={ */}
-          <Button variant={"outline"} size={"sm"}>
-            <Settings2 className="size-4 opacity-80" />
-            <span className="ml-2">Display</span>
-          </Button>
+          <DocumentFilterOptions
+            open={displayOptions}
+            setOpen={setDisplayOptions}
+          >
+            <Button variant={"outline"} size={"sm"}>
+              <Settings2 className="size-4 opacity-80" />
+              <span className="ml-2">Display</span>
+            </Button>
+          </DocumentFilterOptions>
           {/* }
             className="ml-3 mt-2 max-h-72 w-64  rounded-xl bg-neutral-100  p-0 shadow-black/30 drop-shadow-xl backdrop-blur-lg dark:bg-neutral-800  "
           >

@@ -86,7 +86,7 @@ const Login = () => {
           type="submit"
           className="mt-2 rounded-lg bg-[#6a5ed9] px-4 py-2  text-white  hover:bg-[#564ac6]"
         >
-          {formState?.isSubmitting && (
+          {formState?.isLoading && (
             <Loader className="size-4 animate-spin opacity-80" />
           )}
           <span className="font-medium ">Login</span>

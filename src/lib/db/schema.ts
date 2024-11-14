@@ -30,6 +30,7 @@ export const documents = pgTable("documents", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   title: text("title"),
   content: text("content"),
+  tags: text("tags").array().default([]),
   markdown: text("markdown"),
   authorId: uuid("author_id")
     .notNull()

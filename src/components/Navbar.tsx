@@ -27,8 +27,8 @@ const Navbar = () => {
 
   return (
     <header className=" flex w-full flex-col  items-center justify-center ">
-      <div className="flex w-full max-w-5xl items-center justify-between  ">
-        <div className="">
+      <div className="flex w-full max-w-5xl items-center justify-end md:justify-between  ">
+        <div className="hidden md:flex">
           <WorkspaceSwitcher />
         </div>
 
@@ -36,7 +36,7 @@ const Navbar = () => {
           <AvatarDropDownMenu />
         </div>
       </div>
-      <nav className="sticky top-0 flex w-full items-center justify-center">
+      <nav className="sticky hidden md:flex top-0  w-full items-center justify-center">
         <div className="flex w-full items-center justify-center px-3">
           <Tabs defaultValue={getActivePath()}>
             <TabsList className="rounded-lg bg-neutral-200/60 dark:bg-lightGray/10">

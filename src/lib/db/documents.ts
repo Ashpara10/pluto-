@@ -26,12 +26,14 @@ export const updateDocument = async ({
   content,
   id,
   title,
+  tags,
   markdown,
 }: {
   id: string;
   title: string;
   content: string;
   markdown: string;
+  tags: string[];
 }) => {
   try {
     const document = await db
@@ -40,6 +42,7 @@ export const updateDocument = async ({
         title: title,
         content: content,
         markdown: markdown,
+        tags: tags,
       })
       .where(eq(documents.id, id))
       .returning();
