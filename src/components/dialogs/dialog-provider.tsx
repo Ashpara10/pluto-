@@ -2,6 +2,7 @@ import React from "react";
 import CreateDocumentDialog from "./CreateDocumentDialog";
 import CreateCollectionDialog from "./CreateCollectionDialog";
 import MoveToFolderDialog from "./MoveToFolderDialog";
+import CreateWorkspaceDialog from "./CreateWorkspaceDialog";
 
 const DialogProvider = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -9,6 +10,7 @@ const DialogProvider = ({ children }: { children: React.ReactNode }) => {
       <CreateDocumentDialog />
       <CreateCollectionDialog />
       <MoveToFolderDialog />
+      <CreateWorkspaceDialog />
       {children}
     </>
   );

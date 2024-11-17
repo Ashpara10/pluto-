@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
     .from(documents)
     .where(
       and(
-        // eq(documents?.workspaceId, workspace!),
+        eq(documents?.workspaceId, workspace!),
         eq(documents?.authorId, sessionData!?.user.id!)
       )
     );

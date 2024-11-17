@@ -2,6 +2,7 @@
 export type CreateWorkspacePayload = {
   name: string;
   user: string;
+  image?: string;
 };
 // Collection Types
 export type CreateCollectionPayload = {

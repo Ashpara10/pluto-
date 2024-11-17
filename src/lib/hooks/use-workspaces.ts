@@ -4,7 +4,6 @@ import { useQuery } from "react-query";
 import { getActiveWorkspace } from "../actions";
 import { Workspace } from "../db/schema";
 import { getUserWorkspaces } from "../db/workspaces";
-// import { useUser } from "../user-provider";
 import { useSession } from "next-auth/react";
 
 type GetWorkspacesResponse = {

@@ -9,18 +9,23 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { ScrollArea } from "./ui/scroll-area";
 import { Skeleton } from "./ui/skeleton";
 import { setActiveWorkspace } from "@/lib/actions";
+import { useWorkspaceDialog } from "@/lib/context";
 
 const WorkspaceSwitcher = () => {
   const router = useRouter();
   const [show, setShow] = React.useState(false);
+  const { isCreateWorkspaceDialogOpen, setIsCreateWorkspaceDialogOpen } =
+    useWorkspaceDialog();
   const { workspaces, isLoading, currentWorkspace } = useWorkspaces();
+  console.log(currentWorkspace);
   if (isLoading)
     return (
       <Skeleton className="h-10 w-64 animate-pulse rounded-lg bg-neutral-200/60 dark:bg-lightGray/10" />
     );
   const handleWorkspaceClick = (workspace: Workspace) => {
+    if (workspace?.id === currentWorkspace?.id) return;
     setActiveWorkspace(workspace);
-    router.replace(`/${workspace?.id}`);
+    router.replace(`/w/${workspace?.id}`);
   };
   return (
     <Popover>
@@ -72,12 +77,17 @@ const WorkspaceSwitcher = () => {
                 })}
           </ScrollArea>
         </div>
-        <div className="group flex cursor-pointer items-center justify-start gap-x-2 border-t border-neutral-200/60  px-3 py-2 dark:border-lightGray/10">
+        <button
+          onClick={() => {
+            setIsCreateWorkspaceDialogOpen!(true);
+          }}
+          className="group w-full flex cursor-pointer items-center justify-start gap-x-2 border-t border-neutral-200/60  px-3 py-2 dark:border-lightGray/10"
+        >
           <Plus className="size-4 opacity-80 group-hover:opacity-100" />{" "}
           <span className="text-sm opacity-80 group-hover:opacity-100">
             Create Workspace
           </span>
-        </div>
+        </button>
       </PopoverContent>
     </Popover>
   );

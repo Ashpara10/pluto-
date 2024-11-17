@@ -11,34 +11,34 @@ type UpdateStateFunctionType = (isOpen: boolean) => void;
 type ContextStateType = {
   sidebarOpen: boolean;
   createDocumentDialogOpen: boolean;
-  splitView: boolean;
   selectedDocuments?: Set<number>;
   setSelectedDocuments?: React.Dispatch<React.SetStateAction<Set<number>>>;
   isFlashCardsDialogOpen?: boolean;
   isCreateCollectionDialogOpen?: boolean;
   isMoveToFolderDialogOpen?: boolean;
+  isCreateWorkspaceDialogOpen?: boolean;
 };
 type setContextType = [
   ContextStateType,
   {
     setSidebarOpen: UpdateStateFunctionType;
     setCreateDocumentDialogOpen: UpdateStateFunctionType;
-    setSplitView: UpdateStateFunctionType;
     setIsFlashCardsDialogOpen?: UpdateStateFunctionType;
     setIsCreateCollectionDialogOpen?: UpdateStateFunctionType;
     setIsMoveToFolderDialogOpen?: UpdateStateFunctionType;
+    setIsCreateWorkspaceDialogOpen?: UpdateStateFunctionType;
   }
 ];
 
 const defaultContextState: ContextStateType = {
   sidebarOpen: false,
   createDocumentDialogOpen: false,
-  splitView: false,
   selectedDocuments: new Set(),
   setSelectedDocuments: () => {},
   isFlashCardsDialogOpen: false,
   isCreateCollectionDialogOpen: false,
   isMoveToFolderDialogOpen: false,
+  isCreateWorkspaceDialogOpen: false,
 };
 
 export const Context = createContext([
@@ -46,10 +46,10 @@ export const Context = createContext([
   {
     setSidebarOpen: () => {},
     setCreateDocumentDialogOpen: () => {},
-    setSplitView: () => {},
     setIsFlashCardsDialogOpen: () => {},
     setIsCreateCollectionDialogOpen: () => {},
     setIsMoveToFolderDialogOpen: () => {},
+    setIsCreateWorkspaceDialogOpen: () => {},
   },
 ] as setContextType);
 
@@ -65,18 +65,7 @@ export const useSidebarOpenContext = () => {
     setSidebarOpen: context[1].setSidebarOpen,
   };
 };
-export const useSplitView = () => {
-  const context = useContext(Context);
 
-  if (!context) {
-    throw new Error("useDialogs must be used within a DialogsProvider");
-  }
-
-  return {
-    splitView: context[0].splitView,
-    setSplitView: context[1].setSplitView,
-  };
-};
 export const useCreateDocumentDialog = () => {
   const context = useContext(Context);
 
@@ -140,6 +129,18 @@ export const useIsMoveToFolderDialog = () => {
     setIsMoveToFolderDialogOpen: context[1].setIsMoveToFolderDialogOpen,
   };
 };
+export const useWorkspaceDialog = () => {
+  const context = useContext(Context);
+
+  if (!context) {
+    throw new Error("Context error");
+  }
+
+  return {
+    isCreateWorkspaceDialogOpen: context[0].isCreateWorkspaceDialogOpen,
+    setIsCreateWorkspaceDialogOpen: context[1].setIsCreateWorkspaceDialogOpen,
+  };
+};
 
 const AppContextProvider = ({ children }: { children: ReactNode }) => {
   const [selectedDocuments, setSelectedDocuments] = useState<Set<number>>(
@@ -154,7 +155,6 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
     [openContext?.sidebarOpen]
   );
 
-  const [splitView, setSplitView] = useState(false);
   const setCreateDocumentDialogOpen = useCallback(
     (isOpen: boolean) => {
       setOpenContext({ ...openContext, createDocumentDialogOpen: isOpen });
@@ -179,6 +179,12 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
     },
     [openContext?.isMoveToFolderDialogOpen]
   );
+  const setIsCreateWorkspaceDialogOpen = useCallback(
+    (isOpen: boolean) => {
+      setOpenContext({ ...openContext, isCreateWorkspaceDialogOpen: isOpen });
+    },
+    [openContext?.isCreateWorkspaceDialogOpen]
+  );
   return (
     <Context.Provider
       value={[
@@ -186,7 +192,7 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
         {
           setSidebarOpen,
           setCreateDocumentDialogOpen,
-          setSplitView,
+          setIsCreateWorkspaceDialogOpen,
           setIsFlashCardsDialogOpen,
           setIsCreateCollectionDialogOpen,
           setIsMoveToFolderDialogOpen,
