@@ -75,7 +75,7 @@ const DocumentPage: FC<DocumentPageProps> = ({ document }) => {
             setData((prev) => ({ ...prev, title: e?.target?.value as string }))
           }
         />
-        <TagInput tags={tags!} setTags={(tags) => setTags(tags)} />
+        {/* <TagInput tags={tags!} setTags={(tags) => setTags(tags)} /> */}
         <div className="w-full flex mt-1 items-center justify-start">
           <span className="text-sm opacity-75">
             {new Date(data?.createdAt!).toLocaleDateString("en-US", {

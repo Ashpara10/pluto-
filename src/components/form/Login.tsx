@@ -47,6 +47,20 @@ const Login = () => {
     }
     router.push(`/w/${activeWorkspace.id}`);
   });
+  const handleOauthLogin = async (provider: string) => {
+    const res = await signIn(provider);
+    if (!res?.ok && res?.error) {
+      toast.error(res?.error);
+      return;
+    }
+    const activeWorkspace = await getActiveWorkspace();
+    toast.success("LoggedIn successfully");
+    if (!activeWorkspace) {
+      router.push("/workspace");
+      return;
+    }
+    router.push(`/w/${activeWorkspace.id}`);
+  };
 
   return (
     <div className="flex w-full max-w-sm flex-col">
@@ -101,7 +115,7 @@ const Login = () => {
         <Button
           className="w-full"
           variant={"outline"}
-          onClick={async () => signIn("github")}
+          onClick={async () => handleOauthLogin("github")}
         >
           <Image
             src={"/github.svg"}
@@ -117,7 +131,7 @@ const Login = () => {
         <Button
           variant={"outline"}
           className="w-full "
-          onClick={async () => signIn("google")}
+          onClick={async () => handleOauthLogin("google")}
         >
           <Image
             src={"/google.svg"}

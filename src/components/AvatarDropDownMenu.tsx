@@ -20,19 +20,23 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import UserAvatar from "./UserAvatar";
+import { useWorkspaces } from "@/lib/hooks/use-workspaces";
 
 interface AvatarDropDownMenuProps extends PropsWithChildren {}
 
 const AvatarDropDownMenu: FC<AvatarDropDownMenuProps> = ({ children }) => {
   const router = useRouter();
   const { data: user, status } = useSession();
+  const { currentWorkspace } = useWorkspaces();
   const { theme, setTheme } = useTheme();
 
   const items = [
     {
       icon: <User className="mr-2 h-4 w-4" />,
-      text: "Profile",
-      handleClick: () => {},
+      text: "Account",
+      handleClick: () => {
+        router.push(`/w/${currentWorkspace?.id}/account`);
+      },
       separator: false,
     },
     {
@@ -87,13 +91,19 @@ const AvatarDropDownMenu: FC<AvatarDropDownMenuProps> = ({ children }) => {
           isLoading={status === "loading"}
         />
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="md:mr-10 mr-3  translate-y-2 p-0 rounded-xl border  order-neutral-200/60 dark:border-lightGray/10 bg-white/30 shadow-black/10 dark:shadow-black/30 drop-shadow-xl backdrop-blur-lg dark:bg-neutral-900">
+      <DropdownMenuContent className="md:mr-10 mr-3  translate-y-2 p-0 rounded-xl border  border-neutral-200/60 dark:border-lightGray/10 bg-white/70 shadow-black/10 dark:shadow-black/30 drop-shadow-xl backdrop-blur-lg dark:bg-neutral-900 max-w-[280px]">
+        <div className="w-full flex px-3 py-4 flex-col items-start justify-center">
+          <span className="text-sm font-medium">{user?.user?.name}</span>
+          <span className="text-sm line-clamp-1 opacity-75 w-full">
+            {user?.user?.email}
+          </span>
+        </div>
         {items.map((item, index) => {
           return (
             <DropdownMenuItem
               key={index}
               onClick={item.handleClick}
-              className="w-full border-t [&>svg]:size-5 hover:bg-white hover:dark:bg-lightGray/10  [&>svg]:opacity-75 first:border-none px-3 py-2 border-neutral-300 dark:border-light-dark-border flex items-center justify-start gap-0"
+              className="w-full border-t [&>svg]:size-5 hover:bg-white hover:dark:bg-lightGray/10  [&>svg]:opacity-75  dark:border-lightGray/10 px-3 py-2 border-neutral-200/60  flex items-center justify-start gap-0"
             >
               {item.icon}
               <span className="tracking-tight ml-1 ">{item.text}</span>

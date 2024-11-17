@@ -16,7 +16,7 @@ const WorkspaceSwitcher = () => {
   const { workspaces, isLoading, currentWorkspace } = useWorkspaces();
   if (isLoading)
     return (
-      <Skeleton className="h-10 w-32 animate-pulse rounded-lg bg-neutral-200/60 dark:bg-lightGray/10" />
+      <Skeleton className="h-10 w-64 animate-pulse rounded-lg bg-neutral-200/60 dark:bg-lightGray/10" />
     );
   const handleWorkspaceClick = (workspace: Workspace) => {
     setActiveWorkspace(workspace);
@@ -24,13 +24,13 @@ const WorkspaceSwitcher = () => {
   };
   return (
     <Popover>
-      <PopoverTrigger asChild className="w-64 ">
+      <PopoverTrigger asChild className="w-full max-w-64">
         <button
           onClick={() => setShow(!show)}
-          className="flex w-full items-center justify-center gap-x-1 rounded-3xl border border-neutral-200/60 px-3 py-1.5  hover:bg-neutral-100 dark:border-lightGray/10 dark:hover:bg-lightGray/10"
+          className="flex w-full items-center justify-center gap-x-1 rounded-lg border border-neutral-200/60 px-3 py-2  hover:bg-neutral-100 dark:border-lightGray/10 dark:hover:bg-lightGray/10"
         >
-          <div className="ml-1 flex items-center justify-center">
-            <span className="line-clamp-1 text-sm leading-tight">
+          <div className="ml-1 w-full flex items-center justify-between">
+            <span className="w-full line-clamp-1 text-sm leading-tight">
               {currentWorkspace!?.name}
             </span>
             <ChevronsUpDown

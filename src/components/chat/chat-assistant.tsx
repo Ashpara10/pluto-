@@ -7,6 +7,7 @@ import { remark } from "remark";
 import html from "remark-html";
 import { ScrollArea } from "../ui/scroll-area";
 import ChatInput from "./chat-input";
+
 const ChatAssistant = () => {
   const chatInputContainerRef = useRef<HTMLDivElement>(null);
   const chatRef = useRef<HTMLDivElement>(null);
@@ -30,6 +31,7 @@ const ChatAssistant = () => {
   useEffect(() => {
     chatRef.current?.scrollIntoView(false);
   }, [messages]);
+
   return (
     <div className={cn(" w-full", `h-[84.5vh]`)}>
       <div className="h-full w-full ">
