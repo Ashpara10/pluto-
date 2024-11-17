@@ -22,12 +22,12 @@ const DocumentCardItem = ({
     router.push(`/w/${currentWorkspace?.id}/document/${document.id}`);
   };
   return (
-    <div className=" flex w-full flex-col  rounded-xl border border-neutral-200 px-2.5 py-3 dark:border-lightGray/10 relative">
+    <div className=" flex w-full group flex-col  rounded-xl border border-neutral-200 px-2.5 py-3 dark:border-lightGray/10 relative">
       <Checkbox
         checked={checked}
         className={cn(
           `data-[state=checked]:bg-violet-600`,
-          "absolute right-2 top-2"
+          "absolute right-2 top-2 group-hover:opacity-100 opacity-0 transition-opacity "
         )}
         onCheckedChange={(checked) => {
           handleCheckChange(checked as boolean, document?.id);

@@ -1,8 +1,9 @@
 import { eq } from "drizzle-orm";
-import { db } from "./drizzle";
-import { workspaces } from "./schema";
 import { CreateWorkspacePayload } from "../types";
 import { getSlug } from "../utils";
+import { db } from "./drizzle";
+import { workspaces } from "./schema";
+import { PgUUID, uuid } from "drizzle-orm/pg-core";
 
 export const getUserWorkspaces = async (user: string) => {
   if (!user) {
@@ -13,9 +14,20 @@ export const getUserWorkspaces = async (user: string) => {
     .from(workspaces)
     .where(eq(workspaces?.user, user));
 
-  // console.log({ userWorkspaces });
-
   return userWorkspaces;
+};
+
+export const getWorkspaceByID = async (id: string) => {
+  try {
+    if (!id) {
+      throw new Error("Provide a valid workspace ID");
+    }
+    const w = await db.select().from(workspaces).where(eq(workspaces?.id, id));
+
+    return { data: w, error: null };
+  } catch (error) {
+    return { data: null, error: (error as Error).message };
+  }
 };
 
 export const createWorkspace = async (payload: CreateWorkspacePayload) => {

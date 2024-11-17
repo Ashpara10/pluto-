@@ -10,6 +10,7 @@ import { ScrollArea } from "./ui/scroll-area";
 import { Skeleton } from "./ui/skeleton";
 import { setActiveWorkspace } from "@/lib/actions";
 import { useWorkspaceDialog } from "@/lib/context";
+import Image from "next/image";
 
 const WorkspaceSwitcher = () => {
   const router = useRouter();
@@ -61,11 +62,21 @@ const WorkspaceSwitcher = () => {
                   return (
                     <div
                       key={workspace?.id}
-                      className="flex w-full cursor-pointer items-center justify-start border-t border-neutral-200/60  px-3 py-2 first:border-none   dark:border-lightGray/10 "
+                      className="flex w-full cursor-pointer items-center justify-start border-t border-neutral-200/60  px-3 py-2 first:border-none  dark:border-lightGray/10 "
                       onClick={() => handleWorkspaceClick(workspace)}
                     >
                       <div>
-                        <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-red-500 via-indigo-300 to-transparent" />
+                        {workspace?.image ? (
+                          <Image
+                            src={workspace?.image!}
+                            width={20}
+                            height={20}
+                            className="rounded-full size-8"
+                            alt={`workspace-${workspace?.image}`}
+                          />
+                        ) : (
+                          <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-red-500 via-indigo-300 to-transparent" />
+                        )}
                       </div>
                       <div className="ml-3 flex flex-col">
                         <span className="line-clamp-2 text-sm leading-tight tracking-tight">
@@ -83,8 +94,8 @@ const WorkspaceSwitcher = () => {
           }}
           className="group w-full flex cursor-pointer items-center justify-start gap-x-2 border-t border-neutral-200/60  px-3 py-2 dark:border-lightGray/10"
         >
-          <Plus className="size-4 opacity-80 group-hover:opacity-100" />{" "}
-          <span className="text-sm opacity-80 group-hover:opacity-100">
+          <Plus className="size-4 opacity-70 group-hover:opacity-100" />{" "}
+          <span className="text-sm opacity-70 group-hover:opacity-100">
             Create Workspace
           </span>
         </button>

@@ -7,7 +7,7 @@ import { ScrollArea } from "./ui/scroll-area";
 const TransitionLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <motion.div
-      className="flex h-screen w-full pt-32"
+      className="flex h-screen w-full "
       initial={{ opacity: 0.3, y: "600px" }}
       animate={{ y: 0, opacity: 1 }}
       transition={{
@@ -16,10 +16,10 @@ const TransitionLayout = ({ children }: { children: React.ReactNode }) => {
         ease: "easeInOut",
       }}
     >
-      <ScrollArea className="relative h-full w-full overflow-y-auto px-3 ">
+      <ScrollArea className="relative h-full w-full overflow-y-auto px-3 pt-36">
         <GradientBottom />
-        <div className=" flex w-full items-center justify-center">
-          <div className="flex w-full flex-col items-center justify-center px-3  md:max-w-2xl md:p-0 lg:max-w-3xl ">
+        <div className=" flex w-full items-center justify-center h-full">
+          <div className="flex w-full flex-col items-center justify-center h-full px-3  md:max-w-2xl md:p-0 lg:max-w-3xl ">
             {children}
           </div>
         </div>

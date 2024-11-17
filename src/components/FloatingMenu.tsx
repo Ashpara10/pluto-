@@ -2,7 +2,6 @@
 import { getActiveWorkspace } from "@/lib/actions";
 import {
   useCreateCollectionDialog,
-  useIsFlashcardsDialog,
   useIsMoveToFolderDialog,
   useSelectedDocuments,
 } from "@/lib/context";
@@ -27,6 +26,7 @@ import {
   Sun,
   Trash2,
 } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { memo, useEffect, useId, useState } from "react";
@@ -37,7 +37,6 @@ import {
   SelectedDocumentsMenuFace,
 } from "./FloatingMenuFaces";
 import { DefaultMenuSlide, DocumentMenuSlide } from "./FloatingMenuSlides";
-import { useSession } from "next-auth/react";
 
 const FloatingMenu = memo(() => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -48,7 +47,6 @@ const FloatingMenu = memo(() => {
   const params = useParams() as { workspace: string };
   const { selectedDocuments, setSelectedDocuments } = useSelectedDocuments();
   const [editor] = useLexicalComposerContext();
-  const { setFlashcardsDialogOpen } = useIsFlashcardsDialog();
   const { setCreateCollectionDialogOpen } = useCreateCollectionDialog();
   const { setIsMoveToFolderDialogOpen } = useIsMoveToFolderDialog();
   const { theme, setTheme } = useTheme();
@@ -79,19 +77,6 @@ const FloatingMenu = memo(() => {
       },
     },
 
-    {
-      kbd: <KeyboardItem keys="Shift,D" ctrl={true} />,
-      icon: (
-        <Copy
-          strokeWidth={1.7}
-          className="size-4.5 stroke-black opacity-80 dark:stroke-white"
-        />
-      ),
-      name: "Generate Flashcards",
-      onClick: async () => {
-        setFlashcardsDialogOpen!(true);
-      },
-    },
     {
       kbd: <KeyboardItem keys="Shift,D" ctrl={true} />,
       icon: (

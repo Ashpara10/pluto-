@@ -13,7 +13,6 @@ type ContextStateType = {
   createDocumentDialogOpen: boolean;
   selectedDocuments?: Set<number>;
   setSelectedDocuments?: React.Dispatch<React.SetStateAction<Set<number>>>;
-  isFlashCardsDialogOpen?: boolean;
   isCreateCollectionDialogOpen?: boolean;
   isMoveToFolderDialogOpen?: boolean;
   isCreateWorkspaceDialogOpen?: boolean;
@@ -23,7 +22,6 @@ type setContextType = [
   {
     setSidebarOpen: UpdateStateFunctionType;
     setCreateDocumentDialogOpen: UpdateStateFunctionType;
-    setIsFlashCardsDialogOpen?: UpdateStateFunctionType;
     setIsCreateCollectionDialogOpen?: UpdateStateFunctionType;
     setIsMoveToFolderDialogOpen?: UpdateStateFunctionType;
     setIsCreateWorkspaceDialogOpen?: UpdateStateFunctionType;
@@ -35,7 +33,6 @@ const defaultContextState: ContextStateType = {
   createDocumentDialogOpen: false,
   selectedDocuments: new Set(),
   setSelectedDocuments: () => {},
-  isFlashCardsDialogOpen: false,
   isCreateCollectionDialogOpen: false,
   isMoveToFolderDialogOpen: false,
   isCreateWorkspaceDialogOpen: false,
@@ -46,7 +43,6 @@ export const Context = createContext([
   {
     setSidebarOpen: () => {},
     setCreateDocumentDialogOpen: () => {},
-    setIsFlashCardsDialogOpen: () => {},
     setIsCreateCollectionDialogOpen: () => {},
     setIsMoveToFolderDialogOpen: () => {},
     setIsCreateWorkspaceDialogOpen: () => {},
@@ -104,19 +100,6 @@ export const useSelectedDocuments = () => {
   };
 };
 
-export const useIsFlashcardsDialog = () => {
-  const context = useContext(Context);
-
-  if (!context) {
-    throw new Error("Context error");
-  }
-
-  return {
-    flashcardsDialogOpen: context[0].isFlashCardsDialogOpen,
-    setFlashcardsDialogOpen: context[1].setIsFlashCardsDialogOpen,
-  };
-};
-
 export const useIsMoveToFolderDialog = () => {
   const context = useContext(Context);
 
@@ -161,12 +144,7 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
     },
     [openContext?.createDocumentDialogOpen]
   );
-  const setIsFlashCardsDialogOpen = useCallback(
-    (isOpen: boolean) => {
-      setOpenContext({ ...openContext, isFlashCardsDialogOpen: isOpen });
-    },
-    [openContext?.isFlashCardsDialogOpen]
-  );
+
   const setIsCreateCollectionDialogOpen = useCallback(
     (isOpen: boolean) => {
       setOpenContext({ ...openContext, isCreateCollectionDialogOpen: isOpen });
@@ -193,7 +171,6 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
           setSidebarOpen,
           setCreateDocumentDialogOpen,
           setIsCreateWorkspaceDialogOpen,
-          setIsFlashCardsDialogOpen,
           setIsCreateCollectionDialogOpen,
           setIsMoveToFolderDialogOpen,
         },
