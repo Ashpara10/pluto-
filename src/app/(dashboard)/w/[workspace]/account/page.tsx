@@ -4,10 +4,11 @@ import React from "react";
 
 const Page = () => {
   return (
-    <ScrollArea className="w-full  flex items-center justify-center min-h-screen h-full overflow-y-auto">
+    <ScrollArea className="w-full pt-10  flex items-center justify-center min-h-screen h-full overflow-y-auto">
       <div className=" w-full flex h-screen items-center justify-center">
         <UpdateAccount />
       </div>
+      <div className="h-[100px]"></div>
     </ScrollArea>
   );
 };

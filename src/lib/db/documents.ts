@@ -1,8 +1,10 @@
+"use server";
 import { eq } from "drizzle-orm";
+import { revalidateDocumentByTag } from "../serverActions";
+import { CreateDocumentPayload } from "../types";
 import { db } from "./drizzle";
 import { documents } from "./schema";
-import { CreateDocumentPayload } from "../types";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { revalidateDocumentData } from "@/app/(dashboard)/w/[workspace]/document/[id]/actions";
 
 export const getDocumentById = async (id: string) => {
@@ -52,6 +54,7 @@ export const updateDocument = async ({
       throw new Error("Failed to save document");
     }
     await revalidateDocumentData("/(dashboard)/w/[workspace]/document/[id]");
+
     return { data: document, error: null };
   } catch (error) {
     return { data: null, error: (error as Error).message };
@@ -81,6 +84,17 @@ export const createDocument = async ({
     return { data: document[0], error: null };
   } catch (error) {
     return { data: null, error: (error as Error).message };
+  }
+};
+
+export const deleteDocuments = async (ids: string[]) => {
+  try {
+    ids.map(async (id) => {
+      await db.delete(documents).where(eq(documents.id, id));
+    });
+    return { ok: true, error: null };
+  } catch (error) {
+    return { ok: false, error: (error as Error).message };
   }
 };
 

@@ -65,38 +65,6 @@ const Navbar = () => {
           </Tabs>
         </div>
       </nav>
-      {/* <nav className="sticky top-0 z-50 flex w-full items-center justify-center pb-0.5">
-        <ul className="relative flex items-center justify-center">
-          {links?.map((link) => {
-            return (
-              <li
-                key={link.id}
-                onClick={() => router.push(link?.url)}
-                className={cn(
-                  "relative cursor-pointer px-4 py-2 font-medium tracking-tight text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100",
-                  getActivePath() === link?.id &&
-                    "text-neutral-900 dark:text-neutral-100",
-                )}
-              >
-                {link.name}
-
-                {getActivePath() === link?.id && (
-                  <motion.span
-                    layoutId="bubble"
-                    className="absolute inset-[100%_0]  h-1   bg-neutral-200 dark:bg-neutral-800"
-                    style={{ borderRadius: 9999 }}
-                    transition={{
-                      type: "spring",
-                      bounce: 0.2,
-                      duration: 0.6,
-                    }}
-                  />
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      </nav> */}
     </header>
   );
 };

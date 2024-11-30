@@ -44,7 +44,9 @@ const CreateCollectionDialog = () => {
     >
       <DialogContent className="w-full max-w-sm rounded-2xl bg-neutral-100 backdrop-blur-2xl dark:bg-neutral-900">
         <DialogHeader>
-          <DialogTitle>Create Collection</DialogTitle>
+          <DialogTitle className="text-xl font-medium tracking-tight leading-tight">
+            Create Collection
+          </DialogTitle>
           <DialogDescription>
             Create a collection to group different documents
           </DialogDescription>

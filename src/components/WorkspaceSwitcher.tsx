@@ -1,24 +1,21 @@
 "use client";
+import { setActiveWorkspace } from "@/lib/actions";
+import { useWorkspaceDialog } from "@/lib/context";
 import { Workspace } from "@/lib/db/schema";
 import { useWorkspaces } from "@/lib/hooks/use-workspaces";
-import { setCookie } from "cookies-next";
 import { ChevronsUpDown, Plus } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { ScrollArea } from "./ui/scroll-area";
 import { Skeleton } from "./ui/skeleton";
-import { setActiveWorkspace } from "@/lib/actions";
-import { useWorkspaceDialog } from "@/lib/context";
-import Image from "next/image";
 
 const WorkspaceSwitcher = () => {
   const router = useRouter();
   const [show, setShow] = React.useState(false);
-  const { isCreateWorkspaceDialogOpen, setIsCreateWorkspaceDialogOpen } =
-    useWorkspaceDialog();
+  const { setIsCreateWorkspaceDialogOpen } = useWorkspaceDialog();
   const { workspaces, isLoading, currentWorkspace } = useWorkspaces();
-  console.log(currentWorkspace);
   if (isLoading)
     return (
       <Skeleton className="h-10 w-64 animate-pulse rounded-lg bg-neutral-200/60 dark:bg-lightGray/10" />
@@ -46,9 +43,12 @@ const WorkspaceSwitcher = () => {
           </div>
         </button>
       </PopoverTrigger>
-      <PopoverContent className="ml-3 mt-2 max-h-72 w-64 rounded-xl bg-white/70 p-0  shadow-black/30 drop-shadow-xl backdrop-blur-lg dark:bg-neutral-900">
-        <div className="w-full ">
-          <ScrollArea className="flex h-full flex-col space-y-1 overflow-y-auto p-0">
+      <PopoverContent
+        style={{ scrollbarWidth: "none" }}
+        className="ml-3  mt-2  w-64 rounded-xl bg-white/70 p-0  shadow-black/30 drop-shadow-xl backdrop-blur-lg dark:bg-neutral-900 overflow-hidden "
+      >
+        <div className="">
+          <ScrollArea className=" scrollbar-none flex max-h-52 h-fit flex-col space-y-1 overflow-y-auto p-0">
             {!workspaces
               ? [...Array(10)].map((_, i) => {
                   return (
@@ -88,6 +88,7 @@ const WorkspaceSwitcher = () => {
                 })}
           </ScrollArea>
         </div>
+
         <button
           onClick={() => {
             setIsCreateWorkspaceDialogOpen!(true);

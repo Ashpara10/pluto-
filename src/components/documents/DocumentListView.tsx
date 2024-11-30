@@ -18,11 +18,7 @@ const DocumentListView: FC<DocumentListViewProps> = ({ data, isLoading }) => {
     if (data && checkedArr?.length !== 0) {
       setSelectedDocuments!(
         () =>
-          new Set(
-            checkedArr
-              .filter(([, value]) => value)
-              .map(([key]) => parseInt(key))
-          )
+          new Set(checkedArr.filter(([, value]) => value).map(([key]) => key))
       );
     }
   }, [checked]);

@@ -48,68 +48,31 @@ const Login = () => {
     router.push(`/w/${activeWorkspace.id}`);
   });
   const handleOauthLogin = async (provider: string) => {
-    const res = await signIn(provider);
+    const activeWorkspace = await getActiveWorkspace();
+    const res = await signIn(provider, {
+      callbackUrl: activeWorkspace ? `/w/${activeWorkspace?.id}` : "/workspace",
+      redirect: true,
+    });
     if (!res?.ok && res?.error) {
       toast.error(res?.error);
       return;
     }
-    const activeWorkspace = await getActiveWorkspace();
+    // if (!res?.ok && res?.error) {
+    //   toast.error(res?.error);
+    //   return;
+    // }
+    // if (!activeWorkspace) {
+    //   router.push("/workspace");
+    //   return;
+    // }
     toast.success("LoggedIn successfully");
-    if (!activeWorkspace) {
-      router.push("/workspace");
-      return;
-    }
-    router.push(`/w/${activeWorkspace.id}`);
+    // router.push(`/w/${activeWorkspace.id}`);
   };
 
   return (
-    <div className="flex w-full max-w-sm flex-col">
+    <div className="flex w-full z-20 drop-shadow-2xl shadow-black/40 max-w-md flex-col bg-white dark:bg-darkBorder px-6 py-10 rounded-2xl">
       <div className="mb-4">
-        <span className="text-2xl font-semibold tracking-tight">
-          Welcome Back
-        </span>
-      </div>
-      <form onSubmit={handleLogin} className="flex w-full  flex-col space-y-2">
-        <input
-          className="rounded-lg border  border-neutral-300 px-4 py-2  dark:border-lightGray/10"
-          {...register("email")}
-          placeholder="Email"
-        />
-        <div className="mt-2 flex items-center justify-center overflow-hidden rounded-lg border border-neutral-300  dark:border-lightGray/10">
-          <input
-            className="w-full px-4 py-2"
-            {...register("password")}
-            placeholder="Password"
-            type={show ? "text" : "password"}
-          />
-          <div className="bg-transparent p-2" onClick={() => setShow(!show)}>
-            {show ? (
-              <EyeOffIcon
-                strokeWidth={1.6}
-                className=" h-6 w-6 cursor-pointer opacity-80"
-              />
-            ) : (
-              <EyeIcon
-                strokeWidth={1.6}
-                className=" h-6 w-6 cursor-pointer opacity-80"
-              />
-            )}
-          </div>
-        </div>
-        <button
-          type="submit"
-          className="mt-2 rounded-lg bg-[#6a5ed9] px-4 py-2  text-white  hover:bg-[#564ac6]"
-        >
-          {formState?.isLoading && (
-            <Loader className="size-4 animate-spin opacity-80" />
-          )}
-          <span className="font-medium ">Login</span>
-        </button>
-      </form>
-      <div className="my-4 flex w-full items-center justify-center gap-x-2">
-        <Separator className="h-[0.9px] w-full bg-neutral-300/60 dark:bg-lightGray/10" />{" "}
-        <span className="text-sm opacity-80">or</span>
-        <Separator className="h-[0.9px] w-full bg-neutral-300/60 dark:bg-lightGray/10" />
+        <span className="text-xl font-medium tracking-tight">Welcome Back</span>
       </div>
       <div className="flex w-full flex-col space-y-2">
         <Button
@@ -144,6 +107,60 @@ const Login = () => {
             Login with Google
           </span>
         </Button>
+      </div>
+      <div className="my-4 flex w-full items-center justify-center gap-x-2">
+        <Separator className="h-[0.9px] w-full bg-neutral-300/60 dark:bg-lightGray/10" />{" "}
+        <span className="text-sm opacity-80">or</span>
+        <Separator className="h-[0.9px] w-full bg-neutral-300/60 dark:bg-lightGray/10" />
+      </div>
+
+      <form onSubmit={handleLogin} className="flex w-full  flex-col space-y-2">
+        <input
+          className="rounded-lg border  border-neutral-300 px-4 py-2  dark:border-lightGray/10"
+          {...register("email")}
+          placeholder="Email"
+        />
+        <div className="mt-2 flex items-center justify-center overflow-hidden rounded-lg border border-neutral-300  dark:border-lightGray/10">
+          <input
+            className="w-full px-4 py-2"
+            {...register("password")}
+            placeholder="Password"
+            type={show ? "text" : "password"}
+          />
+          <div className="bg-transparent p-2" onClick={() => setShow(!show)}>
+            {show ? (
+              <EyeOffIcon
+                strokeWidth={1.6}
+                className=" h-6 w-6 cursor-pointer opacity-80"
+              />
+            ) : (
+              <EyeIcon
+                strokeWidth={1.6}
+                className=" h-6 w-6 cursor-pointer opacity-80"
+              />
+            )}
+          </div>
+        </div>
+        <button
+          type="submit"
+          className="mt-4 rounded-lg bg-[#6a5ed9] px-4 py-2  text-white  hover:bg-[#564ac6]"
+        >
+          {formState?.isLoading && (
+            <Loader className="size-4 animate-spin opacity-80" />
+          )}
+          <span className="font-medium ">Login</span>
+        </button>
+      </form>
+      <div className="w-full flex items-center justify-center  mt-3">
+        <span className="text-sm ">
+          Don't have an account?{" "}
+          <span
+            onClick={() => router.push("/register")}
+            className="text-[#6a5ed9] cursor-pointer"
+          >
+            Sign up
+          </span>
+        </span>
       </div>
     </div>
   );

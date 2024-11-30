@@ -6,6 +6,8 @@ import GoogleProvider from "next-auth/providers/google";
 import { comparePasswords } from "./actions";
 import { db } from "./db/drizzle";
 import { users } from "./db/schema";
+import { get } from "http";
+import { getUserByEmail } from "./db/user";
 
 declare module "next-auth" {
   interface Session {
@@ -21,9 +23,15 @@ export const auth = {
     strategy: "jwt",
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account, profile, session }) {
       if (user) {
-        token.id = user.id;
+        const u = await getUserByEmail(user.email!);
+        console.log({ u });
+        if (!u.data) {
+          return token;
+        }
+        token.id = u.data.id;
+        token.picture = u.data.image;
         console.log({ token });
       }
       return token;

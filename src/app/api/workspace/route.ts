@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
       { status: 401 }
     );
   }
-
+  console.log({ payload, sessionCookie });
   const workspace = await db
     .insert(workspaces)
     .values({ ...payload, user: sessionCookie?.user?.id! })

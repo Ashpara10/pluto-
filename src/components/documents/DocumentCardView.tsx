@@ -19,11 +19,7 @@ const DocumentCardView: FC<DocumentCardViewProps> = ({ data, isLoading }) => {
     if (data && checkedArr?.length !== 0) {
       setSelectedDocuments!(
         () =>
-          new Set(
-            checkedArr
-              .filter(([, value]) => value)
-              .map(([key]) => parseInt(key))
-          )
+          new Set(checkedArr.filter(([, value]) => value).map(([key]) => key))
       );
     }
   }, [checked]);
@@ -32,15 +28,14 @@ const DocumentCardView: FC<DocumentCardViewProps> = ({ data, isLoading }) => {
   };
 
   return (
-    <section className="w-full grid grid-cols-2 md:grid-cols-3 gap-4 ">
+    <section className="w-full grid grid-cols-2 md:grid-cols-3 gap-3 ">
       {/* <div className=""> */}
       {isLoading
         ? [...Array(18)].map((_, i) => {
             return (
               <Skeleton
                 key={i}
-                style={{ height: Math.random() * 100 + i }}
-                className="mt-2 w-full animate-pulse rounded-lg bg-darkGray/60 dark:bg-lightGray/10"
+                className=" h-[200px] w-full animate-pulse rounded-lg bg-darkGray/60 dark:bg-lightGray/10"
               />
             );
           })

@@ -1,8 +1,8 @@
 import { getServerAuthSession } from "@/lib/auth";
 import { createCollection } from "@/lib/db/collections";
 import { db } from "@/lib/db/drizzle";
-import { Collection, collections } from "@/lib/db/schema";
-import { and, eq } from "drizzle-orm";
+import { Collection, collections, documents } from "@/lib/db/schema";
+import { and, count, eq } from "drizzle-orm";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -14,6 +14,7 @@ export async function GET(req: NextRequest) {
       { status: 400 }
     );
   }
+
   const allCollections = await db
     .select()
     .from(collections)

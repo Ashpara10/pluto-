@@ -1,5 +1,5 @@
 import { instance } from "@/lib/axios";
-import { Collection } from "@/lib/db/schema";
+import { Collection, Document } from "@/lib/db/schema";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { useQuery } from "react-query";
@@ -49,11 +49,11 @@ const AllCollections = () => {
               />
             );
           })
-        : data!?.map((collection, i) => {
+        : data!?.map((collections, i) => {
             return (
               <CollectionCard
-                collection={collection}
-                checked={checked[collection?.id]}
+                collection={collections}
+                checked={checked[collections.id]}
                 handleCheckChange={handleCheckBoxChange}
               />
             );

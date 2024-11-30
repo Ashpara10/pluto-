@@ -27,11 +27,9 @@ const Register = () => {
 
   const [show, setShow] = React.useState(false);
   return (
-    <div className="flex w-full max-w-sm flex-col">
+    <div className="flex w-full z-20 drop-shadow-2xl shadow-black/40 max-w-md flex-col bg-white dark:bg-darkBorder px-6 py-10 rounded-2xl">
       <div className="mb-4">
-        <span className="text-2xl font-semibold tracking-tight">
-          Register Now
-        </span>
+        <span className="text-xl font-medium tracking-tight">Register Now</span>
       </div>
       <div className="flex w-full flex-col space-y-2">
         <Button
@@ -89,6 +87,7 @@ const Register = () => {
         </label>
         <input
           required
+          placeholder="Enter your name"
           maxLength={50}
           id="name"
           {...register("name")}
@@ -116,6 +115,7 @@ const Register = () => {
             className="w-full px-4 py-2 "
             id="password"
             required
+            placeholder="Create a strong password"
             {...register("password")}
             type={show ? "text" : "password"}
           />
@@ -142,6 +142,17 @@ const Register = () => {
           <span className="font-medium tracking-tight">Signup</span>
         </button>
       </form>
+      <div className="w-full flex items-center justify-center  mt-3">
+        <span className="text-sm ">
+          Already have an account?{" "}
+          <span
+            onClick={() => router.push("/login")}
+            className="text-[#6a5ed9] cursor-pointer"
+          >
+            Log In
+          </span>
+        </span>
+      </div>
     </div>
   );
 };

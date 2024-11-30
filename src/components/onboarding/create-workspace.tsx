@@ -15,6 +15,8 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { useSession } from "next-auth/react";
+import { createWorkspace } from "@/lib/db/workspaces";
+import { useMemo } from "react";
 
 const NewWorkspaceSchema = z.object({
   name: z.string().min(6).max(30),
@@ -32,8 +34,9 @@ const CreateWorkspace = () => {
 
   const {
     register,
-    getValues,
     handleSubmit,
+    getValues,
+    watch,
     formState: { isSubmitting },
   } = useForm({
     defaultValues: {
@@ -44,19 +47,38 @@ const CreateWorkspace = () => {
     },
     resolver: zodResolver(NewWorkspaceSchema),
   });
+  const values = getValues();
+  const watchTitle = watch("name");
+
+  const workspaceImage = useMemo(() => {
+    if (watchTitle === "")
+      return "https://api.dicebear.com/9.x/glass/svg?seed=Untitled-Workspace";
+    return `https://api.dicebear.com/9.x/glass/svg?seed=${watchTitle?.toLocaleLowerCase()}`;
+  }, [watchTitle]);
 
   const handleFormSubmit = handleSubmit(async (values) => {
-    const res = await instance.post("/workspace", {
+    const { data, error } = await createWorkspace({
+      image: workspaceImage,
       name: values?.name!,
-      slug: getSlug(values!?.name!),
-    } as Pick<NewWorkspace, "name" | "slug">);
-    if (res?.status !== 201) {
-      toast.error("Failed to create workspace");
+      user: user?.user?.id!,
+    });
+    if (error) {
+      toast.error("Failed to create workspace" + error);
       return;
     }
+    toast.success("Workspace created successfully");
+    setActiveWorkspace(data![0] as Workspace);
     await queryClient.refetchQueries(["get-workspaces", user?.user?.id!]);
-    setActiveWorkspace(res?.data?.data as Workspace);
-    router.push(`/w/${res?.data?.data?.id}`);
+    router.push(`/w/${data![0]?.id}`);
+    // const res = await instance.post("/workspace", {
+    //   name: values?.name!,
+    //   slug: getSlug(values!?.name!),
+    // } as Pick<NewWorkspace, "name" | "slug">);
+    // if (res?.status !== 201) {
+    //   toast.error("Failed to create workspace");
+    //   return;
+    // }
+    // await queryClient.refetchQueries(["get-workspaces", user?.user?.id!]);
   });
   return (
     <motion.form

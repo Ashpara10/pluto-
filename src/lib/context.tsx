@@ -11,11 +11,13 @@ type UpdateStateFunctionType = (isOpen: boolean) => void;
 type ContextStateType = {
   sidebarOpen: boolean;
   createDocumentDialogOpen: boolean;
-  selectedDocuments?: Set<number>;
-  setSelectedDocuments?: React.Dispatch<React.SetStateAction<Set<number>>>;
+  selectedDocuments?: Set<string>;
+  setSelectedDocuments?: React.Dispatch<React.SetStateAction<Set<string>>>;
   isCreateCollectionDialogOpen?: boolean;
   isMoveToFolderDialogOpen?: boolean;
   isCreateWorkspaceDialogOpen?: boolean;
+  isDeleteWorkspaceDialogOpen?: boolean;
+  isDeleteDocumentDialogOpen?: boolean;
 };
 type setContextType = [
   ContextStateType,
@@ -25,6 +27,8 @@ type setContextType = [
     setIsCreateCollectionDialogOpen?: UpdateStateFunctionType;
     setIsMoveToFolderDialogOpen?: UpdateStateFunctionType;
     setIsCreateWorkspaceDialogOpen?: UpdateStateFunctionType;
+    setIsDeleteWorkspaceDialogOpen?: UpdateStateFunctionType;
+    setIsDeleteDocumentDialogOpen?: UpdateStateFunctionType;
   }
 ];
 
@@ -36,6 +40,8 @@ const defaultContextState: ContextStateType = {
   isCreateCollectionDialogOpen: false,
   isMoveToFolderDialogOpen: false,
   isCreateWorkspaceDialogOpen: false,
+  isDeleteWorkspaceDialogOpen: false,
+  isDeleteDocumentDialogOpen: false,
 };
 
 export const Context = createContext([
@@ -46,6 +52,8 @@ export const Context = createContext([
     setIsCreateCollectionDialogOpen: () => {},
     setIsMoveToFolderDialogOpen: () => {},
     setIsCreateWorkspaceDialogOpen: () => {},
+    setIsDeleteWorkspaceDialogOpen: () => {},
+    setIsDeleteDocumentDialogOpen: () => {},
   },
 ] as setContextType);
 
@@ -125,8 +133,34 @@ export const useWorkspaceDialog = () => {
   };
 };
 
+export const useDeleteWorkspaceDialog = () => {
+  const context = useContext(Context);
+
+  if (!context) {
+    throw new Error("Context error");
+  }
+
+  return {
+    isDeleteWorkspaceDialogOpen: context[0].isDeleteWorkspaceDialogOpen,
+    setIsDeleteWorkspaceDialogOpen: context[1].setIsDeleteWorkspaceDialogOpen,
+  };
+};
+
+export const useDeleteDocumentDialog = () => {
+  const context = useContext(Context);
+
+  if (!context) {
+    throw new Error("Context error");
+  }
+
+  return {
+    isDeleteDocumentDialogOpen: context[0].isDeleteDocumentDialogOpen,
+    setIsDeleteDocumentDialogOpen: context[1].setIsDeleteDocumentDialogOpen,
+  };
+};
+
 const AppContextProvider = ({ children }: { children: ReactNode }) => {
-  const [selectedDocuments, setSelectedDocuments] = useState<Set<number>>(
+  const [selectedDocuments, setSelectedDocuments] = useState<Set<string>>(
     new Set()
   );
   const [openContext, setOpenContext] =
@@ -143,6 +177,20 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
       setOpenContext({ ...openContext, createDocumentDialogOpen: isOpen });
     },
     [openContext?.createDocumentDialogOpen]
+  );
+
+  const setIsDeleteWorkspaceDialogOpen = useCallback(
+    (isOpen: boolean) => {
+      setOpenContext({ ...openContext, isDeleteWorkspaceDialogOpen: isOpen });
+    },
+    [openContext?.isDeleteWorkspaceDialogOpen]
+  );
+
+  const setIsDeleteDocumentDialogOpen = useCallback(
+    (isOpen: boolean) => {
+      setOpenContext({ ...openContext, isDeleteDocumentDialogOpen: isOpen });
+    },
+    [openContext?.isDeleteDocumentDialogOpen]
   );
 
   const setIsCreateCollectionDialogOpen = useCallback(
@@ -173,6 +221,8 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
           setIsCreateWorkspaceDialogOpen,
           setIsCreateCollectionDialogOpen,
           setIsMoveToFolderDialogOpen,
+          setIsDeleteWorkspaceDialogOpen,
+          setIsDeleteDocumentDialogOpen,
         },
       ]}
     >

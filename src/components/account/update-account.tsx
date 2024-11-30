@@ -7,10 +7,27 @@ import { useForm, FormProvider, useFormContext } from "react-hook-form";
 import { Button } from "../ui/button";
 import { useWorkspaces } from "@/lib/hooks/use-workspaces";
 import Image from "next/image";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
+import Link from "next/link";
+import { Workspace } from "@/lib/db/schema";
 
 const UpdateAccount = () => {
   const { data: user, status } = useSession();
-  const { currentWorkspace } = useWorkspaces();
+  const { currentWorkspace, workspaces } = useWorkspaces();
   const methods = useForm({
     values: {
       image: user?.user?.image,
@@ -23,33 +40,60 @@ const UpdateAccount = () => {
     <div className="max-w-xl w-full">
       <FormProvider {...methods}>
         <div className="mt-10">
-          {/* <UpdateFieldForm field="name" title="Your Name" /> */}
           <UpdateProfileForm />
-          {/* <hr className="w-full h-1 dark:bg-lightGray/10 bg-neutral-200/60" /> */}
-          <UpdateWorkspaceSettings />
+          <UpdateWorkspaceSettings
+            workspaces={workspaces!}
+            curentWorkspace={currentWorkspace!}
+          />
         </div>
       </FormProvider>
     </div>
   );
 };
 
-const UpdateWorkspaceSettings = () => {
-  const { register, getValues } = useFormContext();
-  const values = getValues();
+const UpdateWorkspaceSettings: FC<{
+  workspaces: Workspace[];
+  curentWorkspace: Workspace;
+}> = ({ workspaces, curentWorkspace }) => {
+  const form = useFormContext();
   return (
     <div className="mt-6 w-full border dark:border-lightGray/10 border-neutral-300/80 rounded-lg p-3 ">
       <div>
         <h3 className="text-xl font-medium tracking-tight">
           Configure Workspace Settings
         </h3>
-        <span className="opacity-75 leading-snug">
+        <span className="opacity-75 leading-snug text-sm">
           Update and Configure your worspace settings
         </span>
       </div>
       <div>
-        <form className="mt-4">
-          <Label className="mt-2">Default Workspace</Label>
-          <Input className="mt-2" {...register("defaultWorkspace")} />
+        <form {...form} className="mt-4">
+          <FormField
+            control={form.control}
+            name="defaultWorkspace"
+            render={({ field }) => (
+              <FormItem>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a verified email to display" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="dark:border-lightGray/10 border-neutral-300/80 bg-neutral-100 dark:bg-neutral-800">
+                    {workspaces?.map((workspace, i) => {
+                      return (
+                        <SelectItem value={workspace?.name}>
+                          {workspace?.name}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </form>
       </div>
     </div>
@@ -70,16 +114,28 @@ const UpdateProfileForm: FC = () => {
       <div>
         <form className="py-4 flex flex-col items-start gap-3 justify-center">
           <div className="flex">
-            {values?.image && (
-              <Image
-                className="rounded-full"
-                src={values?.image}
-                alt={`${values?.name}-avatar`}
-                width={60}
-                height={60}
-              />
-            )}
+            <label htmlFor="file-input">
+              {values?.image ? (
+                <Image
+                  className="rounded-full"
+                  src={values?.image}
+                  alt={`${values?.name}-avatar`}
+                  width={60}
+                  height={60}
+                />
+              ) : (
+                // <div>
+                <div className="size-[60px] rounded-full bg-gradient-to-tr from-red-500 via-indigo-300 to-transparent" />
+              )}
+            </label>
+
+            <input id="file-input" {...register("image")} className="hidden" />
             <div className="ml-2 flex flex-col items-start justify-center">
+              <div>
+                <span className="font-medium tracking-tight">
+                  Profile Image
+                </span>
+              </div>
               <div className="flex items-center justify-start gap-2">
                 <Button size={"sm"} variant={"outline"}>
                   Upload
@@ -94,37 +150,11 @@ const UpdateProfileForm: FC = () => {
           <Input {...register("name")} />
           <Label>Email</Label>
           <Input {...register("email")} />
-          <div className="flex mt-6 gap-3 w-full items-center justify-start">
-            <Button>Discard Changes</Button>
-            <Button>Save Changes</Button>
+          <div className="flex mt-3 gap-3 w-full items-center justify-start">
+            <Button size={"sm"}>Discard Changes</Button>
+            <Button size={"sm"}>Save Changes</Button>
           </div>
         </form>
-      </div>
-    </div>
-  );
-};
-type UpdateFieldFormProps = {
-  title: string;
-  field: string;
-  //   value: string;
-};
-
-const UpdateFieldForm: FC<UpdateFieldFormProps> = ({ title, field }) => {
-  const { register } = useFormContext();
-  return (
-    <div className="border w-full flex flex-col p-4 items-start justify-center rounded-lg  border-neutral-200/60 dark:border-lightGray/10">
-      <div className="w-full flex flex-col items-start justify-center">
-        <Label className="text-lg font-medium tracking-tight">{title}</Label>
-        <span className="opacity-75 text-sm mt-2">
-          This will be your display name on Pluto.app
-        </span>
-        <Input
-          {...register(field)}
-          className=" px-3 border-neutral-200/60 dark:border-lightGray/10 py-4 mt-2  opacity-75 w-full"
-        />
-      </div>
-      <div className="border-neutral-200/60 dark:border-lightGray/10 border-t">
-        <Button variant={"outline"}>Save</Button>
       </div>
     </div>
   );

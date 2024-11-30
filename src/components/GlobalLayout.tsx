@@ -10,6 +10,7 @@ import {
 } from "./ui/resizable";
 import { usePathname } from "next/navigation";
 import AppSidebar from "./AppSidebar";
+import { ScrollArea } from "./ui/scroll-area";
 
 const GlobalLayout = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
@@ -38,15 +39,12 @@ const GlobalLayout = ({ children }: { children: ReactNode }) => {
             <Navbar />
           </div>
         </div>
-        {children}
+        <ScrollArea className="w-full overflow-y-auto h-screen">
+          {children}
+        </ScrollArea>
       </ResizablePanel>
-      {/* {isDocumentPage && (
-        <> */}
       <ResizableHandle className="hidden md:flex" withHandle />
-
       <ChatWithDocumentSidebar />
-      {/* </> */}
-      {/* )} */}
     </ResizablePanelGroup>
   );
 };

@@ -1,4 +1,8 @@
-import { useIsMoveToFolderDialog, useSelectedDocuments } from "@/lib/context";
+import {
+  useDeleteDocumentDialog,
+  useIsMoveToFolderDialog,
+  useSelectedDocuments,
+} from "@/lib/context";
 import { Command, Folder, Sparkles, Trash2, X } from "lucide-react";
 import { ReactNode } from "react";
 import {
@@ -48,6 +52,8 @@ export const DefaultFloatingMenuFace = () => {
 export const SelectedDocumentsMenuFace = () => {
   const { selectedDocuments, setSelectedDocuments } = useSelectedDocuments();
   const { setIsMoveToFolderDialogOpen } = useIsMoveToFolderDialog();
+  const { isDeleteDocumentDialogOpen, setIsDeleteDocumentDialogOpen } =
+    useDeleteDocumentDialog();
 
   return (
     <div className="flex w-full items-center justify-between">
@@ -64,7 +70,10 @@ export const SelectedDocumentsMenuFace = () => {
       <div className="ml-3 flex items-center justify-center gap-2">
         <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger className=" rounded-lg border border-darkGray/80 bg-transparent p-1.5 dark:border-light-dark-border">
+            <TooltipTrigger
+              onClick={() => setIsDeleteDocumentDialogOpen!(true)}
+              className=" rounded-lg border border-darkGray/80 bg-transparent p-1.5 dark:border-light-dark-border"
+            >
               <Trash2 className="size-4 opacity-80" />
             </TooltipTrigger>
             <TooltipContent>Move to Trash</TooltipContent>

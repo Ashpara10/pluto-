@@ -1,7 +1,10 @@
-import { Filter, MoreVertical, Settings2 } from "lucide-react";
+import { Copy, Filter, MoreVertical, Plus, Settings2 } from "lucide-react";
 import React, { FC, useState } from "react";
 import { Button } from "./ui/button";
 import DocumentFilterOptions from "./documents/DocumentFilterOptions";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { createDocument } from "@/lib/db/documents";
+import { useSession } from "next-auth/react";
 
 type DocumentViewOptionsProps = {
   children?: React.ReactNode;
@@ -16,7 +19,10 @@ const DocumentViewOptions: FC<DocumentViewOptionsProps> = ({
   view,
   onViewChange,
 }) => {
+  const { data } = useSession();
   const [displayOptions, setDisplayOptions] = useState(false);
+  // const [newPopoverOpen, setNewPopoverOpen] = useState(false);
+
   return (
     <div className="mt-6 block w-full ">
       <div className="flex  w-full items-center justify-between px-3">
@@ -26,12 +32,35 @@ const DocumentViewOptions: FC<DocumentViewOptionsProps> = ({
           </span>
         </div>
         <div className="flex items-center justify-center gap-x-2">
-          <Button variant={"outline"} size={"sm"}>
-            <Filter className="size-4 opacity-80" />
-            <span className="ml-2">Filter</span>
+          {/* <Popover open={newPopoverOpen} onOpenChange={setNewPopoverOpen}>
+            <PopoverTrigger asChild> */}
+          <Button
+            variant={"outline"}
+            onClick={() => createDocument({ user: data!?.user?.id! })}
+            size={"sm"}
+          >
+            <Plus className="size-4 opacity-80" />
+            <span className="ml-2">New</span>
           </Button>
-          {/* <PopoverWrapper
-            trigger={ */}
+          {/* </PopoverTrigger>
+            <PopoverContent className="border p-0 border-neutral-200/60 bg-neutral-100 hover:bg-white  dark:border-lightGray/10 dark:bg-neutral-800 dark:hover:bg-neutral-800 mt-2 ">
+              <div className="py-1">
+                {newOptions.map((option, i) => {
+                  return (
+                    <div
+                      onClick={option?.onClick}
+                      className="w-full px-3 py-1 border-t border-neutral-200/60  hover:bg-white  dark:border-lightGray/10  dark:hover:bg-neutral-800 first:border-none flex items-center justify-start"
+                    >
+                      {option?.icon}{" "}
+                      <span className=" opacity-80 tracking-tight ml-2">
+                        {option?.name}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </PopoverContent>
+          </Popover> */}
           <DocumentFilterOptions
             view={view!}
             open={displayOptions}
@@ -39,8 +68,8 @@ const DocumentViewOptions: FC<DocumentViewOptionsProps> = ({
             onViewChange={onViewChange!}
           >
             <Button variant={"outline"} size={"sm"}>
-              <Settings2 className="size-4 opacity-80" />
-              <span className="ml-2">Display</span>
+              <Filter className="size-4 opacity-80" />
+              <span className="ml-2">Filter</span>
             </Button>
           </DocumentFilterOptions>
 

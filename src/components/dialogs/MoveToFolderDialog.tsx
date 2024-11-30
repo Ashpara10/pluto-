@@ -70,17 +70,17 @@ const MoveToFolderDialog = () => {
                     />
                   );
                 })
-              : data!?.map((collection, i) => {
+              : data!?.map((collections, i) => {
                   return (
                     <div
                       key={i}
-                      onMouseEnter={() => setHoveredCollection(collection?.id)}
+                      onMouseEnter={() => setHoveredCollection(collections.id)}
                       onMouseLeave={() => setHoveredCollection(null)}
                       className="flex w-full items-center justify-between border-b border-neutral-200/60 py-1 dark:border-lightGray/10 "
                     >
                       <div className="flex items-center justify-center">
                         <Checkbox
-                          checked={selectedCollections.includes(collection?.id)}
+                          checked={selectedCollections.includes(collections.id)}
                           className={cn(
                             `data-[state=checked]:bg-violet-600`,
                             "mt-0.5"
@@ -88,20 +88,22 @@ const MoveToFolderDialog = () => {
                           onCheckedChange={(checked) => {
                             setSelectedCollections((prev) => {
                               if (checked) {
-                                return [...prev, collection?.id];
+                                return [...prev, collections?.id];
                               }
-                              return prev.filter((id) => id !== collection?.id);
+                              return prev.filter(
+                                (id) => id !== collections?.id
+                              );
                             });
                           }}
                         />
 
                         <span className="ml-2 leading-tight tracking-tight">
-                          {collection?.name}
+                          {collections?.name || "Untitled"}
                         </span>
                       </div>
                       <span className="text-sm opacity-80">
-                        {/* @ts-ignore */}
-                        {collection?.documents?.length}{" "}
+                        {/* @ts-ignore */}0
+                        {/* {collection?.documents?.length}{" "} */}
                       </span>
                     </div>
                   );

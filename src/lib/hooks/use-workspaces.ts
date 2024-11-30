@@ -1,18 +1,22 @@
 "use client";
-import { cache, useEffect, useState } from "react";
-import { useQuery } from "react-query";
-import { getActiveWorkspace, setActiveWorkspace } from "../actions";
-import { Workspace } from "../db/schema";
-import { getUserWorkspaces, getWorkspaceByID } from "../db/workspaces";
 import { useSession } from "next-auth/react";
 import { useParams, useRouter } from "next/navigation";
+import { cache, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useQuery } from "react-query";
+import { setActiveWorkspace } from "../actions";
+import { Workspace } from "../db/schema";
+import { getUserWorkspaces, getWorkspaceByID } from "../db/workspaces";
 import { isValidUUID } from "../utils";
 
 type GetWorkspacesResponse = {
   workspaces: Workspace[];
   currentWorkspace: Workspace | null;
 };
+
+const cachedGetUserWorkspaces = cache(async (user: string) =>
+  getUserWorkspaces(user)
+);
 
 export const useWorkspaces = () => {
   const { data: user } = useSession();
@@ -23,7 +27,7 @@ export const useWorkspaces = () => {
   const { workspace: workspaceId } = useParams();
   const { data, isLoading, refetch } = useQuery(
     ["get-workspaces", user?.user?.id!],
-    cache(async () => await getUserWorkspaces(user?.user?.id!)),
+    cache(async () => await cachedGetUserWorkspaces(user?.user?.id!)),
     { enabled: false }
   );
 
@@ -38,7 +42,7 @@ export const useWorkspaces = () => {
     }
     (async () => {
       const workspace = await getWorkspaceByID(workspaceId as string);
-      console.log({ workspace, workspaceId });
+      // console.log({ workspace, workspaceId });
       if (workspace?.error) {
         toast.error(workspace?.error);
         return;
