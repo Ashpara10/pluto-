@@ -1,7 +1,7 @@
-import axios from "axios";
 import { load } from "cheerio";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { instance } from "./axios";
 
 export const key = new TextEncoder().encode(process?.env.JWT_SECRET);
 
@@ -10,27 +10,12 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export async function getArticleDataByURL(url: string) {
-  const resp = await axios.get(url);
-
-  const $ = load(resp?.data);
-  $("script").remove();
-  $("style").remove();
-  $("svg").remove();
-  $("footer").remove();
-  $("header").remove();
-  $("aside").remove();
-  $("img").remove();
-  $("picture").remove();
-  $("video").remove();
-  $("media").remove();
-  $("*").removeAttr("class");
-  $("*").removeAttr("style");
-
-  const bodyHtml = $.root().find("body");
-  bodyHtml.find("img").each((_, elem) => {
-    $(elem).addClass("editor-image");
-  });
-  return bodyHtml.html();
+  const res = await instance(`/get-article?url=${url}`);
+  if (res?.status !== 200) {
+    return null;
+  }
+  console.log(res);
+  return res.data?.data;
 }
 
 export function isValidUUID(uuid: string) {

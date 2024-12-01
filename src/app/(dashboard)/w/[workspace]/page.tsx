@@ -2,6 +2,7 @@
 import DocumentCardView from "@/components/documents/DocumentCardView";
 import DocumentListView from "@/components/documents/DocumentListView";
 import DocumentViewOptions from "@/components/DocumentViewOptions";
+import EmptyDocuments from "@/components/empty-documents";
 import { instance } from "@/lib/axios";
 import { Document } from "@/lib/db/schema";
 import { getCookie, setCookie } from "cookies-next";
@@ -48,7 +49,7 @@ const Page: FC<PageProps> = ({ params }) => {
           view={activeView}
           title="All Documents"
         >
-          {data!?.length === 0 && <span>No Documents found </span>}
+          {data!?.length === 0 && <EmptyDocuments />}
           {activeView === "grid" ? (
             <DocumentCardView data={data!} isLoading={isLoading} />
           ) : (

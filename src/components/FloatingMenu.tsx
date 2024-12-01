@@ -247,13 +247,13 @@ const FloatingMenu = memo(() => {
   }, [path, params?.workspace]);
 
   useEffect(() => {
-    if (selectedDocuments!.size > 0) {
+    if (selectedDocuments!.length > 0) {
       console.log(selectedDocuments);
       setActiveFace("selected");
     } else {
       setActiveFace("default");
     }
-  }, [selectedDocuments?.size]);
+  }, [selectedDocuments?.length]);
 
   useWindowEvent("keydown", (e) => {
     if (isExpanded && e.key === "Escape") {

@@ -4,7 +4,7 @@ import { Separator } from "@radix-ui/react-dropdown-menu";
 import { EyeIcon, EyeOffIcon, Loader } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "../ui/button";
@@ -25,10 +25,12 @@ const Login = () => {
       password: "",
     },
   });
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [show, setShow] = React.useState(false);
 
   const handleLogin = handleSubmit(async (values) => {
+    setIsLoading(true);
     const res = await signIn("credentials", {
       redirect: false,
       email: values.email,
@@ -36,15 +38,19 @@ const Login = () => {
     });
     console.log({ res });
     if (!res?.ok && res?.error) {
+      setIsLoading(false);
       toast.error(res?.error);
       return;
     }
     const activeWorkspace = await getActiveWorkspace();
     toast.success("LoggedIn successfully");
     if (!activeWorkspace) {
+      setIsLoading(false);
       router.push("/workspace");
       return;
     }
+    setIsLoading(false);
+
     router.push(`/w/${activeWorkspace.id}`);
   });
   const handleOauthLogin = async (provider: string) => {
@@ -57,20 +63,11 @@ const Login = () => {
       toast.error(res?.error);
       return;
     }
-    // if (!res?.ok && res?.error) {
-    //   toast.error(res?.error);
-    //   return;
-    // }
-    // if (!activeWorkspace) {
-    //   router.push("/workspace");
-    //   return;
-    // }
     toast.success("LoggedIn successfully");
-    // router.push(`/w/${activeWorkspace.id}`);
   };
 
   return (
-    <div className="flex w-full z-20 drop-shadow-2xl shadow-black/40 max-w-md flex-col bg-white dark:bg-darkBorder px-6 py-10 rounded-2xl">
+    <div className="flex w-full z-20 max-w-md flex-col px-6 py-10 ">
       <div className="mb-4">
         <span className="text-xl font-medium tracking-tight">Welcome Back</span>
       </div>
@@ -143,10 +140,10 @@ const Login = () => {
         </div>
         <button
           type="submit"
-          className="mt-4 rounded-lg bg-[#6a5ed9] px-4 py-2  text-white  hover:bg-[#564ac6]"
+          className="mt-4 flex items-center justify-center rounded-lg bg-[#6a5ed9] px-4 py-2  text-white  hover:bg-[#564ac6]"
         >
-          {formState?.isLoading && (
-            <Loader className="size-4 animate-spin opacity-80" />
+          {isLoading && (
+            <Loader className="size-4 animate-spin opacity-80 mr-2" />
           )}
           <span className="font-medium ">Login</span>
         </button>

@@ -6,11 +6,11 @@ import WorkspaceSwitcher from "./WorkspaceSwitcher";
 const Navbar = () => {
   const router = useRouter();
   const { workspace } = useParams();
-  const links = [
-    { id: "documents", name: "Document", url: "/home" },
-    { id: "collections", name: "Collection", url: "/home/collection" },
-    { id: "tags", name: "Tags", url: "/home" },
-  ];
+  // const links = [
+  //   { id: "documents", name: "Document", url: "/home" },
+  //   { id: "collections", name: "Collection", url: "/home/collection" },
+  //   { id: "tags", name: "Tags", url: "/home/tags" },
+  // ];
   const path = usePathname();
   const getActivePath = () => {
     switch (path) {
@@ -18,7 +18,7 @@ const Navbar = () => {
         return "documents";
       case `/w/${workspace}/collection`:
         return "collections";
-      case `/w/${workspace}`:
+      case `/w/${workspace}/tags`:
         return "tags";
       default:
         return "documents";
@@ -57,7 +57,7 @@ const Navbar = () => {
               <TabsTrigger
                 className="rounded-lg data-[state=active]:bg-white dark:data-[state=active]:bg-neutral-900"
                 value="tags"
-                onClick={() => router.push(`/w/${workspace}`)}
+                onClick={() => router.push(`/w/${workspace}/tags`)}
               >
                 Tags
               </TabsTrigger>

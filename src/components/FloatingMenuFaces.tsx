@@ -59,12 +59,12 @@ export const SelectedDocumentsMenuFace = () => {
     <div className="flex w-full items-center justify-between">
       <span className="flex items-center justify-start gap-x-1">
         <span
-          onClick={() => setSelectedDocuments!(new Set())}
+          onClick={() => setSelectedDocuments!([])}
           className="mr-2 rounded-lg border border-darkGray/80 bg-transparent p-1.5 dark:border-light-dark-border"
         >
           <X className="size-4 opacity-80" />
         </span>
-        <span>{selectedDocuments?.size} </span>
+        <span>{selectedDocuments?.length} </span>
         Documents
       </span>
       <div className="ml-3 flex items-center justify-center gap-2">

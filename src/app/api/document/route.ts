@@ -35,6 +35,5 @@ export async function GET(req: NextRequest) {
         eq(documents?.authorId, sessionData!?.user.id!)
       )
     );
-  console.log({ workspaceDocuments });
   return Response.json({ documents: workspaceDocuments }, { status: 201 });
 }

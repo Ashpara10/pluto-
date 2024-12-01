@@ -3,17 +3,18 @@ import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 import toast from "react-hot-toast";
 import { getDocument } from "./actions";
+import DocumentPage from "@/components/documents/DocumentPage";
 
 type PageProps = {
   params: { id: string };
 };
 
-const DocumentPage = dynamic(
-  () => import("@/components/documents/DocumentPage"),
-  {
-    ssr: false,
-  }
-);
+// const DocumentPage = dynamic(
+//   () => import("@/components/documents/DocumentPage"),
+//   {
+//     ssr: false,
+//   }
+// );
 
 export default async function Page({ params }: PageProps) {
   if (!params?.id) return notFound();

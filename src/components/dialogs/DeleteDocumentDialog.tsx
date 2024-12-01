@@ -40,7 +40,7 @@ const DeleteDocumentDialog = () => {
         <DialogHeader>
           <DialogTitle>Delete Document</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete {selectedDocuments?.size}{" "}
+            Are you sure you want to delete {selectedDocuments?.length}{" "}
             document's?
           </DialogDescription>
         </DialogHeader>
@@ -48,7 +48,7 @@ const DeleteDocumentDialog = () => {
           <div className="flex items-center justify-center gap-x-2">
             <Button
               onClick={() => {
-                setSelectedDocuments!(new Set());
+                setSelectedDocuments!([]);
                 setIsDeleteDocumentDialogOpen!(false);
               }}
               size={"sm"}

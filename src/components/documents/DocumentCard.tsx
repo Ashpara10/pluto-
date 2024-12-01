@@ -4,6 +4,7 @@ import { useWorkspaces } from "@/lib/hooks/use-workspaces";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { Checkbox } from "../ui/checkbox";
+import { Card, CardHeader, CardTitle } from "../ui/card";
 
 type DocumentCardProps = {
   document: Document;
@@ -22,36 +23,64 @@ const DocumentCardItem = ({
     router.push(`/w/${currentWorkspace?.id}/document/${document.id}`);
   };
   return (
-    <div className=" flex w-full group flex-col  rounded-xl border border-neutral-200 px-2.5 py-3 dark:border-lightGray/10 relative">
-      <div className="flex w-full items-center justify-center">
-        <span
+    // <div className=" flex w-full group flex-col  rounded-xl border border-neutral-200 px-2.5 py-3 dark:border-lightGray/10 relative">
+    //   <div className="flex w-full items-center justify-center">
+    //     <span
+    //       onClick={handleClick}
+    //       className="line-clamp-2 w-full text-lg leading-tight tracking-tight hover:cursor-pointer  "
+    //     >
+    //       {document?.title || "Untitled"}
+    //     </span>
+    //     <Checkbox
+    //       checked={checked}
+    //       className={cn(
+    //         `data-[state=checked]:bg-violet-600`,
+    //         "absolute right-2 top-2 group-hover:opacity-100 data-[state=checked]:opacity-100 opacity-0  transition-opacity "
+    //       )}
+    //       onCheckedChange={(checked) => {
+    //         handleCheckChange(checked as boolean, document?.id);
+    //       }}
+    //     />
+    //   </div>
+
+    //   <div className="">
+    //     <span className="text-sm opacity-80">
+    //       {new Date(document?.createdAt)?.toLocaleString("en-US", {
+    //         month: "short",
+    //         day: "numeric",
+    //         year: "numeric",
+    //       })}
+    //     </span>
+    //   </div>
+    // </div>
+    <Card className="rounded-xl  group">
+      <Checkbox
+        checked={checked}
+        className={cn(
+          `data-[state=checked]:bg-violet-600`,
+          "absolute right-2 top-2 group-hover:opacity-100 data-[state=checked]:opacity-100 opacity-0  transition-opacity "
+        )}
+        onCheckedChange={(checked) => {
+          handleCheckChange(checked as boolean, document?.id);
+        }}
+      />
+      <CardHeader>
+        <CardTitle
           onClick={handleClick}
-          className="line-clamp-2 w-full text-lg leading-tight tracking-tight hover:cursor-pointer  "
+          className="text-lg font-medium tracking-tight leading-tight"
         >
           {document?.title || "Untitled"}
-        </span>
-        <Checkbox
-          checked={checked}
-          className={cn(
-            `data-[state=checked]:bg-violet-600`,
-            "absolute right-2 top-2 group-hover:opacity-100 data-[state=checked]:opacity-100 opacity-0  transition-opacity "
-          )}
-          onCheckedChange={(checked) => {
-            handleCheckChange(checked as boolean, document?.id);
-          }}
-        />
-      </div>
+        </CardTitle>
 
-      <div className="">
-        <span className="text-sm opacity-80">
+        <span>
           {new Date(document?.createdAt)?.toLocaleString("en-US", {
             month: "short",
             day: "numeric",
             year: "numeric",
           })}
         </span>
-      </div>
-    </div>
+      </CardHeader>
+    </Card>
   );
 };
 

@@ -12,20 +12,18 @@ type DocumentListViewProps = {
 const DocumentListView: FC<DocumentListViewProps> = ({ data, isLoading }) => {
   const { setSelectedDocuments, selectedDocuments } = useSelectedDocuments();
 
-  const [checked, setChecked] = useState<Record<string, boolean>>({});
-  useEffect(() => {
-    const checkedArr = Object.entries(checked);
-    if (data && checkedArr?.length !== 0) {
-      setSelectedDocuments!(
-        () =>
-          new Set(checkedArr.filter(([, value]) => value).map(([key]) => key))
-      );
-    }
-  }, [checked]);
   const handleCheckBoxChange = (checked: boolean, id: string) => {
-    setChecked((prev) => ({ ...prev, [id]: checked }));
+    setSelectedDocuments!((prev) => {
+      const newSet = new Set(prev);
+      if (checked) {
+        newSet.add(id);
+      } else {
+        newSet.delete(id);
+      }
+      return Array.from(newSet);
+    });
   };
-
+  console.log(selectedDocuments, { ...selectedDocuments });
   return (
     <section className="">
       {isLoading
@@ -33,15 +31,16 @@ const DocumentListView: FC<DocumentListViewProps> = ({ data, isLoading }) => {
             return (
               <Skeleton
                 key={i}
-                className="mt-2 h-10 w-full animate-pulse rounded-lg bg-darkGray/60 dark:bg-lightGray/10"
+                className="mt-2 h-12 w-full animate-pulse rounded-lg bg-darkGray/60 dark:bg-lightGray/10"
               />
             );
           })
         : data!?.map((doc, i) => {
+            const isChecked = selectedDocuments?.includes(doc?.id);
             return (
               <DocumentListItem
                 key={i}
-                checked={checked[doc?.id]}
+                checked={isChecked}
                 handleCheckChange={(checked) =>
                   handleCheckBoxChange(checked, doc?.id)
                 }

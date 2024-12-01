@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useQuery } from "react-query";
 import { Skeleton } from "../ui/skeleton";
 import CollectionCard from "./CollectionCard";
+import EmptyCollections from "../empty-collection";
 
 export const getAllCollections = async ({
   workspace,
@@ -39,25 +40,28 @@ const AllCollections = () => {
     setChecked((prev) => ({ ...prev, [id]: checked }));
   };
   return (
-    <div className="grid w-full grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4">
-      {isLoading
-        ? [...Array(9)].map((_, i) => {
-            return (
-              <Skeleton
-                key={i}
-                className="h-34  w-full animate-pulse rounded-lg bg-darkGray/60 dark:bg-lightGray/10"
-              />
-            );
-          })
-        : data!?.map((collections, i) => {
-            return (
-              <CollectionCard
-                collection={collections}
-                checked={checked[collections.id]}
-                handleCheckChange={handleCheckBoxChange}
-              />
-            );
-          })}
+    <div>
+      {data?.length === 0 && <EmptyCollections />}
+      <div className="grid w-full grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4">
+        {isLoading
+          ? [...Array(9)].map((_, i) => {
+              return (
+                <Skeleton
+                  key={i}
+                  className="h-34  w-full animate-pulse rounded-lg bg-darkGray/60 dark:bg-lightGray/10"
+                />
+              );
+            })
+          : data!?.map((collections, i) => {
+              return (
+                <CollectionCard
+                  collection={collections}
+                  checked={checked[collections.id]}
+                  handleCheckChange={handleCheckBoxChange}
+                />
+              );
+            })}
+      </div>
     </div>
   );
 };

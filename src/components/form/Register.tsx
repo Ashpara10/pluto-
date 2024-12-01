@@ -1,21 +1,28 @@
 "use client";
-import { RegisterSchema, register as signUp } from "@/lib/actions";
+import {
+  getActiveWorkspace,
+  RegisterSchema,
+  register as signUp,
+} from "@/lib/actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { EyeIcon, EyeOffIcon, Loader } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Button } from "../ui/button";
+import { signIn } from "next-auth/react";
 
 const Register = () => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
   const {
     handleSubmit,
     register,
-    formState: { errors, isLoading },
+    formState: { errors },
   } = useForm({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -27,13 +34,13 @@ const Register = () => {
 
   const [show, setShow] = React.useState(false);
   return (
-    <div className="flex w-full z-20 drop-shadow-2xl shadow-black/40 max-w-md flex-col bg-white dark:bg-darkBorder px-6 py-10 rounded-2xl">
+    <div className="flex w-full z-20 max-w-md flex-col px-6 py-10 ">
       <div className="mb-4">
         <span className="text-xl font-medium tracking-tight">Register Now</span>
       </div>
       <div className="flex w-full flex-col space-y-2">
         <Button
-          className="w-full"
+          className="w-full bg-white hover:bg-neutral-200"
           variant={"outline"}
           // onClick={async () => signIn("github", { callbackUrl: "/workspace" })}
         >
@@ -50,7 +57,7 @@ const Register = () => {
         </Button>
         <Button
           variant={"outline"}
-          className="mt-2 w-full"
+          className="w-full bg-white hover:bg-neutral-200 mt-2"
           // onClick={async () => signIn("google", { callbackUrl: "/workspace" })}
         >
           <Image
@@ -72,13 +79,32 @@ const Register = () => {
       </div>
       <form
         onSubmit={handleSubmit(async (data) => {
+          setIsLoading(true);
           const { data: res, error } = await signUp(data);
           console.log({ res, error });
           if (error) {
+            setIsLoading(false);
             toast.error(error);
             return;
           }
-          router.push("/login");
+          // const resp = await signIn("credentials", {
+          //   redirect: false,
+          //   email: res?.email!,
+          //   password: res?.passwordHash!,
+          // });
+          // console.log({ res });
+          // if (!resp?.ok && resp?.error) {
+          //   toast.error(resp?.error);
+          //   return;
+          // }
+          // const activeWorkspace = await getActiveWorkspace();
+          // toast.success("LoggedIn successfully");
+          // if (!activeWorkspace) {
+          //   router.push("/workspace");
+          //   return;
+          // }
+          // router.push(`/w/${activeWorkspace.id}`);
+          router.push(`/login`);
         })}
         className="flex w-full  flex-col "
       >
@@ -136,7 +162,7 @@ const Register = () => {
 
         <button
           type="submit"
-          className="mt-4 rounded-lg bg-indigo-600 px-4 py-2  text-white  hover:bg-indigo-700"
+          className="mt-4 flex items-center justify-center rounded-lg bg-[#6a5ed9] px-4 py-2  text-white  hover:bg-[#564ac6]"
         >
           {isLoading && <Loader className="size-4 animate-spin opacity-80" />}
           <span className="font-medium tracking-tight">Signup</span>

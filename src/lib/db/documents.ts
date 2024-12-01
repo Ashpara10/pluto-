@@ -1,11 +1,9 @@
 "use server";
+import { revalidateDocumentData } from "@/app/(dashboard)/w/[workspace]/document/[id]/actions";
 import { eq } from "drizzle-orm";
-import { revalidateDocumentByTag } from "../serverActions";
 import { CreateDocumentPayload } from "../types";
 import { db } from "./drizzle";
 import { documents } from "./schema";
-import { revalidateTag } from "next/cache";
-import { revalidateDocumentData } from "@/app/(dashboard)/w/[workspace]/document/[id]/actions";
 
 export const getDocumentById = async (id: string) => {
   try {
@@ -54,7 +52,6 @@ export const updateDocument = async ({
       throw new Error("Failed to save document");
     }
     await revalidateDocumentData("/(dashboard)/w/[workspace]/document/[id]");
-
     return { data: document, error: null };
   } catch (error) {
     return { data: null, error: (error as Error).message };
@@ -70,7 +67,7 @@ export const createDocument = async ({
     const document = await db
       .insert(documents)
       .values({
-        title: "",
+        title: `Untitled Document`,
         content: "",
         markdown: "",
         authorId: user,

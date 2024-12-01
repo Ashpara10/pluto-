@@ -8,7 +8,7 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { useWindowEvent } from "@mantine/hooks";
 import { Loader } from "lucide-react";
 import dynamic from "next/dynamic";
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import TextareaAutosize from "react-textarea-autosize";
 import TransitionLayout from "../TransitionLayout";
@@ -23,34 +23,37 @@ const Editor = dynamic(() => import("@/components/editor/editor"), {
 });
 
 const DocumentPage: FC<DocumentPageProps> = ({ document }) => {
-  const [title, setTitle] = useState<string>(document?.title!);
   const [data, setData] = useState<Document>(document!);
   const [tags, setTags] = useState<string[]>(document?.tags! || []);
   const [editor] = useLexicalComposerContext();
 
-  const onSave = useCallback(async () => {
+  useEffect(() => {
+    console.log({ data });
+  }, [data]);
+
+  const onSave = async () => {
+    let payload = {
+      id: data?.id!,
+      title: data?.title!,
+      markdown: "",
+      content: "",
+      tags: tags,
+    };
+    console.log(payload?.title);
     editor?.read(() => {
       const html = $generateHtmlFromNodes(editor);
       const md = $convertToMarkdownString(TRANSFORMERS);
-      const payload = {
-        id: data?.id!,
-        title: title,
-        markdown: md!,
-        content: html!,
-        tags: tags,
-      };
+      payload = { ...payload, markdown: md, content: html };
       console.log({ tags: payload });
-      (async () => {
-        const { error } = await updateDocument(payload);
-        if (error) {
-          return toast.error(error);
-        }
-        toast.success("Document saved successfully");
-
-        queryClient.refetchQueries(["documents-lists"]);
-      })();
     });
-  }, []);
+
+    const { error } = await updateDocument(payload);
+    if (error) {
+      return toast.error(error);
+    }
+    toast.success("Document saved successfully");
+    queryClient.refetchQueries(["documents-lists"]);
+  };
 
   useWindowEvent("keydown", (e) => {
     if (e?.code === "KeyS" && (e?.ctrlKey || e?.metaKey)) {
@@ -69,10 +72,8 @@ const DocumentPage: FC<DocumentPageProps> = ({ document }) => {
 						text-3xl lg:text-4xl p-0 focus-visible:outline-none bg-transparent placeholder:text-neutral-300 dark:placeholder:text-neutral-700
 						border-none appearance-none shadow-none overflow-hidden "
           placeholder="Enter Title..."
-          value={title}
-          onChange={(e) => {
-            setTitle(e.target.value);
-          }}
+          value={data?.title!}
+          onChange={(e) => setData((p) => ({ ...p, title: e.target.value }))}
         />
         {/* <TagInput tags={tags!} setTags={(tags) => setTags(tags)} /> */}
         <div className="w-full flex mt-1 items-center justify-start">

@@ -3,6 +3,7 @@ import {
   ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useState,
 } from "react";
 
@@ -11,8 +12,8 @@ type UpdateStateFunctionType = (isOpen: boolean) => void;
 type ContextStateType = {
   sidebarOpen: boolean;
   createDocumentDialogOpen: boolean;
-  selectedDocuments?: Set<string>;
-  setSelectedDocuments?: React.Dispatch<React.SetStateAction<Set<string>>>;
+  selectedDocuments?: string[];
+  setSelectedDocuments?: React.Dispatch<React.SetStateAction<string[]>>;
   isCreateCollectionDialogOpen?: boolean;
   isMoveToFolderDialogOpen?: boolean;
   isCreateWorkspaceDialogOpen?: boolean;
@@ -35,7 +36,7 @@ type setContextType = [
 const defaultContextState: ContextStateType = {
   sidebarOpen: false,
   createDocumentDialogOpen: false,
-  selectedDocuments: new Set(),
+  selectedDocuments: [],
   setSelectedDocuments: () => {},
   isCreateCollectionDialogOpen: false,
   isMoveToFolderDialogOpen: false,
@@ -160,9 +161,7 @@ export const useDeleteDocumentDialog = () => {
 };
 
 const AppContextProvider = ({ children }: { children: ReactNode }) => {
-  const [selectedDocuments, setSelectedDocuments] = useState<Set<string>>(
-    new Set()
-  );
+  const [selectedDocuments, setSelectedDocuments] = useState<string[]>([]);
   const [openContext, setOpenContext] =
     useState<ContextStateType>(defaultContextState);
   const setSidebarOpen = useCallback(

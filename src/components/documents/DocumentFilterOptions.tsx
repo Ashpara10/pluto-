@@ -37,7 +37,6 @@ const DocumentFilterOptions: FC<DocumentFilterOptionsProps> = ({
       <PopoverContent className="border p-0 border-neutral-200/60 bg-neutral-100 hover:bg-white  dark:border-lightGray/10 dark:bg-neutral-800 dark:hover:bg-neutral-800 mt-2 ">
         <div className="space-y-4">
           <div className="space-y-2 px-3 py-2">
-            <h4 className=" tracking-tight leading-none">View</h4>
             <div className="flex items-center gap-2">
               <Button
                 variant={view === "grid" ? "default" : "outline"}
@@ -57,6 +56,10 @@ const DocumentFilterOptions: FC<DocumentFilterOptionsProps> = ({
                 <List className="mr-2 h-4 w-4" />
                 List
               </Button>
+            </div>
+            <Separator />
+            <div>
+              <span></span>
             </div>
           </div>
         </div>
