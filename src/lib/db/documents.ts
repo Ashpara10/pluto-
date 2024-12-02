@@ -46,7 +46,7 @@ export const updateDocument = async ({
       })
       .where(eq(documents.id, id))
       .returning();
-    console.log({ document });
+    // console.log({ document });
 
     if (document.length === 0) {
       throw new Error("Failed to save document");
@@ -59,9 +59,8 @@ export const updateDocument = async ({
 };
 export const createDocument = async ({
   user,
-  content,
-  title,
   workspaceId,
+  collectionId,
 }: CreateDocumentPayload) => {
   try {
     const document = await db
@@ -72,6 +71,7 @@ export const createDocument = async ({
         markdown: "",
         authorId: user,
         workspaceId: workspaceId!,
+        collectionId: collectionId!,
       })
       .returning();
 

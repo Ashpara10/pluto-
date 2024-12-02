@@ -7,6 +7,7 @@ import { instance } from "@/lib/axios";
 import { Document } from "@/lib/db/schema";
 import { getCookie, setCookie } from "cookies-next";
 import { FC, useState } from "react";
+import toast from "react-hot-toast";
 import { useQuery } from "react-query";
 
 const fetchDocuments = async ({ workspace }: { workspace: string }) => {
@@ -16,7 +17,8 @@ const fetchDocuments = async ({ workspace }: { workspace: string }) => {
     },
   });
   if (!res?.data) {
-    console.log({ err: res?.data });
+    // console.log({ err: res?.data });
+    toast.error("Failed to fetch documents");
     return;
   }
   return res.data?.documents as Document[];
@@ -42,8 +44,8 @@ const Page: FC<PageProps> = ({ params }) => {
   };
 
   return (
-    <div className="flex w-full flex-col items-center justify-center pt-28">
-      <div className="w-full max-w-5xl">
+    <div className="flex w-full flex-col items-center justify-center mt-28">
+      <div className="w-full ">
         <DocumentViewOptions
           onViewChange={onViewChange}
           view={activeView}

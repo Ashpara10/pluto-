@@ -116,7 +116,7 @@ export const login = async (payload: z.infer<typeof LoginSchema>) => {
     };
   }
 
-  console.log({ user });
+  // console.log({ user });
 
   const isValid = await comparePasswords(data.password, user[0]!.passwordHash!);
   if (!isValid) {
@@ -143,13 +143,13 @@ export const register = async (payload: z.infer<typeof RegisterSchema>) => {
     .from(users)
     .where(eq(users.email, email))
     .limit(1);
-  console.log({ existingUser });
+  // console.log({ existingUser });
   if (existingUser.length > 0) {
     return { data: null, error: "Failed to create user. Please try again." };
   }
   const passwordHash = await hashPassword(password);
   const avatar = getAvatarByUserInitials(name);
-  console.log({ passwordHash, avatar });
+  // console.log({ passwordHash, avatar });
   const newUser: NewUser = {
     image: avatar || null,
     name,
@@ -159,7 +159,7 @@ export const register = async (payload: z.infer<typeof RegisterSchema>) => {
   };
 
   const [createdUser] = await db.insert(users).values(newUser).returning();
-  console.log({ createdUser });
+  // console.log({ createdUser });
   if (!createdUser) {
     return { data: null, error: "Failed to create user. Please try again." };
   }
@@ -175,7 +175,7 @@ const getActiveWorkspace = async () => {
 };
 export const setActiveWorkspace = async (payload: Workspace) => {
   const encryptedWorkspace = await signToken(payload);
-  console.log({ payload, encryptedWorkspace });
+  // console.log({ payload, encryptedWorkspace });
   setCookie("active-workspace", encryptedWorkspace);
 };
 

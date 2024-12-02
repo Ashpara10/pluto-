@@ -14,7 +14,7 @@ export async function getArticleDataByURL(url: string) {
   if (res?.status !== 200) {
     return null;
   }
-  console.log(res);
+  // console.log(res);
   return res.data?.data;
 }
 

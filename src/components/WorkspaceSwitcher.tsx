@@ -18,7 +18,7 @@ const WorkspaceSwitcher = () => {
   const { workspaces, isLoading, currentWorkspace } = useWorkspaces();
   if (isLoading)
     return (
-      <Skeleton className="h-10 w-64 animate-pulse rounded-lg bg-neutral-200/60 dark:bg-lightGray/10" />
+      <Skeleton className="h-10 w-full animate-pulse rounded-lg bg-neutral-200/60 dark:bg-lightGray/10" />
     );
   const handleWorkspaceClick = (workspace: Workspace) => {
     if (workspace?.id === currentWorkspace?.id) return;
@@ -33,7 +33,7 @@ const WorkspaceSwitcher = () => {
           className="flex w-full items-center justify-center gap-x-1 rounded-lg border border-neutral-200/60 px-3 py-2  hover:bg-neutral-100 dark:border-lightGray/10 dark:hover:bg-lightGray/10"
         >
           <div className="ml-1 w-full flex items-center justify-between">
-            <span className="w-full line-clamp-1 text-sm leading-tight">
+            <span className="w-full text-left truncate text-sm leading-tight">
               {currentWorkspace!?.name}
             </span>
             <ChevronsUpDown

@@ -18,9 +18,9 @@ const DeleteDocumentDialog = () => {
   const { selectedDocuments, setSelectedDocuments } = useSelectedDocuments();
 
   const handleDeleteDocuments = async () => {
-    console.log("Deleting documents");
+    // console.log("Deleting documents");
     const ids = Array.from(selectedDocuments!);
-    console.log(ids);
+    // console.log(ids);
     const { ok, error } = await deleteDocuments(ids);
     if (!ok) {
       console.error(error);

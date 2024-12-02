@@ -750,7 +750,7 @@ pre::-webkit-scrollbar-thumb {
 }
 
 .PlaygroundEditorTheme__table {
-  @apply w-full max-w-2xl table-auto border-collapse border-spacing-0 overflow-scroll;
+  @apply w-full  table-auto border-collapse border-spacing-0 overflow-scroll;
 }
 .PlaygroundEditorTheme__tableSelection *::selection {
   background-color: transparent;
@@ -762,7 +762,7 @@ pre::-webkit-scrollbar-thumb {
 .PlaygroundEditorTheme__tableCell {
   min-width: 75px;
 
-  @apply relative border border-darkGray  px-3 py-2 text-start align-top outline-none;
+  @apply relative border border-neutral-200 dark:border-lightGray/20 bg-transparent px-3 py-2 text-start align-top outline-none;
 }
 .PlaygroundEditorTheme__tableCellSortedIndicator {
   display: block;
@@ -772,7 +772,7 @@ pre::-webkit-scrollbar-thumb {
   left: 0;
   width: 100%;
   height: 4px;
-  background-color: #999;
+  background-color: rgb(153, 153, 153);
 }
 .PlaygroundEditorTheme__tableCellResizer {
   position: absolute;
@@ -784,10 +784,10 @@ pre::-webkit-scrollbar-thumb {
   top: 0;
 }
 .PlaygroundEditorTheme__tableCellHeader {
-  @apply bg-lightGray/20 text-start font-medium;
+  @apply bg-neutral-200 dark:bg-lightGray/20 text-start font-medium;
 }
 .PlaygroundEditorTheme__tableCellSelected {
-  background-color: #c9dbf0;
+  background-color: rgb(201, 219, 240);
 }
 .PlaygroundEditorTheme__tableCellPrimarySelected {
   border: 2px solid rgb(60, 132, 244);
@@ -818,7 +818,7 @@ pre::-webkit-scrollbar-thumb {
 .PlaygroundEditorTheme__tableAddRows {
   position: absolute;
   width: calc(100% - 25px);
-  background-color: #eee;
+  background-color: rgb(238, 238, 238);
   animation: table-controls 0.2s ease;
   border: 0;
   cursor: pointer;
@@ -854,7 +854,7 @@ pre::-webkit-scrollbar-thumb {
   height: 20px;
 }
 .PlaygroundEditorTheme__tableCellActionButton {
-  background-color: #eee;
+  background-color: rgb(238, 238, 238);
   display: block;
   border: 0;
   border-radius: 20px;

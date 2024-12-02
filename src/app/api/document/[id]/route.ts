@@ -10,14 +10,14 @@ export async function GET(
 ) {
   try {
     const user = await getUserFromCookies(req);
-    console.log(user);
+    // console.log(user);
     const { id } = params;
     const doc = await db
       .select()
       .from(documents)
       .where(and(eq(documents?.id, id)))
       .limit(1);
-    console.log({ doc });
+    // console.log({ doc });
     if (doc.length === 0) {
       throw new Error("Document not found");
     }

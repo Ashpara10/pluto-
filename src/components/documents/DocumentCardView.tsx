@@ -13,18 +13,16 @@ type DocumentCardViewProps = {
 const DocumentCardView: FC<DocumentCardViewProps> = ({ data, isLoading }) => {
   const { setSelectedDocuments, selectedDocuments } = useSelectedDocuments();
 
-  const [checked, setChecked] = useState<Record<string, boolean>>({});
-  useEffect(() => {
-    const checkedArr = Object.entries(checked);
-    if (data && checkedArr?.length !== 0) {
-      setSelectedDocuments!(
-        () =>
-          new Set(checkedArr.filter(([, value]) => value).map(([key]) => key))
-      );
-    }
-  }, [checked]);
   const handleCheckBoxChange = (checked: boolean, id: string) => {
-    setChecked((prev) => ({ ...prev, [id]: checked }));
+    setSelectedDocuments!((prev) => {
+      const newSet = new Set(prev);
+      if (checked) {
+        newSet.add(id);
+      } else {
+        newSet.delete(id);
+      }
+      return Array.from(newSet);
+    });
   };
 
   return (
@@ -43,7 +41,7 @@ const DocumentCardView: FC<DocumentCardViewProps> = ({ data, isLoading }) => {
             return (
               <DocumentCardItem
                 key={i}
-                checked={checked[doc?.id]}
+                checked={selectedDocuments?.includes(doc?.id)}
                 handleCheckChange={(checked) =>
                   handleCheckBoxChange(checked, doc?.id)
                 }

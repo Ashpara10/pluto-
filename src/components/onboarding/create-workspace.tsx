@@ -25,7 +25,7 @@ const NewWorkspaceSchema = z.object({
 const CreateWorkspace = () => {
   const router = useRouter();
   const { data: user } = useSession();
-  console.log({ user });
+  // console.log({ user });
   const workspaceName =
     user?.user?.name &&
     `${capitalizeFirstLetter(

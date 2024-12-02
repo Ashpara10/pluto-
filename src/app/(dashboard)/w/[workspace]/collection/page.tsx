@@ -5,8 +5,8 @@ import React from "react";
 
 const Page = () => {
   return (
-    <section className="flex w-full flex-col items-center justify-center pt-28">
-      <div className="w-full max-w-5xl">
+    <section className="flex w-full flex-col items-center justify-center mt-28">
+      <div className="w-full ">
         <CollectionViewOptions title="All Collections">
           <AllCollections />
         </CollectionViewOptions>

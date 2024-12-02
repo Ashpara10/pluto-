@@ -74,7 +74,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
       node.__altText,
       node.__width,
       node.__height,
-      node.__key,
+      node.__key
     );
   }
 
@@ -114,7 +114,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
     width?: "inherit" | number,
     height?: "inherit" | number,
 
-    key?: NodeKey,
+    key?: NodeKey
   ) {
     super(key);
     this.__src = src;
@@ -136,7 +136,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
 
   setWidthAndHeight(
     width: "inherit" | number,
-    height: "inherit" | number,
+    height: "inherit" | number
   ): void {
     const writable = this.getWritable();
     writable.__width = width;
@@ -146,7 +146,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
   // View
 
   createDOM(config: EditorConfig): HTMLElement {
-    console.log("image createDom");
+    // console.log("image createDom");
     const span = document.createElement("span");
     const theme = config.theme;
     const className = theme.image;
@@ -194,7 +194,7 @@ export function $createImageNode({
 }
 
 export function $isImageNode(
-  node: LexicalNode | null | undefined,
+  node: LexicalNode | null | undefined
 ): node is ImageNode {
   return node instanceof ImageNode;
 }

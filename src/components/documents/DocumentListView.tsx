@@ -23,7 +23,6 @@ const DocumentListView: FC<DocumentListViewProps> = ({ data, isLoading }) => {
       return Array.from(newSet);
     });
   };
-  console.log(selectedDocuments, { ...selectedDocuments });
   return (
     <section className="">
       {isLoading

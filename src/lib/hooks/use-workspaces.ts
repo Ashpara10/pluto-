@@ -14,10 +14,7 @@ type GetWorkspacesResponse = {
   currentWorkspace: Workspace | null;
 };
 
-const cachedGetUserWorkspaces = cache(async (user: string) =>
-  getUserWorkspaces(user)
-);
-
+const cachedGetUserWorkspaces = async (user: string) => getUserWorkspaces(user);
 export const useWorkspaces = () => {
   const { data: user } = useSession();
   const router = useRouter();
@@ -27,7 +24,7 @@ export const useWorkspaces = () => {
   const { workspace: workspaceId } = useParams();
   const { data, isLoading, refetch } = useQuery(
     ["get-workspaces", user?.user?.id!],
-    cache(async () => await cachedGetUserWorkspaces(user?.user?.id!)),
+    async () => await cachedGetUserWorkspaces(user?.user?.id!),
     { enabled: false }
   );
 

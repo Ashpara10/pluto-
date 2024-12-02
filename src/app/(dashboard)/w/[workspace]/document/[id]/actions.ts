@@ -1,5 +1,6 @@
 "use server";
 
+import { Document } from "@/lib/db/schema";
 import { revalidatePath } from "next/cache";
 
 export const getDocument = async (id: string) => {
@@ -14,7 +15,7 @@ export const getDocument = async (id: string) => {
   if (!res?.ok && data.error) {
     return { data: null, error: data.error };
   }
-  return { data: data?.data, error: null };
+  return { data: data?.data as Document, error: null };
 };
 
 export const revalidateDocumentData = async (

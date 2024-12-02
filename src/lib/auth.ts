@@ -26,20 +26,17 @@ export const auth = {
     async jwt({ token, user, account, profile, session }) {
       if (user) {
         const u = await getUserByEmail(user.email!);
-        console.log({ u });
         if (!u.data) {
           return token;
         }
         token.id = u.data.id;
         token.picture = u.data.image;
-        console.log({ token });
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
         session.user.id = token.id as string;
-        console.log({ session: session?.user?.id });
       }
       return session;
     },
@@ -69,7 +66,7 @@ export const auth = {
           .from(users)
           .where(eq(users.email, credentials?.email))
           .limit(1);
-        console.log({ u: user[0] });
+        // console.log({ u: user[0] });
         if (!user[0]) {
           throw new Error(`User ${credentials?.email} not found`);
         }

@@ -8,7 +8,7 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { useWindowEvent } from "@mantine/hooks";
 import { Loader } from "lucide-react";
 import dynamic from "next/dynamic";
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import toast from "react-hot-toast";
 import TextareaAutosize from "react-textarea-autosize";
 import TransitionLayout from "../TransitionLayout";
@@ -27,10 +27,6 @@ const DocumentPage: FC<DocumentPageProps> = ({ document }) => {
   const [tags, setTags] = useState<string[]>(document?.tags! || []);
   const [editor] = useLexicalComposerContext();
 
-  useEffect(() => {
-    console.log({ data });
-  }, [data]);
-
   const onSave = async () => {
     let payload = {
       id: data?.id!,
@@ -39,12 +35,12 @@ const DocumentPage: FC<DocumentPageProps> = ({ document }) => {
       content: "",
       tags: tags,
     };
-    console.log(payload?.title);
+    // console.log(payload?.title);
     editor?.read(() => {
       const html = $generateHtmlFromNodes(editor);
       const md = $convertToMarkdownString(TRANSFORMERS);
       payload = { ...payload, markdown: md, content: html };
-      console.log({ tags: payload });
+      // console.log({ tags: payload });
     });
 
     const { error } = await updateDocument(payload);

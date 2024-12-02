@@ -23,37 +23,7 @@ const DocumentCardItem = ({
     router.push(`/w/${currentWorkspace?.id}/document/${document.id}`);
   };
   return (
-    // <div className=" flex w-full group flex-col  rounded-xl border border-neutral-200 px-2.5 py-3 dark:border-lightGray/10 relative">
-    //   <div className="flex w-full items-center justify-center">
-    //     <span
-    //       onClick={handleClick}
-    //       className="line-clamp-2 w-full text-lg leading-tight tracking-tight hover:cursor-pointer  "
-    //     >
-    //       {document?.title || "Untitled"}
-    //     </span>
-    //     <Checkbox
-    //       checked={checked}
-    //       className={cn(
-    //         `data-[state=checked]:bg-violet-600`,
-    //         "absolute right-2 top-2 group-hover:opacity-100 data-[state=checked]:opacity-100 opacity-0  transition-opacity "
-    //       )}
-    //       onCheckedChange={(checked) => {
-    //         handleCheckChange(checked as boolean, document?.id);
-    //       }}
-    //     />
-    //   </div>
-
-    //   <div className="">
-    //     <span className="text-sm opacity-80">
-    //       {new Date(document?.createdAt)?.toLocaleString("en-US", {
-    //         month: "short",
-    //         day: "numeric",
-    //         year: "numeric",
-    //       })}
-    //     </span>
-    //   </div>
-    // </div>
-    <Card className="rounded-xl  group">
+    <Card className="rounded-xl relative group cursor-pointer">
       <Checkbox
         checked={checked}
         className={cn(
@@ -64,21 +34,22 @@ const DocumentCardItem = ({
           handleCheckChange(checked as boolean, document?.id);
         }}
       />
-      <CardHeader>
+      <CardHeader className="flex flex-col items-center justify-between">
         <CardTitle
           onClick={handleClick}
-          className="text-lg font-medium tracking-tight leading-tight"
+          className="text-lg font-medium line-clamp-2 w-full tracking-tight leading-tight"
         >
           {document?.title || "Untitled"}
         </CardTitle>
-
-        <span>
-          {new Date(document?.createdAt)?.toLocaleString("en-US", {
-            month: "short",
-            day: "numeric",
-            year: "numeric",
-          })}
-        </span>
+        <div className="w-full">
+          <span className="text-sm opacity-80">
+            {new Date(document?.createdAt)?.toLocaleString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })}
+          </span>
+        </div>
       </CardHeader>
     </Card>
   );

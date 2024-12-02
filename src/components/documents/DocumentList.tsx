@@ -41,7 +41,7 @@ const DocumentListItem = ({
         <div className="ml-2 flex items-center justify-start">
           <span
             onClick={handleClick}
-            className="line-clamp-1 text-lg leading-tight tracking-tight hover:cursor-pointer "
+            className="truncate text-lg max-w-md leading-tight tracking-tight hover:cursor-pointer "
           >
             {document?.title || "Untitled"}
           </span>

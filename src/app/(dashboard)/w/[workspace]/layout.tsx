@@ -1,4 +1,5 @@
 import GlobalLayout from "@/components/GlobalLayout";
+import Protect from "@/components/Protect";
 import Providers from "@/lib/providers";
 
 // If loading a variable font, you don't need to specify the font weight
@@ -6,7 +7,9 @@ import Providers from "@/lib/providers";
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <Providers>
-      <GlobalLayout>{children}</GlobalLayout>
+      <Protect>
+        <GlobalLayout>{children}</GlobalLayout>
+      </Protect>
     </Providers>
   );
 }

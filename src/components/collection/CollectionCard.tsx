@@ -30,7 +30,7 @@ const CollectionCard: FC<CollectionCardProps> = ({
       onDragOver={(e) => {
         e?.preventDefault();
 
-        console.log("data: ", e?.dataTransfer?.getData("text/plain"));
+        // console.log("data: ", e?.dataTransfer?.getData("text/plain"));
         setIcon("/folder-open.svg");
       }}
       onDragLeave={(e) => {

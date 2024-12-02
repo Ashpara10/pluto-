@@ -19,6 +19,7 @@ export type CreateDocumentPayload = {
   title?: string;
   content?: string;
   workspaceId?: string;
+  collectionId?: string;
 };
 
 export type AddDocumentToCollectionPayload = {

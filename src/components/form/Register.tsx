@@ -1,9 +1,5 @@
 "use client";
-import {
-  getActiveWorkspace,
-  RegisterSchema,
-  register as signUp,
-} from "@/lib/actions";
+import { RegisterSchema, register as signUp } from "@/lib/actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { EyeIcon, EyeOffIcon, Loader } from "lucide-react";
@@ -13,7 +9,6 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Button } from "../ui/button";
-import { signIn } from "next-auth/react";
 
 const Register = () => {
   const router = useRouter();
@@ -40,9 +35,8 @@ const Register = () => {
       </div>
       <div className="flex w-full flex-col space-y-2">
         <Button
-          className="w-full bg-white hover:bg-neutral-200"
+          className="w-full border-neutral-300 bg-white"
           variant={"outline"}
-          // onClick={async () => signIn("github", { callbackUrl: "/workspace" })}
         >
           <Image
             src={"/github.svg"}
@@ -57,8 +51,7 @@ const Register = () => {
         </Button>
         <Button
           variant={"outline"}
-          className="w-full bg-white hover:bg-neutral-200 mt-2"
-          // onClick={async () => signIn("google", { callbackUrl: "/workspace" })}
+          className="w-full border-neutral-300 bg-white"
         >
           <Image
             src={"/google.svg"}
@@ -87,23 +80,6 @@ const Register = () => {
             toast.error(error);
             return;
           }
-          // const resp = await signIn("credentials", {
-          //   redirect: false,
-          //   email: res?.email!,
-          //   password: res?.passwordHash!,
-          // });
-          // console.log({ res });
-          // if (!resp?.ok && resp?.error) {
-          //   toast.error(resp?.error);
-          //   return;
-          // }
-          // const activeWorkspace = await getActiveWorkspace();
-          // toast.success("LoggedIn successfully");
-          // if (!activeWorkspace) {
-          //   router.push("/workspace");
-          //   return;
-          // }
-          // router.push(`/w/${activeWorkspace.id}`);
           router.push(`/login`);
         })}
         className="flex w-full  flex-col "

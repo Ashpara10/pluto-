@@ -6,6 +6,7 @@ import { useQuery } from "react-query";
 import { Skeleton } from "../ui/skeleton";
 import CollectionCard from "./CollectionCard";
 import EmptyCollections from "../empty-collection";
+import toast from "react-hot-toast";
 
 export const getAllCollections = async ({
   workspace,
@@ -18,7 +19,8 @@ export const getAllCollections = async ({
     },
   });
   if (res.status !== 200) {
-    console.log(res?.data);
+    // console.log(res?.data);
+    toast.error("Failed to fetch collections");
     return;
   }
   return res.data.data as Collection[];
@@ -33,7 +35,7 @@ const AllCollections = () => {
         workspace: params.workspace!,
       })
   );
-  console.log(data);
+  // console.log(data);
   const [checked, setChecked] = useState<Record<string, boolean>>({});
 
   const handleCheckBoxChange = (checked: boolean, id: string) => {
@@ -42,7 +44,7 @@ const AllCollections = () => {
   return (
     <div>
       {data?.length === 0 && <EmptyCollections />}
-      <div className="grid w-full grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid w-full grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4 ">
         {isLoading
           ? [...Array(9)].map((_, i) => {
               return (

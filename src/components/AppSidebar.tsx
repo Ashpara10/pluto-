@@ -3,8 +3,8 @@ import WorkspaceSwitcher from "./WorkspaceSwitcher";
 
 const AppSidebar = () => {
   return (
-    <div className={cn(" w-full py-2 px-3", `h-screen`)}>
-      <div className="w-full mt-3">
+    <div className={cn(" w-full py-3 px-3", `h-screen`)}>
+      <div className="w-full ">
         <WorkspaceSwitcher />
       </div>
     </div>

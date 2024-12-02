@@ -55,7 +55,7 @@ const CreateCollectionDialog = () => {
           <form
             onSubmit={handleSubmit(async (values) => {
               try {
-                console.log("inside");
+                // console.log("inside");
                 const resp = await instance.post(
                   "/collection",
                   {
@@ -69,7 +69,7 @@ const CreateCollectionDialog = () => {
                     },
                   }
                 );
-                console.log({ resp });
+                // console.log({ resp });
                 if (resp.status !== 201) {
                   toast.error(JSON.stringify(resp?.data));
                   return;
@@ -78,6 +78,7 @@ const CreateCollectionDialog = () => {
               } catch (error) {
                 if (error instanceof AxiosError) {
                   console.log(error);
+                  toast.error(error?.response?.data?.message);
                 }
               }
             })}

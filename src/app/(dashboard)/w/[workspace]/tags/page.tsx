@@ -24,7 +24,7 @@ const getDocumentsGroupedByTag = async (user: string, workspace: string) => {
   const docs =
     await db.execute(sql`SELECT t.tag, json_agg(d.*) AS documents FROM documents d,
   LATERAL UNNEST(d.tags) AS t(tag) WHERE d.author_id = ${user} AND d.workspace_id=${workspace} GROUP BY t.tag;`);
-  console.log(docs?.rows);
+  // console.log(docs?.rows);
   return docs?.rows as TDocumentGroupedByTag[];
 };
 const Page = () => {

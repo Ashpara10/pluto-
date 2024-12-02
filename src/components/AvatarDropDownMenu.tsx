@@ -47,18 +47,18 @@ const AvatarDropDownMenu: FC<AvatarDropDownMenuProps> = ({ children }) => {
       },
       separator: false,
     },
-    {
-      icon: <Settings className="mr-2 h-4 w-4" />,
-      text: "Settings",
-      handleClick: () => {},
-      separator: false,
-    },
-    {
-      icon: <Keyboard className="mr-2 h-4 w-4" />,
-      text: "Keyboard shortcuts",
-      handleClick: () => {},
-      separator: true,
-    },
+    // {
+    //   icon: <Settings className="mr-2 h-4 w-4" />,
+    //   text: "Settings",
+    //   handleClick: () => {},
+    //   separator: false,
+    // },
+    // {
+    //   icon: <Keyboard className="mr-2 h-4 w-4" />,
+    //   text: "Keyboard shortcuts",
+    //   handleClick: () => {},
+    //   separator: true,
+    // },
     {
       icon:
         theme === "light" ? (
@@ -91,7 +91,7 @@ const AvatarDropDownMenu: FC<AvatarDropDownMenuProps> = ({ children }) => {
           isLoading={status === "loading"}
         />
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="md:mr-10 mr-3  translate-y-2 p-0 rounded-xl border  border-neutral-200/60 dark:border-lightGray/10 bg-white/70 shadow-black/10 dark:shadow-black/30 drop-shadow-xl backdrop-blur-lg dark:bg-neutral-900 max-w-[280px]">
+      <DropdownMenuContent className=" translate-y-2 p-0 rounded-xl border  border-neutral-200/60 dark:border-lightGray/10 bg-white/70 shadow-black/10 dark:shadow-black/30 drop-shadow-xl backdrop-blur-lg dark:bg-neutral-900 w-full max-w-xs">
         <div className="w-full flex px-3 py-4 flex-col items-start justify-center">
           <span className="text-sm font-medium">{user?.user?.name}</span>
           <span className="text-sm line-clamp-1 opacity-75 w-full">

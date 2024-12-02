@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
         eq(collections.workspaceId, workspace!)
       )
     );
-  console.log({ allCollections });
+  // console.log({ allCollections });
   return Response.json({ data: allCollections, error: null });
 }
 export async function POST(req: NextRequest) {

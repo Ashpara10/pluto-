@@ -22,7 +22,7 @@ type ChatInputProps = {
     event?: {
       preventDefault?: () => void;
     },
-    chatRequestOptions?: ChatRequestOptions,
+    chatRequestOptions?: ChatRequestOptions
   ) => void;
   isLoading?: boolean;
   isResponseLoading?: boolean;
@@ -39,7 +39,7 @@ const ChatInput: FC<ChatInputProps> = ({
     <form
       className=" flex w-full flex-col items-end justify-center overflow-hidden rounded-xl bg-neutral-200/60 p-1 dark:bg-neutral-800"
       onSubmit={(e) => {
-        console.log({ input });
+        // console.log({ input });
         handleSubmit!(e);
       }}
     >

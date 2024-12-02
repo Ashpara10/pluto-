@@ -131,16 +131,16 @@ const UpdateProfileForm: FC = () => {
 
             <input id="file-input" {...register("image")} className="hidden" />
             <div className="ml-2 flex flex-col items-start justify-center">
-              <div>
-                <span className="font-medium tracking-tight">
+              {/* <div>
+                <span className="text-sm mb-1 font-medium tracking-tight">
                   Profile Image
                 </span>
-              </div>
+              </div> */}
               <div className="flex items-center justify-start gap-2">
-                <Button size={"sm"} variant={"outline"}>
+                <Button type="button" size={"sm"} variant={"outline"}>
                   Upload
                 </Button>
-                <Button size={"sm"} variant={"outline"}>
+                <Button type="button" size={"sm"} variant={"outline"}>
                   Remove
                 </Button>
               </div>

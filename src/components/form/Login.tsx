@@ -36,7 +36,7 @@ const Login = () => {
       email: values.email,
       password: values.password,
     });
-    console.log({ res });
+    // console.log({ res });
     if (!res?.ok && res?.error) {
       setIsLoading(false);
       toast.error(res?.error);
@@ -73,7 +73,7 @@ const Login = () => {
       </div>
       <div className="flex w-full flex-col space-y-2">
         <Button
-          className="w-full"
+          className="w-full border-neutral-300 bg-white"
           variant={"outline"}
           onClick={async () => handleOauthLogin("github")}
         >
@@ -90,7 +90,7 @@ const Login = () => {
         </Button>
         <Button
           variant={"outline"}
-          className="w-full "
+          className="w-full border-neutral-300 bg-white"
           onClick={async () => handleOauthLogin("google")}
         >
           <Image

@@ -4,25 +4,33 @@ import { notFound } from "next/navigation";
 import toast from "react-hot-toast";
 import { getDocument } from "./actions";
 import DocumentPage from "@/components/documents/DocumentPage";
+import { Metadata } from "next";
 
 type PageProps = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-// const DocumentPage = dynamic(
-//   () => import("@/components/documents/DocumentPage"),
-//   {
-//     ssr: false,
-//   }
-// );
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  // read route params
+  const id = (await params).id;
+
+  const { data } = await getDocument(id);
+
+  return {
+    title: `${data?.title} | Pluto`,
+  };
+}
 
 export default async function Page({ params }: PageProps) {
-  if (!params?.id) return notFound();
-  const { data, error } = await getDocument(params.id);
-  // console.log({ data, error });
+  const id = (await params)?.id;
+  if (!id) return notFound();
+  const { data, error } = await getDocument(id);
   if (error) {
     toast.error(error);
     return;
   }
-  return <DocumentPage document={data} />;
+  return <DocumentPage document={data!} />;
 }

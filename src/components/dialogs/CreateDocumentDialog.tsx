@@ -5,6 +5,7 @@ import { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import toast from "react-hot-toast";
 // import { useSession } from "next-auth/react";
 
 const CreateDocumentDialogSchema = z.object({
@@ -38,7 +39,6 @@ const CreateDocumentDialog = () => {
           <form
             onSubmit={handleSubmit(async (values) => {
               try {
-                console.log("inside");
                 const resp = await fetch("/api/document", {
                   method: "POST",
                   headers: {
@@ -50,10 +50,11 @@ const CreateDocumentDialog = () => {
                   }),
                 });
                 const res = await resp.json();
-                console.log(resp, res);
+                // console.log(resp, res);
               } catch (error) {
                 if (error instanceof AxiosError) {
                   console.log(error);
+                  toast.error(error.response?.data.message);
                 }
               }
             })}

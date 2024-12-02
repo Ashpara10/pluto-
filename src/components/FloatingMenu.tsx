@@ -63,7 +63,7 @@ const FloatingMenu = memo(() => {
       ),
       name: "Create Document",
       onClick: async () => {
-        console.log({ user });
+        // console.log({ user });
         const workspace = await getActiveWorkspace();
         const { data, error } = await createDocument({
           user: user?.user?.id!,
@@ -162,7 +162,7 @@ const FloatingMenu = memo(() => {
           const parser = new DOMParser();
           const dom = parser.parseFromString(data!, "text/html");
           const nodes = $generateNodesFromDOM(editor, dom);
-          console.log(nodes);
+          // console.log(nodes);
           $insertNodes([...nodes]);
         });
       },
@@ -248,7 +248,7 @@ const FloatingMenu = memo(() => {
 
   useEffect(() => {
     if (selectedDocuments!.length > 0) {
-      console.log(selectedDocuments);
+      // console.log(selectedDocuments);
       setActiveFace("selected");
     } else {
       setActiveFace("default");
