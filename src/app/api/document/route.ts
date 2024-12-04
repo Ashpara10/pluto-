@@ -1,7 +1,7 @@
 import { getServerAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db/drizzle";
 import { collections, documents } from "@/lib/db/schema";
-import { and, asc, desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -22,6 +22,7 @@ export async function GET(req: NextRequest) {
         )
       )
       .leftJoin(documents, eq(documents?.collectionId, collections?.id));
+
     console.log({ collectionDocuments });
     return Response.json({ data: collectionDocuments }, { status: 201 });
   }
@@ -36,5 +37,6 @@ export async function GET(req: NextRequest) {
       )
     )
     .orderBy(desc(documents?.createdAt));
+  // console.log({ workspaceDocuments });
   return Response.json({ documents: workspaceDocuments }, { status: 201 });
 }

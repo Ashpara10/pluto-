@@ -1,28 +1,29 @@
-import { Copy, Filter, MoreVertical, Plus, Settings2 } from "lucide-react";
-import React, { FC, useState } from "react";
-import { Button } from "./ui/button";
-import DocumentFilterOptions from "./documents/DocumentFilterOptions";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+"use client";
+import { useActiveView } from "@/lib/context";
 import { createDocument } from "@/lib/db/documents";
+import { setCookie } from "cookies-next";
+import { Filter, MoreVertical, Plus } from "lucide-react";
 import { useSession } from "next-auth/react";
+import React, { FC, useState } from "react";
+import DocumentFilterOptions from "./documents/DocumentFilterOptions";
+import { Button } from "./ui/button";
 
 type DocumentViewOptionsProps = {
   children?: React.ReactNode;
   title?: string;
-  onViewChange?: (view: string) => void;
-  view?: string;
 };
 
 const DocumentViewOptions: FC<DocumentViewOptionsProps> = ({
   children,
   title,
-  view,
-  onViewChange,
 }) => {
   const { data } = useSession();
+  const { activeView, setActiveView } = useActiveView();
   const [displayOptions, setDisplayOptions] = useState(false);
-  // const [newPopoverOpen, setNewPopoverOpen] = useState(false);
-
+  const onViewChange = (view: string) => {
+    setActiveView!(view);
+    setCookie("activeView", view);
+  };
   return (
     <div className="mt-6 block w-full ">
       <div className="flex  w-full items-center justify-between px-3">
@@ -62,7 +63,7 @@ const DocumentViewOptions: FC<DocumentViewOptionsProps> = ({
             </PopoverContent>
           </Popover> */}
           <DocumentFilterOptions
-            view={view!}
+            view={activeView!}
             open={displayOptions}
             setOpen={setDisplayOptions}
             onViewChange={onViewChange!}

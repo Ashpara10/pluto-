@@ -28,7 +28,10 @@ export const KeyboardItem = ({
       </div>{" "}
       {keys?.split(",").map((key) => {
         return (
-          <span className="flex items-center justify-center rounded-md border border-neutral-300 px-1 py-0.5 text-sm font-medium dark:border-neutral-500/50">
+          <span
+            key={key}
+            className="flex items-center justify-center rounded-md border border-neutral-300 px-1 py-0.5 text-sm font-medium dark:border-neutral-500/50"
+          >
             {key}
           </span>
         );

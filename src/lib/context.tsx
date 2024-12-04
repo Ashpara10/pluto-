@@ -1,3 +1,4 @@
+import { getCookie } from "cookies-next";
 import {
   createContext,
   ReactNode,
@@ -10,6 +11,8 @@ import {
 type UpdateStateFunctionType = (isOpen: boolean) => void;
 
 type ContextStateType = {
+  activeView?: string;
+  setActiveView?: React.Dispatch<React.SetStateAction<string>>;
   sidebarOpen: boolean;
   createDocumentDialogOpen: boolean;
   selectedDocuments?: string[];
@@ -160,8 +163,23 @@ export const useDeleteDocumentDialog = () => {
   };
 };
 
+export const useActiveView = () => {
+  const context = useContext(Context);
+
+  if (!context) {
+    throw new Error("Context error");
+  }
+
+  return {
+    activeView: context[0].activeView,
+    setActiveView: context[0].setActiveView,
+  };
+};
 const AppContextProvider = ({ children }: { children: ReactNode }) => {
   const [selectedDocuments, setSelectedDocuments] = useState<string[]>([]);
+  const [activeView, setActiveView] = useState(
+    getCookie("activeView") || "list"
+  );
   const [openContext, setOpenContext] =
     useState<ContextStateType>(defaultContextState);
   const setSidebarOpen = useCallback(
@@ -213,7 +231,13 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
   return (
     <Context.Provider
       value={[
-        { ...openContext, selectedDocuments, setSelectedDocuments },
+        {
+          ...openContext,
+          selectedDocuments,
+          setSelectedDocuments,
+          activeView,
+          setActiveView,
+        },
         {
           setSidebarOpen,
           setCreateDocumentDialogOpen,

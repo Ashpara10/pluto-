@@ -2,7 +2,7 @@ import { getServerAuthSession } from "@/lib/auth";
 import { createCollection } from "@/lib/db/collections";
 import { db } from "@/lib/db/drizzle";
 import { Collection, collections, documents } from "@/lib/db/schema";
-import { and, count, eq } from "drizzle-orm";
+import { and, count, eq, sql } from "drizzle-orm";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -14,17 +14,34 @@ export async function GET(req: NextRequest) {
       { status: 400 }
     );
   }
+  // const documentsCount = await db
+  //   .select({ count: count() })
+  //   .from(documents)
+  //   .where(
+  //     and(
+  //       eq(documents.workspaceId, workspace),
+  //       eq(documents.authorId, user?.user?.id!),
+  //       eq(documents?.collectionId, collections?.id)
+  //     )
+  //   )
+  //   .as("documents_count");
+  // console.log(documentsCount);
 
   const allCollections = await db
-    .select()
+    .select({
+      collection: collections,
+      documents_count: sql<number>`count(${documents?.id})`,
+    })
     .from(collections)
     .where(
       and(
         eq(collections?.userId, user?.user?.id!),
         eq(collections.workspaceId, workspace!)
       )
-    );
-  // console.log({ allCollections });
+    )
+    .leftJoin(documents, eq(documents?.collectionId, collections?.id))
+    .groupBy(collections?.id);
+
   return Response.json({ data: allCollections, error: null });
 }
 export async function POST(req: NextRequest) {

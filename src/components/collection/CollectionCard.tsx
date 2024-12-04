@@ -8,13 +8,13 @@ import { Dot } from "lucide-react";
 import { Collection } from "@/lib/db/schema";
 
 type CollectionCardProps = {
-  collection: Collection;
+  collection: { collection: Collection; documents_count: string };
   checked?: boolean;
   handleCheckChange: (checked: boolean, id: string) => void;
 };
 
 const CollectionCard: FC<CollectionCardProps> = ({
-  collection,
+  collection: { collection, documents_count },
   handleCheckChange,
   checked,
 }) => {
@@ -59,7 +59,7 @@ const CollectionCard: FC<CollectionCardProps> = ({
           <Dot size={20} className="gap-0 opacity-80" />
           <span className="text-sm leading-tight opacity-70">
             {/* @ts-ignore */}
-            {collection?.documents?.length || 0}
+            {documents_count}
           </span>
         </div>
       </div>

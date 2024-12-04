@@ -12,6 +12,7 @@ const Protect: FC<Props> = ({ children }) => {
   if (status === "unauthenticated") {
     redirect("/login");
   }
+
   return children;
 };
 

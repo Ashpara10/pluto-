@@ -17,6 +17,7 @@ import {
 } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { TagInput } from "../ui/tag-input";
+import { Label } from "../ui/label";
 
 const CreateCollectionPayloadSchema = z.object({
   name: z.string(),
@@ -42,16 +43,20 @@ const CreateCollectionDialog = () => {
       open={createCollectionDialogOpen}
       onOpenChange={setCreateCollectionDialogOpen}
     >
-      <DialogContent className="w-full max-w-sm rounded-2xl bg-neutral-100 backdrop-blur-2xl dark:bg-neutral-900">
-        <DialogHeader>
+      <DialogContent
+        style={{ borderRadius: 30 }}
+        className="w-full border border-neutral-300/60 dark:border-lightGray/10 max-w-md  p-0 overflow-hidden bg-neutral-100 backdrop-blur-2xl dark:bg-neutral-900"
+      >
+        <DialogHeader className="bg-white border-b border-neutral-300/60 dark:border-lightGray/10 dark:bg-neutral-900 px-8 pt-6 pb-4">
           <DialogTitle className="text-xl font-medium tracking-tight leading-tight">
             Create Collection
           </DialogTitle>
           <DialogDescription>
-            Create a collection to group different documents
+            Creating collections to group your research papers, assignments,
+            notes, and more.{" "}
           </DialogDescription>
         </DialogHeader>
-        <div>
+        <div className="w-full  px-8 pt-2 pb-8">
           <form
             onSubmit={handleSubmit(async (values) => {
               try {
@@ -84,9 +89,9 @@ const CreateCollectionDialog = () => {
             })}
           >
             <Input
-              className=" bg-neutral-200 focus-visible:outline-none focus-visible:ring-0 dark:bg-neutral-950"
+              className=" py-2"
               {...register("name")}
-              placeholder="Collection Name"
+              placeholder="Enter collection name"
             />
             <TagInput
               tags={tags}
@@ -94,7 +99,7 @@ const CreateCollectionDialog = () => {
               setTags={setTags}
             />
             <Button variant={"default"} className="mt-2 w-full">
-              New Collection
+              Create Collection
             </Button>
           </form>
         </div>

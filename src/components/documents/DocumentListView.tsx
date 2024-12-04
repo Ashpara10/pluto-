@@ -25,30 +25,32 @@ const DocumentListView: FC<DocumentListViewProps> = ({ data, isLoading }) => {
   };
   return (
     <section className="">
-      {isLoading
-        ? [...Array(18)].map((_, i) => {
-            return (
-              <Skeleton
-                key={i}
-                className="mt-2 h-12 w-full animate-pulse rounded-lg bg-darkGray/60 dark:bg-lightGray/10"
-              />
-            );
-          })
-        : data!?.map((doc, i) => {
-            const isChecked = selectedDocuments?.includes(doc?.id);
-            return (
-              <DocumentListItem
-                key={i}
-                checked={isChecked}
-                handleCheckChange={(checked) =>
-                  handleCheckBoxChange(checked, doc?.id)
-                }
-                document={doc}
-              />
-            );
-          })}
+      {data!?.map((doc, i) => {
+        const isChecked = selectedDocuments?.includes(doc?.id);
+        return (
+          <DocumentListItem
+            key={i}
+            checked={isChecked}
+            handleCheckChange={(checked) =>
+              handleCheckBoxChange(checked, doc?.id)
+            }
+            document={doc}
+          />
+        );
+      })}
     </section>
   );
 };
 
 export default DocumentListView;
+
+export const DocumentListViewSkeleton = () => {
+  return [...Array(18)].map((_, i) => {
+    return (
+      <Skeleton
+        key={i}
+        className="mt-2 h-12 w-full animate-pulse rounded-lg bg-darkGray/60 dark:bg-lightGray/10"
+      />
+    );
+  });
+};

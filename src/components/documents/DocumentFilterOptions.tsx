@@ -20,6 +20,11 @@ const DocumentFilterOptions: FC<DocumentFilterOptionsProps> = ({
   view,
   onViewChange,
 }) => {
+  const sort_options = [
+    { name: "Favourite", key: "favourite" },
+    { name: "Created", key: "created_at" },
+    { name: "Updated", key: "updated_at" },
+  ];
   const options = [
     {
       name: "Favorites",
@@ -34,32 +39,40 @@ const DocumentFilterOptions: FC<DocumentFilterOptionsProps> = ({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
-      <PopoverContent className="border p-0 border-neutral-200/60 bg-neutral-100 hover:bg-white  dark:border-lightGray/10 dark:bg-neutral-800 dark:hover:bg-neutral-800 mt-2 ">
+      <PopoverContent className="border  p-0 border-neutral-200/60 bg-neutral-100 hover:bg-white  dark:border-lightGray/10 dark:bg-neutral-800 dark:hover:bg-neutral-800 mt-2 ">
         <div className="space-y-4">
-          <div className="space-y-2 px-3 py-2">
-            <div className="flex items-center gap-2">
+          <div className="space-y-2 ">
+            <div className="flex items-center gap-2 p-3">
               <Button
                 variant={view === "grid" ? "default" : "outline"}
-                size="sm"
-                className="w-full"
+                size="smallIcon"
                 onClick={() => onViewChange("grid")}
               >
-                <LayoutGrid className="mr-2 h-4 w-4" />
-                Grid
+                <LayoutGrid className=" h-4 w-4" />
               </Button>
               <Button
                 variant={view === "list" ? "default" : "outline"}
-                size="sm"
-                className="w-full"
+                size="smallIcon"
                 onClick={() => onViewChange("list")}
               >
-                <List className="mr-2 h-4 w-4" />
-                List
+                <List className=" h-4 w-4" />
               </Button>
             </div>
             <Separator />
-            <div>
-              <span></span>
+            <div className="w-full flex flex-col">
+              <span className="px-4 text-sm pb-2 tracking-tight font-medium">
+                Sort By
+              </span>
+              {sort_options.map((option, i) => {
+                return (
+                  <span
+                    key={i}
+                    className="w-full text-sm px-4 py-1 first-line:border-none border-t border-neutral-300/60 dark:border-lightGray/10 "
+                  >
+                    {option?.name}
+                  </span>
+                );
+              })}
             </div>
           </div>
         </div>

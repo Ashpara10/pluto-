@@ -1,27 +1,26 @@
-"use client";
-import DocumentCardView from "@/components/documents/DocumentCardView";
-import DocumentListView from "@/components/documents/DocumentListView";
+import AllDocuments from "@/components/documents/AllDocuments";
 import DocumentViewOptions from "@/components/DocumentViewOptions";
 import EmptyDocuments from "@/components/empty-documents";
 import { instance } from "@/lib/axios";
 import { Document } from "@/lib/db/schema";
-import { getCookie, setCookie } from "cookies-next";
-import { FC, useState } from "react";
+import { FC } from "react";
 import toast from "react-hot-toast";
-import { useQuery } from "react-query";
 
-const fetchDocuments = async ({ workspace }: { workspace: string }) => {
+export const fetchDocuments = async ({ workspace }: { workspace: string }) => {
+  let isLoading = true;
   const res = await instance.get("/document", {
     params: {
       workspace: workspace,
     },
   });
   if (!res?.data) {
+    isLoading = false;
     // console.log({ err: res?.data });
     toast.error("Failed to fetch documents");
-    return;
+    return { isLoading, data: null };
   }
-  return res.data?.documents as Document[];
+  isLoading = false;
+  return { isLoading, data: res.data?.documents as Document[] };
 };
 type PageProps = {
   params: {
@@ -29,34 +28,20 @@ type PageProps = {
   };
 };
 
-const Page: FC<PageProps> = ({ params }) => {
-  const [activeView, setActiveView] = useState(
-    getCookie("activeView") || "list"
-  );
-
-  const { data, isError, isLoading } = useQuery(
-    ["documents-lists", params?.workspace],
-    async () => await fetchDocuments({ workspace: params?.workspace })
-  );
-  const onViewChange = (view: string) => {
-    setActiveView(view);
-    setCookie("activeView", view);
-  };
-
+const Page: FC<PageProps> = async ({ params }) => {
+  const { isLoading, data } = await fetchDocuments({
+    workspace: params.workspace,
+  });
+  console.log(data);
   return (
     <div className="flex w-full flex-col items-center justify-center mt-28">
-      <div className="w-full ">
-        <DocumentViewOptions
-          onViewChange={onViewChange}
-          view={activeView}
-          title="All Documents"
-        >
-          {data!?.length === 0 && <EmptyDocuments />}
-          {activeView === "grid" ? (
-            <DocumentCardView data={data!} isLoading={isLoading} />
-          ) : (
-            <DocumentListView data={data!} isLoading={isLoading} />
-          )}
+      <div className="w-full max-w-7xl">
+        <DocumentViewOptions title="All Documents">
+          <AllDocuments
+            loading={isLoading}
+            documents={data!}
+            workspace={params?.workspace}
+          />
         </DocumentViewOptions>
       </div>
     </div>

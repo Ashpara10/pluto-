@@ -23,7 +23,7 @@ export const getAllCollections = async ({
     toast.error("Failed to fetch collections");
     return;
   }
-  return res.data.data as Collection[];
+  return res.data.data as { collection: Collection; documents_count: string }[];
 };
 
 const AllCollections = () => {
@@ -54,11 +54,12 @@ const AllCollections = () => {
                 />
               );
             })
-          : data!?.map((collections, i) => {
+          : data!?.map((data, i) => {
               return (
                 <CollectionCard
-                  collection={collections}
-                  checked={checked[collections.id]}
+                  key={i}
+                  collection={data}
+                  checked={checked[data?.collection.id]}
                   handleCheckChange={handleCheckBoxChange}
                 />
               );

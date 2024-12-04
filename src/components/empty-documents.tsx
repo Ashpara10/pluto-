@@ -1,3 +1,4 @@
+"use client";
 import { getActiveWorkspace } from "@/lib/actions";
 import { createDocument } from "@/lib/db/documents";
 import { useSession } from "next-auth/react";
