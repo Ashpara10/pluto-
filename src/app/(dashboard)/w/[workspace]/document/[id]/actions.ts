@@ -1,10 +1,11 @@
 "use server";
 
 import { Document } from "@/lib/db/schema";
+import { BASE_URL } from "@/lib/url";
 import { revalidatePath } from "next/cache";
 
 export const getDocument = async (id: string) => {
-  const res = await fetch(`http://localhost:3000/api/document/${id}`, {
+  const res = await fetch(`${BASE_URL}/api/document/${id}`, {
     next: {
       tags: ["document-by-id"],
     },
