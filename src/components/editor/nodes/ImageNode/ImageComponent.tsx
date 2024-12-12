@@ -80,8 +80,8 @@ function LazyImage({
       className={className || undefined}
       src={src}
       alt={altText}
-      width={imageRef?.current?.width}
-      height={imageRef?.current?.height}
+      width={imageRef?.current?.width || 600}
+      height={imageRef?.current?.height || 500}
       ref={imageRef}
       onError={onError}
       draggable="false"
