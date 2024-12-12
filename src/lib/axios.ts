@@ -1,6 +1,7 @@
 import axios from "axios";
+import { BASE_URL } from "./url";
 export const instance = axios.create({
-  baseURL: "http://localhost:3000/api",
+  baseURL: `${BASE_URL}/api`,
   headers: {
     "Content-Type": "application/json",
   },
