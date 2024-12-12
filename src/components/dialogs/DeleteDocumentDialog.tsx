@@ -41,7 +41,7 @@ const DeleteDocumentDialog = () => {
           <DialogTitle>Delete Document</DialogTitle>
           <DialogDescription>
             Are you sure you want to delete {selectedDocuments?.length}{" "}
-            document's?
+            document&apos;s?
           </DialogDescription>
         </DialogHeader>
         <div className="mt-4 w-full flex items-center justify-end">

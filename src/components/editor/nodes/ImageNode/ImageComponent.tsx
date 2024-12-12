@@ -6,6 +6,7 @@
  *
  */
 
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { useLexicalNodeSelection } from "@lexical/react/useLexicalNodeSelection";
@@ -32,10 +33,9 @@ import {
   KEY_ESCAPE_COMMAND,
   SELECTION_CHANGE_COMMAND,
 } from "lexical";
-import { Suspense, useCallback, useEffect, useRef, useState } from "react";
-
-import { Skeleton } from "@/components/ui/skeleton";
 import { DownloadIcon, Link } from "lucide-react";
+import NextImage from "next/image";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { $isImageNode } from ".";
 
 const imageCache = new Set();
@@ -64,8 +64,6 @@ function LazyImage({
   className,
   imageRef,
   src,
-
-  maxWidth,
   onError,
 }: {
   altText: string;
@@ -78,10 +76,12 @@ function LazyImage({
 }): JSX.Element {
   useSuspenseImage(src);
   return (
-    <img
+    <NextImage
       className={className || undefined}
       src={src}
       alt={altText}
+      width={imageRef?.current?.width || 600}
+      height={imageRef?.current?.height || 500}
       ref={imageRef}
       onError={onError}
       draggable="false"
@@ -89,21 +89,21 @@ function LazyImage({
   );
 }
 
-function BrokenImage(): JSX.Element {
-  return (
-    <img
-      src={
-        "https://i.pinimg.com/564x/ba/b7/73/bab773a344ebb9f17c2c8af055ab1180.jpg"
-      }
-      style={{
-        height: 200,
-        opacity: 0.2,
-        width: 200,
-      }}
-      draggable="false"
-    />
-  );
-}
+// function BrokenImage(): JSX.Element {
+//   return (
+//     <img
+//       src={
+//         "https://i.pinimg.com/564x/ba/b7/73/bab773a344ebb9f17c2c8af055ab1180.jpg"
+//       }
+//       style={{
+//         height: 200,
+//         opacity: 0.2,
+//         width: 200,
+//       }}
+//       draggable="false"
+//     />
+//   );
+// }
 
 export default function ImageComponent({
   src,
@@ -149,7 +149,7 @@ export default function ImageComponent({
       }
       return false;
     },
-    [isSelected, nodeKey],
+    [isSelected, nodeKey]
   );
 
   const $onEnter = useCallback(
@@ -178,7 +178,7 @@ export default function ImageComponent({
       }
       return false;
     },
-    [caption, isSelected, showCaption],
+    [caption, isSelected, showCaption]
   );
 
   const $onEscape = useCallback(
@@ -199,7 +199,7 @@ export default function ImageComponent({
       }
       return false;
     },
-    [caption, editor, setSelected],
+    [caption, editor, setSelected]
   );
 
   const onClick = useCallback(
@@ -221,7 +221,7 @@ export default function ImageComponent({
 
       return false;
     },
-    [isResizing, isSelected, setSelected, clearSelection],
+    [isResizing, isSelected, setSelected, clearSelection]
   );
 
   const onRightClick = useCallback(
@@ -236,12 +236,12 @@ export default function ImageComponent({
         ) {
           editor.dispatchCommand(
             RIGHT_CLICK_IMAGE_COMMAND,
-            event as MouseEvent,
+            event as MouseEvent
           );
         }
       });
     },
-    [editor],
+    [editor]
   );
 
   useEffect(() => {
@@ -259,17 +259,17 @@ export default function ImageComponent({
           activeEditorRef.current = activeEditor;
           return false;
         },
-        COMMAND_PRIORITY_LOW,
+        COMMAND_PRIORITY_LOW
       ),
       editor.registerCommand<MouseEvent>(
         CLICK_COMMAND,
         onClick,
-        COMMAND_PRIORITY_LOW,
+        COMMAND_PRIORITY_LOW
       ),
       editor.registerCommand<MouseEvent>(
         RIGHT_CLICK_IMAGE_COMMAND,
         onClick,
-        COMMAND_PRIORITY_LOW,
+        COMMAND_PRIORITY_LOW
       ),
       editor.registerCommand(
         DRAGSTART_COMMAND,
@@ -282,24 +282,24 @@ export default function ImageComponent({
           }
           return false;
         },
-        COMMAND_PRIORITY_LOW,
+        COMMAND_PRIORITY_LOW
       ),
       editor.registerCommand(
         KEY_DELETE_COMMAND,
         $onDelete,
-        COMMAND_PRIORITY_LOW,
+        COMMAND_PRIORITY_LOW
       ),
       editor.registerCommand(
         KEY_BACKSPACE_COMMAND,
         $onDelete,
-        COMMAND_PRIORITY_LOW,
+        COMMAND_PRIORITY_LOW
       ),
       editor.registerCommand(KEY_ENTER_COMMAND, $onEnter, COMMAND_PRIORITY_LOW),
       editor.registerCommand(
         KEY_ESCAPE_COMMAND,
         $onEscape,
-        COMMAND_PRIORITY_LOW,
-      ),
+        COMMAND_PRIORITY_LOW
+      )
     );
 
     rootElement?.addEventListener("contextmenu", onRightClick);
@@ -325,7 +325,7 @@ export default function ImageComponent({
 
   const onResizeEnd = (
     nextWidth: "inherit" | number,
-    nextHeight: "inherit" | number,
+    nextHeight: "inherit" | number
   ) => {
     // Delay hiding the resize bars for click case
     setTimeout(() => {
@@ -369,7 +369,7 @@ export default function ImageComponent({
           draggable={draggable}
           className={cn(
             "group relative mt-3 flex w-full items-center justify-center overflow-hidden rounded-lg ",
-            isFocused && "border-2 border-dashed border-blue-600 ",
+            isFocused && "border-2 border-dashed border-blue-600 "
           )}
         >
           <LazyImage

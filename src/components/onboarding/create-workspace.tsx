@@ -1,22 +1,21 @@
 "use client";
 import { setActiveWorkspace } from "@/lib/actions";
-import { instance } from "@/lib/axios";
-import { NewWorkspace, Workspace } from "@/lib/db/schema";
+import { Workspace } from "@/lib/db/schema";
+import { createWorkspace } from "@/lib/db/workspaces";
 import { queryClient } from "@/lib/session-provider";
-import { capitalizeFirstLetter, getSlug } from "@/lib/utils";
+import { capitalizeFirstLetter } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { Loader } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { useSession } from "next-auth/react";
-import { createWorkspace } from "@/lib/db/workspaces";
-import { useMemo } from "react";
 
 const NewWorkspaceSchema = z.object({
   name: z.string().min(6).max(30),
@@ -29,13 +28,12 @@ const CreateWorkspace = () => {
   const workspaceName =
     user?.user?.name &&
     `${capitalizeFirstLetter(
-      user?.user?.name?.split(" ")[0]! as string
+      user?.user?.name?.split(" ")[0] as string
     )}'s Personal Workspace`;
 
   const {
     register,
     handleSubmit,
-    getValues,
     watch,
     formState: { isSubmitting },
   } = useForm({
@@ -47,7 +45,6 @@ const CreateWorkspace = () => {
     },
     resolver: zodResolver(NewWorkspaceSchema),
   });
-  const values = getValues();
   const watchTitle = watch("name");
 
   const workspaceImage = useMemo(() => {
@@ -59,8 +56,8 @@ const CreateWorkspace = () => {
   const handleFormSubmit = handleSubmit(async (values) => {
     const { data, error } = await createWorkspace({
       image: workspaceImage,
-      name: values?.name!,
-      user: user?.user?.id!,
+      name: values?.name as string,
+      user: user?.user?.id as string,
     });
     if (error) {
       toast.error("Failed to create workspace" + error);
@@ -68,7 +65,10 @@ const CreateWorkspace = () => {
     }
     toast.success("Workspace created successfully");
     setActiveWorkspace(data![0] as Workspace);
-    await queryClient.refetchQueries(["get-workspaces", user?.user?.id!]);
+    await queryClient.refetchQueries([
+      "get-workspaces",
+      user?.user?.id as string,
+    ]);
     router.push(`/w/${data![0]?.id}`);
     // const res = await instance.post("/workspace", {
     //   name: values?.name!,

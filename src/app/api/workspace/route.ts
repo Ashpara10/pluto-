@@ -14,12 +14,10 @@ export async function POST(req: NextRequest) {
       { status: 401 }
     );
   }
-  // console.log({ payload, sessionCookie });
   const workspace = await db
     .insert(workspaces)
-    .values({ ...payload, user: sessionCookie?.user?.id! })
+    .values({ ...payload, user: sessionCookie?.user?.id as string })
     .returning();
-  // console.log({ workspace });
 
   return Response.json({ data: workspace[0], error: null }, { status: 201 });
 }

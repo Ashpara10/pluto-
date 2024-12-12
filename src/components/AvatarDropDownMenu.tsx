@@ -1,18 +1,10 @@
 // "use client";
+import { useWorkspaces } from "@/lib/hooks/use-workspaces";
 import { deleteCookie } from "cookies-next";
-import {
-  Keyboard,
-  LogOut,
-  Moon,
-  Network,
-  Settings,
-  Sun,
-  User,
-} from "lucide-react";
+import { LogOut, Moon, Network, Sun, User } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
-import { FC, PropsWithChildren } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,11 +12,8 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import UserAvatar from "./UserAvatar";
-import { useWorkspaces } from "@/lib/hooks/use-workspaces";
 
-interface AvatarDropDownMenuProps extends PropsWithChildren {}
-
-const AvatarDropDownMenu: FC<AvatarDropDownMenuProps> = ({ children }) => {
+const AvatarDropDownMenu = () => {
   const router = useRouter();
   const { data: user, status } = useSession();
   const { currentWorkspace } = useWorkspaces();
@@ -87,7 +76,7 @@ const AvatarDropDownMenu: FC<AvatarDropDownMenuProps> = ({ children }) => {
     <DropdownMenu>
       <DropdownMenuTrigger>
         <UserAvatar
-          user={user!?.user?.image!}
+          user={user?.user?.image as string}
           isLoading={status === "loading"}
         />
       </DropdownMenuTrigger>

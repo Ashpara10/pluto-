@@ -1,16 +1,16 @@
 "use client";
+import { getActiveWorkspace } from "@/lib/actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { EyeIcon, EyeOffIcon, Loader } from "lucide-react";
+import { signIn } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { z } from "zod";
 import { Button } from "../ui/button";
-import { getActiveWorkspace, login } from "@/lib/actions";
-import toast from "react-hot-toast";
-import { signIn } from "next-auth/react";
 
 const LoginSchema = z.object({
   email: z.string().email(),
@@ -18,7 +18,7 @@ const LoginSchema = z.object({
 });
 
 const Login = () => {
-  const { handleSubmit, register, formState } = useForm({
+  const { handleSubmit, register } = useForm({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: "",
@@ -150,7 +150,7 @@ const Login = () => {
       </form>
       <div className="w-full flex items-center justify-center  mt-3">
         <span className="text-sm ">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <span
             onClick={() => router.push("/register")}
             className="text-[#6a5ed9] cursor-pointer"

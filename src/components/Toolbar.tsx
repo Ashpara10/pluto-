@@ -1,39 +1,37 @@
 "use client";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $wrapNodeInElement, mergeRegister } from "@lexical/utils";
+import { motion, useAnimation } from "framer-motion";
 import {
   $createParagraphNode,
-  $getSelection,
   $insertNodes,
-  $isRangeSelection,
   $isRootOrShadowRoot,
   COMMAND_PRIORITY_CRITICAL,
   COMMAND_PRIORITY_EDITOR,
   LexicalEditor,
   SELECTION_CHANGE_COMMAND,
 } from "lexical";
-import { Variant, Variants, motion, useAnimation } from "framer-motion";
 
-import {
-  INSERT_IMAGE_COMMAND,
-  InsertImagePayload,
-} from "./editor/plugins/ImagePlugin";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { ImagePlus, List, ListOrderedIcon, Type } from "lucide-react";
-import { cn } from "@/lib/utils";
 import {
   $createImageNode,
   ImageNode,
 } from "@/components/editor/nodes/ImageNode";
+import { cn } from "@/lib/utils";
+import { ImagePlus, List, ListOrderedIcon, Type } from "lucide-react";
+import { useCallback, useEffect, useRef } from "react";
+import {
+  INSERT_IMAGE_COMMAND,
+  InsertImagePayload,
+} from "./editor/plugins/ImagePlugin";
 
-const toolbarVariants: { [key: string]: Variant } = {
-  show: {
-    opacity: 1,
-  },
-  hide: {
-    opacity: 0,
-  },
-};
+// const toolbarVariants: { [key: string]: Variant } = {
+//   show: {
+//     opacity: 1,
+//   },
+//   hide: {
+//     opacity: 0,
+//   },
+// };
 
 const options = [
   {
@@ -72,16 +70,15 @@ const options = [
 
 const Toolbar = () => {
   const [editor] = useLexicalComposerContext();
-  const [show, setShow] = useState(false);
   const toolBarRef = useRef<HTMLDivElement>(null);
   const controls = useAnimation();
 
-  const insertImage = () => {
-    editor?.dispatchCommand(INSERT_IMAGE_COMMAND, {
-      altText: "Image",
-      src: prompt("Enter Image URL") || "",
-    });
-  };
+  // const insertImage = () => {
+  //   editor?.dispatchCommand(INSERT_IMAGE_COMMAND, {
+  //     altText: "Image",
+  //     src: prompt("Enter Image URL") || "",
+  //   });
+  // };
 
   const $updateToolbar = useCallback(() => {
     const selection = getSelection();
@@ -116,7 +113,7 @@ const Toolbar = () => {
     } else {
       controls?.start({ opacity: 0, visibility: "hidden" });
     }
-  }, []);
+  }, [controls]);
 
   useEffect(() => {
     if (typeof document === "undefined") return;

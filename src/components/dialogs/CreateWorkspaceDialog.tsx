@@ -19,6 +19,7 @@ import { createWorkspace } from "@/lib/db/workspaces";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { queryClient } from "@/lib/session-provider";
+import { Loader } from "lucide-react";
 
 const CreateWorkspaceDialogSchema = z.object({
   title: z.string().max(30).min(6),
@@ -27,12 +28,13 @@ const CreateWorkspaceDialogSchema = z.object({
 const CreateWorkspace = () => {
   const { isCreateWorkspaceDialogOpen, setIsCreateWorkspaceDialogOpen } =
     useWorkspaceDialog();
+
   const {
     register,
     handleSubmit,
     getValues,
     watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<z.infer<typeof CreateWorkspaceDialogSchema>>({
     defaultValues: {
       title: "",
@@ -68,16 +70,17 @@ const CreateWorkspace = () => {
               const { data, error } = await createWorkspace({
                 image: workspaceImage,
                 name: title,
-                user: user?.user?.id!,
+                user: user?.user?.id as string,
               });
               if (error) {
                 toast.error("Failed to create workspace" + error);
                 return;
               }
-              toast.success("Workspace created successfully");
+              toast.success(`Workspace ${data![0]?.name} created successfully`);
+              setIsCreateWorkspaceDialogOpen!(false);
               await queryClient.refetchQueries([
                 "get-workspaces",
-                user?.user?.id!,
+                user?.user?.id as string,
               ]);
             })}
           >
@@ -110,7 +113,13 @@ const CreateWorkspace = () => {
               )}
             </div>
             <div className="mt-3">
-              <Button className="w-full rounded-lg " type="submit">
+              <Button
+                className="w-full rounded-lg flex items-center justify-center"
+                type="submit"
+              >
+                {isSubmitting && (
+                  <Loader className="size-4 animate-spin opacity-80 mr-2" />
+                )}
                 Create Workspace
               </Button>
             </div>

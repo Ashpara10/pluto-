@@ -34,7 +34,7 @@ const WorkspaceSwitcher = () => {
         >
           <div className="ml-1 w-full flex items-center justify-between">
             <span className="w-full text-left truncate text-sm leading-tight">
-              {currentWorkspace!?.name}
+              {currentWorkspace?.name}
             </span>
             <ChevronsUpDown
               className="ml-1 h-4 w-4 opacity-75"
@@ -58,7 +58,7 @@ const WorkspaceSwitcher = () => {
                     />
                   );
                 })
-              : workspaces!?.map((workspace) => {
+              : workspaces?.map((workspace) => {
                   return (
                     <div
                       key={workspace?.id}
@@ -68,7 +68,7 @@ const WorkspaceSwitcher = () => {
                       <div>
                         {workspace?.image ? (
                           <Image
-                            src={workspace?.image!}
+                            src={workspace?.image as string}
                             width={20}
                             height={20}
                             className="rounded-full size-8"

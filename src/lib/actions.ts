@@ -1,4 +1,4 @@
-import { NewUser, users, Workspace } from "@/lib/db/schema";
+import { Document, NewUser, users, Workspace } from "@/lib/db/schema";
 import { compare, hash } from "bcryptjs";
 import { getCookie, setCookie } from "cookies-next";
 import { and, eq, isNull } from "drizzle-orm";
@@ -8,6 +8,7 @@ import { db } from "./db/drizzle";
 import { getUserWorkspaces } from "./db/workspaces";
 import { getAvatarByUserInitials } from "./utils";
 import { NextRequest } from "next/server";
+import { instance } from "./axios";
 
 const key = new TextEncoder().encode("532d15e19a1c159dda7474c6c773ff87");
 const SALT_ROUNDS = 10;
@@ -49,7 +50,7 @@ export const getUserFromCookies = async (req: NextRequest) => {
   if (!cookie) {
     return null;
   }
-  return (await verifyToken(cookie?.value!)) as SessionData;
+  return (await verifyToken(cookie?.value as string)) as SessionData;
 };
 
 export async function verifyToken(input: string) {
@@ -75,12 +76,12 @@ export async function setSession(user: NewUser) {
   setCookie("session", encryptedSession);
 }
 
-const systemPrompt = `You are a flashcard generator. You generate flashcards based on the context provided by the user.
-- Context will be provided in markdown format.
-- Context will be provided inside of <context></context> tag.
-- Generate minimum of 5 flashcards and maximum of 10 flashcards.
+// const systemPrompt = `You are a flashcard generator. You generate flashcards based on the context provided by the user.
+// - Context will be provided in markdown format.
+// - Context will be provided inside of <context></context> tag.
+// - Generate minimum of 5 flashcards and maximum of 10 flashcards.
 
-`;
+// `;
 
 // Auth actions
 
@@ -181,3 +182,15 @@ export const setActiveWorkspace = async (payload: Workspace) => {
 
 // Collection actions
 // Document actions
+export const fetchDocuments = async (workspace: string) => {
+  const res = await instance.get("/document", {
+    params: {
+      workspace: workspace,
+    },
+  });
+  if (!res?.data) {
+    return { data: null, error: "Failed to fetch documents" };
+  }
+
+  return { data: res.data?.documents as Document[], error: null };
+};

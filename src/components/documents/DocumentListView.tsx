@@ -1,15 +1,15 @@
 "use client";
 import { useSelectedDocuments } from "@/lib/context";
-import { FC, useEffect, useState } from "react";
-import DocumentListItem from "./DocumentList";
-import { Skeleton } from "../ui/skeleton";
 import { Document } from "@/lib/db/schema";
+import { FC } from "react";
+import { Skeleton } from "../ui/skeleton";
+import DocumentListItem from "./DocumentList";
 
 type DocumentListViewProps = {
   data: Document[];
   isLoading: boolean;
 };
-const DocumentListView: FC<DocumentListViewProps> = ({ data, isLoading }) => {
+const DocumentListView: FC<DocumentListViewProps> = ({ data }) => {
   const { setSelectedDocuments, selectedDocuments } = useSelectedDocuments();
 
   const handleCheckBoxChange = (checked: boolean, id: string) => {
@@ -25,7 +25,7 @@ const DocumentListView: FC<DocumentListViewProps> = ({ data, isLoading }) => {
   };
   return (
     <section className="">
-      {data!?.map((doc, i) => {
+      {data?.map((doc, i) => {
         const isChecked = selectedDocuments?.includes(doc?.id);
         return (
           <DocumentListItem

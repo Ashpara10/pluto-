@@ -1,7 +1,7 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { useParams, useRouter } from "next/navigation";
-import { cache, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useQuery } from "react-query";
 import { setActiveWorkspace } from "../actions";
@@ -9,10 +9,10 @@ import { Workspace } from "../db/schema";
 import { getUserWorkspaces, getWorkspaceByID } from "../db/workspaces";
 import { isValidUUID } from "../utils";
 
-type GetWorkspacesResponse = {
-  workspaces: Workspace[];
-  currentWorkspace: Workspace | null;
-};
+// type GetWorkspacesResponse = {
+//   workspaces: Workspace[];
+//   currentWorkspace: Workspace | null;
+// };
 
 const cachedGetUserWorkspaces = async (user: string) => getUserWorkspaces(user);
 export const useWorkspaces = () => {
@@ -23,14 +23,14 @@ export const useWorkspaces = () => {
   );
   const { workspace: workspaceId } = useParams();
   const { data, isLoading, refetch } = useQuery(
-    ["get-workspaces", user?.user?.id!],
-    async () => await cachedGetUserWorkspaces(user?.user?.id!),
+    ["get-workspaces", user?.user?.id as string],
+    async () => await cachedGetUserWorkspaces(user?.user?.id as string),
     { enabled: false }
   );
 
   useEffect(() => {
     refetch();
-  }, [user]);
+  }, [user, refetch]);
 
   useEffect(() => {
     if (!workspaceId || !isValidUUID(workspaceId as string)) {
@@ -48,10 +48,10 @@ export const useWorkspaces = () => {
         router.push("/workspace");
         return;
       }
-      setActiveWorkspace(workspace!?.data![0]);
-      setCurrentWorkspace(workspace!?.data![0]);
+      setActiveWorkspace(workspace?.data![0]);
+      setCurrentWorkspace(workspace?.data![0]);
     })();
-  }, [workspaceId]);
+  }, [workspaceId, router]);
 
   return {
     isLoading,

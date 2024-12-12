@@ -3,7 +3,10 @@ import { revalidateDocumentData } from "@/app/(dashboard)/w/[workspace]/document
 import { eq } from "drizzle-orm";
 import { CreateDocumentPayload } from "../types";
 import { db } from "./drizzle";
-import { documents } from "./schema";
+import { Document, documents } from "./schema";
+import toast from "react-hot-toast";
+import { instance } from "../axios";
+import { error } from "console";
 
 export const getDocumentById = async (id: string) => {
   try {
@@ -95,25 +98,25 @@ export const deleteDocuments = async (ids: string[]) => {
   }
 };
 
-const movetoCollection = async ({
-  documentsToMove,
-  collectionId,
-}: {
-  documentsToMove: string[];
-  collectionId: string;
-}) => {
-  try {
-    documentsToMove?.map(async (doc) => {
-      await db
-        .update(documents)
-        .set({
-          collectionId: collectionId,
-        })
-        .where(eq(documents.id, doc));
-    });
-    // revalidateDocumentData("/(dashboard)/w/[workspace]");
-    // revalidateDocumentData("/(dashboard)/w/[workspace]/collection/[slug]");
-  } catch (error) {
-    return { data: null, error: (error as Error).message };
-  }
-};
+// const movetoCollection = async ({
+//   documentsToMove,
+//   collectionId,
+// }: {
+//   documentsToMove: string[];
+//   collectionId: string;
+// }) => {
+//   try {
+//     documentsToMove?.map(async (doc) => {
+//       await db
+//         .update(documents)
+//         .set({
+//           collectionId: collectionId,
+//         })
+//         .where(eq(documents.id, doc));
+//     });
+//     // revalidateDocumentData("/(dashboard)/w/[workspace]");
+//     // revalidateDocumentData("/(dashboard)/w/[workspace]/collection/[slug]");
+//   } catch (error) {
+//     return { data: null, error: (error as Error).message };
+//   }
+// };

@@ -1,4 +1,3 @@
-import { load } from "cheerio";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { instance } from "./axios";
@@ -29,9 +28,9 @@ export function getSlug(str: string) {
   str = str.toLowerCase();
 
   // remove accents, swap ñ for n, etc
-  var from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;";
-  var to = "aaaaeeeeiiiioooouuuunc------";
-  for (var i = 0, l = from.length; i < l; i++) {
+  const from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;";
+  const to = "aaaaeeeeiiiioooouuuunc------";
+  for (let i = 0, l = from.length; i < l; i++) {
     str = str.replace(new RegExp(from.charAt(i), "g"), to.charAt(i));
   }
 
@@ -42,21 +41,9 @@ export function getSlug(str: string) {
 
   return str;
 }
-export async function generateFlashCards(ctx: string) {
-  // const res = await fetch("http://localhost:3000/api/flashcards", {
-  //   method: "POST",
-  //   body: JSON.stringify({ ctx }),
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  // });
-  // const resp = await res.json();
-  // return resp;
-  return [];
-}
 
 export const capitalizeFirstLetter = (word: string): string => {
-  return `${word?.at(0)!.toUpperCase()}${word!?.slice(1).toLowerCase()}`;
+  return `${word?.at(0)!.toUpperCase()}${word?.slice(1).toLowerCase()}`;
 };
 
 export const getAvatarByUserInitials = (name: string) => {

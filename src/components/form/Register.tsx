@@ -5,19 +5,18 @@ import { Separator } from "@radix-ui/react-dropdown-menu";
 import { EyeIcon, EyeOffIcon, Loader } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Button } from "../ui/button";
 
 const Register = () => {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
 
   const {
     handleSubmit,
     register,
-    formState: { errors },
+    formState: { isSubmitting },
   } = useForm({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -72,11 +71,9 @@ const Register = () => {
       </div>
       <form
         onSubmit={handleSubmit(async (data) => {
-          setIsLoading(true);
           const { data: res, error } = await signUp(data);
           console.log({ res, error });
           if (error) {
-            setIsLoading(false);
             toast.error(error);
             return;
           }
@@ -140,7 +137,9 @@ const Register = () => {
           type="submit"
           className="mt-4 flex items-center justify-center rounded-lg bg-[#6a5ed9] px-4 py-2  text-white  hover:bg-[#564ac6]"
         >
-          {isLoading && <Loader className="size-4 animate-spin opacity-80" />}
+          {isSubmitting && (
+            <Loader className="size-4 animate-spin opacity-80" />
+          )}
           <span className="font-medium tracking-tight">Signup</span>
         </button>
       </form>

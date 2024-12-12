@@ -46,8 +46,8 @@ import { createPortal } from "react-dom";
 
 export function invariant(
   cond?: boolean,
-  message?: string,
-  ...args: string[]
+  message?: string
+  // ...args: string[]
 ): asserts cond {
   if (cond) {
     return;
@@ -56,7 +56,7 @@ export function invariant(
   throw new Error(
     "Internal Lexical error: invariant() is meant to be replaced at compile " +
       "time. There is no runtime version. Error: " +
-      message,
+      message
   );
 }
 
@@ -85,7 +85,7 @@ function isTableSelectionRectangular(selection: TableSelection): boolean {
       const row = node.getParentOrThrow();
       invariant(
         $isTableRowNode(row),
-        "Expected CellNode to have a RowNode parent",
+        "Expected CellNode to have a RowNode parent"
       );
       if (currentRow !== row) {
         if (expectedColumns !== null && currentColumns !== expectedColumns) {
@@ -167,7 +167,7 @@ type TableCellActionMenuProps = Readonly<{
   setIsMenuOpen: (isOpen: boolean) => void;
   showColorPickerModal?: (
     title: string,
-    showModal: (onClose: () => void) => JSX.Element,
+    showModal: (onClose: () => void) => JSX.Element
   ) => void;
   tableCellNode: TableCellNode;
   cellMerge: boolean;
@@ -190,7 +190,7 @@ function TableActionMenu({
   const [canMergeCells, setCanMergeCells] = useState(false);
   const [canUnmergeCell, setCanUnmergeCell] = useState(false);
   const [backgroundColor, setBackgroundColor] = useState(
-    () => currentCellBackgroundColor(editor) || "",
+    () => currentCellBackgroundColor(editor) || ""
   );
 
   useEffect(() => {
@@ -217,7 +217,7 @@ function TableActionMenu({
         setCanMergeCells(
           isTableSelectionRectangular(selection) &&
             (currentSelectionCounts.columns > 1 ||
-              currentSelectionCounts.rows > 1),
+              currentSelectionCounts.rows > 1)
         );
       }
       // Unmerge cell
@@ -282,7 +282,7 @@ function TableActionMenu({
       if (tableCellNode.isAttached()) {
         const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode);
         const tableElement = editor.getElementByKey(
-          tableNode.getKey(),
+          tableNode.getKey()
         ) as HTMLTableElementWithWithTableSelectionState;
 
         if (!tableElement) {
@@ -357,7 +357,7 @@ function TableActionMenu({
         onClose();
       });
     },
-    [editor, onClose],
+    [editor, onClose]
   );
 
   const insertTableColumnAtSelection = useCallback(
@@ -369,7 +369,7 @@ function TableActionMenu({
         onClose();
       });
     },
-    [editor, onClose, selectionCounts.columns],
+    [editor, onClose, selectionCounts.columns]
   );
 
   const deleteTableRowAtSelection = useCallback(() => {
@@ -436,7 +436,7 @@ function TableActionMenu({
 
       const tableRows = tableNode.getChildren<TableRowNode>();
       const maxRowsLength = Math.max(
-        ...tableRows.map((row) => row.getChildren().length),
+        ...tableRows.map((row) => row.getChildren().length)
       );
 
       if (tableColumnIndex >= maxRowsLength || tableColumnIndex < 0) {
@@ -493,7 +493,7 @@ function TableActionMenu({
         }
       });
     },
-    [editor],
+    [editor]
   );
 
   let mergeCellButton: null | JSX.Element = null;
@@ -656,7 +656,7 @@ function TableActionMenu({
         </span>
       </button>
     </div>,
-    document.body,
+    document.body
   );
 }
 
@@ -674,7 +674,7 @@ function TableCellActionMenuContainer({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const [tableCellNode, setTableMenuCellNode] = useState<TableCellNode | null>(
-    null,
+    null
   );
 
   //   const [colorPickerModal, showColorPickerModal] = useModal();
@@ -699,7 +699,7 @@ function TableCellActionMenuContainer({
       rootElement.contains(nativeSelection.anchorNode)
     ) {
       const tableCellNodeFromSelection = $getTableCellNodeFromLexicalNode(
-        selection.anchor.getNode(),
+        selection.anchor.getNode()
       );
 
       if (tableCellNodeFromSelection == null) {
@@ -708,7 +708,7 @@ function TableCellActionMenuContainer({
       }
 
       const tableCellParentNodeDOM = editor.getElementByKey(
-        tableCellNodeFromSelection.getKey(),
+        tableCellNodeFromSelection.getKey()
       );
 
       if (tableCellParentNodeDOM == null) {
@@ -811,6 +811,6 @@ export default function TableActionMenuPlugin({
         cellMerge={cellMerge}
       />
     ) : null,
-    anchorElem,
+    anchorElem
   );
 }

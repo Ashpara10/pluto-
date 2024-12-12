@@ -4,7 +4,7 @@ import Image from "next/image";
 import React from "react";
 
 const UserDetails = ({ open }: { open: boolean }) => {
-  const { data, status } = useSession();
+  const { data } = useSession();
   return (
     <div className="flex w-full items-center justify-center">
       <div className="w-fit p-2">

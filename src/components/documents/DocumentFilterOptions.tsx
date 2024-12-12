@@ -1,9 +1,8 @@
-import { getCookie, setCookie } from "cookies-next";
-import { Grid2X2, LayoutGrid, List } from "lucide-react";
-import { FC, ReactNode, useEffect, useState } from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Separator } from "@radix-ui/react-dropdown-menu";
+import { LayoutGrid, List } from "lucide-react";
+import { FC, ReactNode } from "react";
 import { Button } from "../ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 type DocumentFilterOptionsProps = {
   open: boolean;

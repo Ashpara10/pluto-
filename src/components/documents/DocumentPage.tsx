@@ -23,14 +23,14 @@ const Editor = dynamic(() => import("@/components/editor/editor"), {
 });
 
 const DocumentPage: FC<DocumentPageProps> = ({ document }) => {
-  const [data, setData] = useState<Document>(document!);
-  const [tags, setTags] = useState<string[]>(document?.tags! || []);
+  const [data, setData] = useState<Document>(document);
+  const [tags, setTags] = useState<string[]>(document?.tags || []);
   const [editor] = useLexicalComposerContext();
 
   const onSave = async () => {
     let payload = {
-      id: data?.id!,
-      title: data?.title!,
+      id: data?.id as string,
+      title: data?.title as string,
       markdown: "",
       content: "",
       tags: tags,
@@ -68,13 +68,13 @@ const DocumentPage: FC<DocumentPageProps> = ({ document }) => {
 						text-3xl lg:text-4xl p-0 focus-visible:outline-none bg-transparent placeholder:text-neutral-300 dark:placeholder:text-neutral-700
 						border-none appearance-none shadow-none overflow-hidden "
           placeholder="Enter Title..."
-          value={data?.title!}
+          value={data?.title as string}
           onChange={(e) => setData((p) => ({ ...p, title: e.target.value }))}
         />
         {/* <TagInput tags={tags!} setTags={(tags) => setTags(tags)} /> */}
         <div className="w-full flex mt-1 items-center justify-start">
           <span className="text-sm opacity-75">
-            {new Date(data?.createdAt!).toLocaleDateString("en-US", {
+            {new Date(data?.createdAt as Date).toLocaleDateString("en-US", {
               day: "2-digit",
               month: "long",
               year: "numeric",
@@ -82,7 +82,7 @@ const DocumentPage: FC<DocumentPageProps> = ({ document }) => {
           </span>
         </div>
         <Editor
-          content={data?.content!}
+          content={data?.content as string}
           setContent={(data) => setData((p) => ({ ...p, content: data }))}
         />
       </TransitionLayout>

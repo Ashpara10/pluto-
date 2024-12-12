@@ -7,7 +7,7 @@ import { NextRequest } from "next/server";
 export async function GET(req: NextRequest) {
   const userId = req.nextUrl.searchParams.get("user");
   const sessionCookie = await verifyJWTPayload(
-    req.cookies.get("session")?.value!
+    req.cookies.get("session")?.value as string
   );
   if (!sessionCookie) {
     return Response.json(
@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
     .from(users)
     .where(
       and(
-        eq(users.id, (sessionCookie as SessionData)?.user?.id!),
+        eq(users.id, (sessionCookie as SessionData)?.user?.id as string),
         isNull(users.deletedAt)
       )
     )

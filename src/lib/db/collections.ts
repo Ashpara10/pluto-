@@ -1,4 +1,3 @@
-import { eq } from "drizzle-orm";
 import { getSlug } from "../utils";
 import { db } from "./drizzle";
 import { collections, NewCollection } from "./schema";
