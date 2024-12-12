@@ -1,6 +1,5 @@
 "use client";
 
-import { fetchDocuments } from "@/app/(dashboard)/w/[workspace]/page";
 import { useActiveView } from "@/lib/context";
 import { Document } from "@/lib/db/schema";
 import { FC } from "react";
@@ -8,43 +7,36 @@ import { useQuery } from "react-query";
 import DocumentCardView, { DocumentCardViewSkeleton } from "./DocumentCardView";
 import DocumentListView, { DocumentListViewSkeleton } from "./DocumentListView";
 import EmptyDocuments from "../empty-documents";
+import { fetchDocuments } from "@/lib/actions";
 
 type AllDocumentsProps = {
   workspace: string;
   documents: Document[];
-  loading: boolean;
 };
 
-const AllDocuments: FC<AllDocumentsProps> = ({
-  workspace,
-  documents,
-  loading,
-}) => {
-  console.log(documents);
+const AllDocuments: FC<AllDocumentsProps> = ({ workspace, documents }) => {
   const { activeView } = useActiveView();
-  const { data, isError, isLoading } = useQuery({
-    initialData: {
-      data: documents,
-      isLoading: loading,
-    },
+  const { data, isFetching } = useQuery({
+    initialData: { data: documents, error: null },
     queryKey: ["documents-lists", workspace],
-    queryFn: () => fetchDocuments({ workspace }),
+    queryFn: () => fetchDocuments(workspace),
+    refetchOnWindowFocus: false,
   });
   if (data?.data?.length === 0) {
+    return <EmptyDocuments />;
+  }
+  if (isFetching) {
     return activeView === "list" ? (
       <DocumentListViewSkeleton />
     ) : (
       <DocumentCardViewSkeleton />
     );
   }
-  if (data?.data?.length === 0) {
-    return <EmptyDocuments />;
-  }
 
   return activeView === "grid" ? (
-    <DocumentCardView data={data?.data!} isLoading={isLoading} />
+    <DocumentCardView data={data?.data as Document[]} isLoading={isFetching} />
   ) : (
-    <DocumentListView data={data?.data!} isLoading={isLoading} />
+    <DocumentListView data={data?.data as Document[]} isLoading={isFetching} />
   );
 };
 

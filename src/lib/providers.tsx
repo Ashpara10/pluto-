@@ -25,7 +25,7 @@ export const editorConfig: InitialConfigType = {
 
 const LexicalConfigContext = createContext<{
   config: InitialConfigType | null;
-  setConfig: Dispatch<SetStateAction<any>>;
+  setConfig: Dispatch<SetStateAction<InitialConfigType>>;
 }>({
   config: null,
   setConfig: () => {},

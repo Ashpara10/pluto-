@@ -47,25 +47,25 @@ export function CheckListPlugin(): null {
           insertList(editor, "check");
           return true;
         },
-        COMMAND_PRIORITY_LOW,
+        COMMAND_PRIORITY_LOW
       ),
       editor.registerCommand<KeyboardEvent>(
         KEY_ARROW_DOWN_COMMAND,
         (event) => {
           return handleArrownUpOrDown(event, editor, false);
         },
-        COMMAND_PRIORITY_LOW,
+        COMMAND_PRIORITY_LOW
       ),
       editor.registerCommand<KeyboardEvent>(
         KEY_ARROW_UP_COMMAND,
         (event) => {
           return handleArrownUpOrDown(event, editor, true);
         },
-        COMMAND_PRIORITY_LOW,
+        COMMAND_PRIORITY_LOW
       ),
       editor.registerCommand<KeyboardEvent>(
         KEY_ESCAPE_COMMAND,
-        (event) => {
+        () => {
           const activeItem = getActiveCheckListItem();
 
           if (activeItem != null) {
@@ -80,7 +80,7 @@ export function CheckListPlugin(): null {
 
           return false;
         },
-        COMMAND_PRIORITY_LOW,
+        COMMAND_PRIORITY_LOW
       ),
       editor.registerCommand<KeyboardEvent>(
         KEY_SPACE_COMMAND,
@@ -101,7 +101,7 @@ export function CheckListPlugin(): null {
 
           return false;
         },
-        COMMAND_PRIORITY_LOW,
+        COMMAND_PRIORITY_LOW
       ),
       editor.registerCommand<KeyboardEvent>(
         KEY_ARROW_LEFT_COMMAND,
@@ -117,7 +117,7 @@ export function CheckListPlugin(): null {
                 const anchorNode = anchor.getNode();
                 const elementNode = $findMatchingParent(
                   anchorNode,
-                  (node) => $isElementNode(node) && !node.isInline(),
+                  (node) => $isElementNode(node) && !node.isInline()
                 );
                 if ($isListItemNode(elementNode)) {
                   const parent = elementNode.getParent();
@@ -142,7 +142,7 @@ export function CheckListPlugin(): null {
             return false;
           });
         },
-        COMMAND_PRIORITY_LOW,
+        COMMAND_PRIORITY_LOW
       ),
       editor.registerRootListener((rootElement, prevElement) => {
         if (rootElement !== null) {
@@ -154,7 +154,7 @@ export function CheckListPlugin(): null {
           prevElement.removeEventListener("click", handleClick);
           prevElement.removeEventListener("pointerdown", handlePointerDown);
         }
-      }),
+      })
     );
   });
 
@@ -254,7 +254,7 @@ function getActiveCheckListItem(): HTMLElement | null {
 
 function findCheckListItemSibling(
   node: ListItemNode,
-  backward: boolean,
+  backward: boolean
 ): ListItemNode | null {
   let sibling = backward ? node.getPreviousSibling() : node.getNextSibling();
   let parent: ListItemNode | null = node;
@@ -290,7 +290,7 @@ function findCheckListItemSibling(
 function handleArrownUpOrDown(
   event: KeyboardEvent,
   editor: LexicalEditor,
-  backward: boolean,
+  backward: boolean
 ) {
   const activeItem = getActiveCheckListItem();
 

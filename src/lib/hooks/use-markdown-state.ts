@@ -2,7 +2,7 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { useEffect, useState } from "react";
 import { $convertToMarkdownString, TRANSFORMERS } from "@lexical/markdown";
 
-export async function useMarkdownEditorState() {
+export function useMarkdownEditorState() {
   const [state, setState] = useState<string>("");
   const [editor] = useLexicalComposerContext();
   useEffect(() => {

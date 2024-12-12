@@ -8,26 +8,24 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "./ui/resizable";
-import { usePathname } from "next/navigation";
-import AppSidebar from "./AppSidebar";
 import { ScrollArea } from "./ui/scroll-area";
 
 const GlobalLayout = ({ children }: { children: ReactNode }) => {
-  const pathname = usePathname();
-  const isDocumentPage = pathname.includes("/document/");
+  // const pathname = usePathname();
+  // const isDocumentPage = pathname.includes("/document/");
   return (
     <ResizablePanelGroup
       direction="horizontal"
       className="relative h-screen w-full overflow-hidden bg-white  dark:bg-dark"
     >
-      <ResizablePanel
+      {/* <ResizablePanel
         className="relative hidden h-screen md:flex "
         maxSize={15}
       >
         <AppSidebar />
-      </ResizablePanel>
+      </ResizablePanel> */}
 
-      <ResizableHandle className="hidden md:flex" withHandle />
+      {/* <ResizableHandle className="hidden md:flex" withHandle /> */}
       <ResizablePanel className="relative w-full">
         <div className="absolute left-0 right-0 flex w-full items-center justify-center ">
           <div className="fixed bottom-5 z-40 w-full ">

@@ -72,7 +72,7 @@ class ComponentPickerOption extends MenuOption {
       keywords?: Array<string>;
       keyboardShortcut?: string;
       onSelect: (queryString: string) => void;
-    },
+    }
   ) {
     super(title);
     this.title = title;
@@ -107,7 +107,7 @@ function ComponentPickerMenuItem({
       tabIndex={-1}
       className={cn(
         "flex w-full items-center space-x-2 rounded-md p-1 text-left text-sm  hover:bg-[#383838] ",
-        isSelected && "bg-[#424242]",
+        isSelected && "bg-[#424242]"
       )}
       ref={option.setRefElement}
       role="option"
@@ -164,8 +164,8 @@ export default function ComponentPickerPlugin(): JSX.Element {
             onSelect: () =>
               // @ts-ignore Correct types, but since they're dynamic TS doesn't like it.
               editor.dispatchCommand(INSERT_TABLE_COMMAND, { columns, rows }),
-          },
-        ),
+          }
+        )
       );
     } else if (partialTableMatch) {
       const rows = parseInt(partialTableMatch[0], 10);
@@ -187,9 +187,9 @@ export default function ComponentPickerPlugin(): JSX.Element {
                     // @ts-ignore
                     rows,
                   }),
-              },
-            ),
-        ),
+              }
+            )
+        )
       );
     }
 
@@ -215,7 +215,7 @@ export default function ComponentPickerPlugin(): JSX.Element {
             if (!query) return false;
             editor.dispatchCommand(INSERT_ASSISTANT_RESPONSE, query);
           },
-        },
+        }
       ),
       new ComponentPickerOption("Text", "Just start typing with plain text.", {
         icon: <Text size={18} />,
@@ -243,12 +243,12 @@ export default function ComponentPickerPlugin(): JSX.Element {
                   if ($isRangeSelection(selection)) {
                     $setBlocksType(selection, () =>
                       // @ts-ignore Correct types, but since they're dynamic TS doesn't like it.
-                      $createHeadingNode(`h${n}`),
+                      $createHeadingNode(`h${n}`)
                     );
                   }
                 }),
-            },
-          ),
+            }
+          )
       ),
 
       new ComponentPickerOption("Todo List", "Create a check list.", {
@@ -265,7 +265,7 @@ export default function ComponentPickerPlugin(): JSX.Element {
           keywords: ["numbered list", "ordered list", "ol"],
           onSelect: () =>
             editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined),
-        },
+        }
       ),
       new ComponentPickerOption(
         "Bulleted List",
@@ -275,18 +275,21 @@ export default function ComponentPickerPlugin(): JSX.Element {
           keywords: ["bulleted list", "unordered list", "ul"],
           onSelect: () =>
             editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined),
-        },
+        }
       ),
       new ComponentPickerOption("Image", "Insert an image", {
         icon: <ImagePlus size={18} />,
         keywords: ["image", "photo", "attachment"],
         onSelect: () => {
           const src = prompt("Enter Image URL");
-          src &&
-            editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
-              altText: "",
-              src: src,
-            });
+          if (!src) {
+            alert("Please enter a valid URL");
+            return;
+          }
+          editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
+            altText: "",
+            src: src,
+          });
         },
       }),
 
@@ -347,7 +350,7 @@ export default function ComponentPickerPlugin(): JSX.Element {
             return new RegExp(queryString, "gi").exec(option.title) ||
               option.keywords != null
               ? option.keywords.some((keyword: string) =>
-                  new RegExp(queryString, "gi").exec(keyword),
+                  new RegExp(queryString, "gi").exec(keyword)
                 )
               : false;
           }),
@@ -360,7 +363,7 @@ export default function ComponentPickerPlugin(): JSX.Element {
       selectedOption: ComponentPickerOption,
       nodeToRemove: TextNode | null,
       closeMenu: () => void,
-      matchingString: string,
+      matchingString: string
     ) => {
       editor.update(() => {
         if (nodeToRemove) {
@@ -370,7 +373,7 @@ export default function ComponentPickerPlugin(): JSX.Element {
         closeMenu();
       });
     },
-    [editor],
+    [editor]
   );
 
   return (
@@ -382,14 +385,14 @@ export default function ComponentPickerPlugin(): JSX.Element {
         options={options}
         menuRenderFn={(
           anchorElementRef,
-          { selectedIndex, selectOptionAndCleanUp, setHighlightedIndex },
+          { selectedIndex, selectOptionAndCleanUp, setHighlightedIndex }
         ) =>
           anchorElementRef.current && options.length
             ? ReactDOM.createPortal(
                 <div
                   className={cn(
                     "absolute z-50 mt-8 h-auto max-h-[330px] w-72 overflow-y-hidden scroll-smooth  rounded-lg px-1 py-2 shadow-md shadow-black/10 transition-all",
-                    "scrollbar-thin border border-lightGray bg-dark-popover dark:border-lightGray/20 ",
+                    "scrollbar-thin border border-lightGray bg-dark-popover dark:border-lightGray/20 "
                   )}
                 >
                   <ul className="flex flex-col gap-2">
@@ -410,7 +413,7 @@ export default function ComponentPickerPlugin(): JSX.Element {
                     ))}
                   </ul>
                 </div>,
-                anchorElementRef.current,
+                anchorElementRef.current
               )
             : null
         }

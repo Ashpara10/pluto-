@@ -14,18 +14,6 @@ export async function GET(req: NextRequest) {
       { status: 400 }
     );
   }
-  // const documentsCount = await db
-  //   .select({ count: count() })
-  //   .from(documents)
-  //   .where(
-  //     and(
-  //       eq(documents.workspaceId, workspace),
-  //       eq(documents.authorId, user?.user?.id!),
-  //       eq(documents?.collectionId, collections?.id)
-  //     )
-  //   )
-  //   .as("documents_count");
-  // console.log(documentsCount);
 
   const allCollections = await db
     .select({
@@ -35,8 +23,8 @@ export async function GET(req: NextRequest) {
     .from(collections)
     .where(
       and(
-        eq(collections?.userId, user?.user?.id!),
-        eq(collections.workspaceId, workspace!)
+        eq(collections?.userId, user?.user?.id as string),
+        eq(collections.workspaceId, workspace as string)
       )
     )
     .leftJoin(documents, eq(documents?.collectionId, collections?.id))
@@ -51,11 +39,11 @@ export async function POST(req: NextRequest) {
   const workspace = req.nextUrl.searchParams?.get("workspace");
 
   const resp = await createCollection({
-    name: name!,
-    tags: tags!,
-    user: user?.user?.id!,
+    name: name as string,
+    tags: tags as string[],
+    user: user?.user?.id as string,
     documents,
-    workspace: workspace!,
+    workspace: workspace as string,
   });
   if (resp?.error)
     return Response.json({ data: null, error: resp.error }, { status: 400 });

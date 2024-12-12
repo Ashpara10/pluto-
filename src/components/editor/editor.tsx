@@ -4,7 +4,7 @@ import { EditorRefPlugin } from "@lexical/react/LexicalEditorRefPlugin";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { LexicalEditor } from "lexical";
-import { memo, useRef } from "react";
+import { useRef } from "react";
 import EditorPlugins from "./plugins";
 import ParseContentPlugin from "./plugins/ParseContentPlugin";
 

@@ -37,7 +37,7 @@ const generateAssistantResponse = async (q: string) => {
   return result;
 };
 
-export default async function AskAssistantPlugin() {
+export default function AskAssistantPlugin() {
   const [editor] = useLexicalComposerContext();
   useEffect(() => {
     return editor.registerCommand<TAssistantNode>(

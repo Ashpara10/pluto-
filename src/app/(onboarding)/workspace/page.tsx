@@ -10,16 +10,9 @@ import { queryClient } from "@/lib/session-provider";
 import { Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { FC } from "react";
 import toast from "react-hot-toast";
 
-type PageProps = {
-  params: {
-    // user: string;
-  };
-};
-
-const Page: FC<PageProps> = ({ params }) => {
+const Page = () => {
   const { workspaces, isLoading } = useWorkspaces();
   const { data } = useSession();
 
@@ -40,7 +33,7 @@ const Page: FC<PageProps> = ({ params }) => {
                 />
               );
             })
-          : workspaces!?.map((workspace, i) => {
+          : workspaces?.map((workspace, i) => {
               return (
                 <Link
                   key={i}
@@ -48,7 +41,7 @@ const Page: FC<PageProps> = ({ params }) => {
                   href={`/w/${workspace?.id}`}
                   className="w-full flex items-start justify-between rounded-lg border border-neutral-300/60 p-3 dark:border-lightGray/10 cursor-pointer "
                 >
-                  <div onClick={() => handleWorkspaceClick(workspace!)}>
+                  <div onClick={() => handleWorkspaceClick(workspace)}>
                     <span>{workspace?.name}</span>
                   </div>
                   <Button
@@ -65,7 +58,7 @@ const Page: FC<PageProps> = ({ params }) => {
                       toast.success("Workspace Deleted");
                       queryClient.refetchQueries([
                         "get-workspaces",
-                        data?.user?.id!,
+                        data?.user?.id,
                       ]);
                     }}
                   >

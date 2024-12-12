@@ -55,8 +55,7 @@ export const DefaultFloatingMenuFace = () => {
 export const SelectedDocumentsMenuFace = () => {
   const { selectedDocuments, setSelectedDocuments } = useSelectedDocuments();
   const { setIsMoveToFolderDialogOpen } = useIsMoveToFolderDialog();
-  const { isDeleteDocumentDialogOpen, setIsDeleteDocumentDialogOpen } =
-    useDeleteDocumentDialog();
+  const { setIsDeleteDocumentDialogOpen } = useDeleteDocumentDialog();
 
   return (
     <div className="flex w-full items-center justify-between">

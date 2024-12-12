@@ -1,10 +1,6 @@
 "use client";
 import { getActiveWorkspace } from "@/lib/actions";
-import {
-  useCreateCollectionDialog,
-  useIsMoveToFolderDialog,
-  useSelectedDocuments,
-} from "@/lib/context";
+import { useCreateCollectionDialog, useSelectedDocuments } from "@/lib/context";
 import { createDocument } from "@/lib/db/documents";
 import { getArticleDataByURL } from "@/lib/utils";
 import { $generateNodesFromDOM } from "@lexical/html";
@@ -45,10 +41,10 @@ const FloatingMenu = memo(() => {
   const { data: user } = useSession();
   const uniqueId = useId();
   const params = useParams() as { workspace: string };
-  const { selectedDocuments, setSelectedDocuments } = useSelectedDocuments();
+  const { selectedDocuments } = useSelectedDocuments();
   const [editor] = useLexicalComposerContext();
   const { setCreateCollectionDialogOpen } = useCreateCollectionDialog();
-  const { setIsMoveToFolderDialogOpen } = useIsMoveToFolderDialog();
+  // const { setIsMoveToFolderDialogOpen } = useIsMoveToFolderDialog();
   const { theme, setTheme } = useTheme();
   const path = usePathname();
 
@@ -66,14 +62,14 @@ const FloatingMenu = memo(() => {
         // console.log({ user });
         const workspace = await getActiveWorkspace();
         const { data, error } = await createDocument({
-          user: user?.user?.id!,
-          workspaceId: workspace?.id!,
+          user: user?.user?.id as string,
+          workspaceId: workspace?.id as string,
         });
         if (error) {
           toast?.error(error);
           return;
         }
-        router.push(`/w/${params?.workspace!}/document/${data!.id}`);
+        router.push(`/w/${params?.workspace as string}/document/${data!.id}`);
       },
     },
 
@@ -253,7 +249,7 @@ const FloatingMenu = memo(() => {
     } else {
       setActiveFace("default");
     }
-  }, [selectedDocuments?.length]);
+  }, [selectedDocuments]);
 
   useWindowEvent("keydown", (e) => {
     if (isExpanded && e.key === "Escape") {
@@ -274,7 +270,7 @@ const FloatingMenu = memo(() => {
     } else {
       controls?.start("collapse");
     }
-  }, [isExpanded]);
+  }, [controls, isExpanded]);
 
   return (
     <div className="relative  flex w-full items-center justify-center ">
@@ -310,4 +306,5 @@ const FloatingMenu = memo(() => {
   );
 });
 
+FloatingMenu.displayName = "FloatingMenu";
 export default FloatingMenu;

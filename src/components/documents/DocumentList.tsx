@@ -1,11 +1,10 @@
 "use client";
-import React, { useState } from "react";
-import { Checkbox } from "../ui/checkbox";
-import { cn } from "@/lib/utils";
-import { useParams, useRouter } from "next/navigation";
 import { Document } from "@/lib/db/schema";
-import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
 import { Star, Trash2 } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
+import { Checkbox } from "../ui/checkbox";
 
 type DocumentListProps = {
   document: Document;
@@ -41,7 +40,7 @@ const DocumentListItem = ({
         <div className="ml-2 flex items-center justify-start">
           <span
             onClick={handleClick}
-            className="truncate text-lg max-w-md leading-tight tracking-tight hover:cursor-pointer "
+            className="truncate text-lg  leading-tight tracking-tight hover:cursor-pointer "
           >
             {document?.title || "Untitled"}
           </span>

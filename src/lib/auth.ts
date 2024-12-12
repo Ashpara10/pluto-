@@ -6,7 +6,6 @@ import GoogleProvider from "next-auth/providers/google";
 import { comparePasswords } from "./actions";
 import { db } from "./db/drizzle";
 import { users } from "./db/schema";
-import { get } from "http";
 import { getUserByEmail } from "./db/user";
 
 declare module "next-auth" {
@@ -24,7 +23,7 @@ export const auth = {
     maxAge: 30 * 24 * 60 * 60,
   },
   callbacks: {
-    async jwt({ token, user, account, profile, session }) {
+    async jwt({ token, user }) {
       if (user) {
         const u = await getUserByEmail(user.email!);
         if (!u.data) {
@@ -58,7 +57,7 @@ export const auth = {
         password: { label: "Password", type: "password" },
       },
       type: "credentials",
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Invalid credentials");
         }

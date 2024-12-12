@@ -33,7 +33,7 @@ const UpdateAccount = () => {
       image: user?.user?.image,
       name: user?.user?.name,
       email: user?.user?.email,
-      defaultWorkspace: currentWorkspace!?.name,
+      defaultWorkspace: currentWorkspace?.name,
     },
   });
   return (
@@ -82,7 +82,7 @@ const UpdateWorkspaceSettings: FC<{
                   <SelectContent className="dark:border-lightGray/10 border-neutral-300/80 bg-neutral-100 dark:bg-neutral-800">
                     {workspaces?.map((workspace, i) => {
                       return (
-                        <SelectItem value={workspace?.name}>
+                        <SelectItem key={i} value={workspace?.name}>
                           {workspace?.name}
                         </SelectItem>
                       );

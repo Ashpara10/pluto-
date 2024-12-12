@@ -4,7 +4,6 @@ import {
   ReactNode,
   useCallback,
   useContext,
-  useEffect,
   useState,
 } from "react";
 
@@ -186,47 +185,47 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
     (isOpen: boolean) => {
       setOpenContext({ ...openContext, sidebarOpen: isOpen });
     },
-    [openContext?.sidebarOpen]
+    [openContext, setOpenContext]
   );
 
   const setCreateDocumentDialogOpen = useCallback(
     (isOpen: boolean) => {
       setOpenContext({ ...openContext, createDocumentDialogOpen: isOpen });
     },
-    [openContext?.createDocumentDialogOpen]
+    [openContext, setOpenContext]
   );
 
   const setIsDeleteWorkspaceDialogOpen = useCallback(
     (isOpen: boolean) => {
       setOpenContext({ ...openContext, isDeleteWorkspaceDialogOpen: isOpen });
     },
-    [openContext?.isDeleteWorkspaceDialogOpen]
+    [openContext, setOpenContext]
   );
 
   const setIsDeleteDocumentDialogOpen = useCallback(
     (isOpen: boolean) => {
       setOpenContext({ ...openContext, isDeleteDocumentDialogOpen: isOpen });
     },
-    [openContext?.isDeleteDocumentDialogOpen]
+    [openContext, setOpenContext]
   );
 
   const setIsCreateCollectionDialogOpen = useCallback(
     (isOpen: boolean) => {
       setOpenContext({ ...openContext, isCreateCollectionDialogOpen: isOpen });
     },
-    [openContext?.isCreateCollectionDialogOpen]
+    [openContext, setOpenContext]
   );
   const setIsMoveToFolderDialogOpen = useCallback(
     (isOpen: boolean) => {
       setOpenContext({ ...openContext, isMoveToFolderDialogOpen: isOpen });
     },
-    [openContext?.isMoveToFolderDialogOpen]
+    [openContext, setOpenContext]
   );
   const setIsCreateWorkspaceDialogOpen = useCallback(
     (isOpen: boolean) => {
       setOpenContext({ ...openContext, isCreateWorkspaceDialogOpen: isOpen });
     },
-    [openContext?.isCreateWorkspaceDialogOpen]
+    [openContext, setOpenContext]
   );
   return (
     <Context.Provider

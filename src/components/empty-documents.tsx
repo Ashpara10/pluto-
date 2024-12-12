@@ -32,8 +32,8 @@ const EmptyDocuments = () => {
             onClick={async () => {
               const workspace = await getActiveWorkspace();
               const { data, error } = await createDocument({
-                user: user?.user?.id!,
-                workspaceId: workspace?.id!,
+                user: user?.user?.id as string,
+                workspaceId: workspace?.id as string,
               });
               // console.log({ data, error });
               if (error) {
@@ -41,7 +41,7 @@ const EmptyDocuments = () => {
                 return;
               }
               toast.success("Document created successfully");
-              router.push(`/w/${workspace?.id!}/document/${data?.id}`);
+              router.push(`/w/${workspace?.id}/document/${data?.id}`);
             }}
           >
             Create Document

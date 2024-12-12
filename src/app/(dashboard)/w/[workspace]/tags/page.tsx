@@ -1,19 +1,17 @@
 "use client";
-import { db } from "@/lib/db/drizzle";
-import { Document } from "@/lib/db/schema";
-import { useWorkspaces } from "@/lib/hooks/use-workspaces";
-import { sql } from "drizzle-orm";
-import { useSession } from "next-auth/react";
-import React, { useEffect } from "react";
-import { useQuery } from "react-query";
+import DocumentListItem from "@/components/documents/DocumentList";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import DocumentListItem from "@/components/documents/DocumentList";
+import { db } from "@/lib/db/drizzle";
+import { Document } from "@/lib/db/schema";
+import { useWorkspaces } from "@/lib/hooks/use-workspaces";
+import { sql } from "drizzle-orm";
+import { useSession } from "next-auth/react";
+import { useQuery } from "react-query";
 
 type TDocumentGroupedByTag = {
   tag: string;
@@ -32,7 +30,11 @@ const Page = () => {
   const { currentWorkspace } = useWorkspaces();
   const { data: docs } = useQuery(
     ["group-documents-by-tags", data?.user?.id, currentWorkspace?.id],
-    () => getDocumentsGroupedByTag(data?.user?.id!, currentWorkspace!?.id!)
+    () =>
+      getDocumentsGroupedByTag(
+        data?.user?.id as string,
+        currentWorkspace?.id as string
+      )
   );
   return (
     <section className="w-full flex flex-col items-center justify-center pt-28">

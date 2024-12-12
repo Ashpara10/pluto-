@@ -44,7 +44,7 @@ const AllCollections = () => {
   return (
     <div>
       {data?.length === 0 && <EmptyCollections />}
-      <div className="grid w-full grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4 ">
+      <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
         {isLoading
           ? [...Array(9)].map((_, i) => {
               return (
@@ -54,7 +54,7 @@ const AllCollections = () => {
                 />
               );
             })
-          : data!?.map((data, i) => {
+          : data?.map((data, i) => {
               return (
                 <CollectionCard
                   key={i}

@@ -6,7 +6,7 @@ import React from "react";
 const Page = () => {
   return (
     <section className="flex w-full flex-col items-center justify-center mt-28">
-      <div className="w-full ">
+      <div className="w-full max-w-7xl">
         <CollectionViewOptions title="All Collections">
           <AllCollections />
         </CollectionViewOptions>
