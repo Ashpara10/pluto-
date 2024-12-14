@@ -27,7 +27,7 @@ const DocumentListItem = ({
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="px-2 rounded-lg py-0.5 hover:dark:bg-lightGray/5 hover:bg-neutral-200/60 flex w-full items-center justify-start truncate"
+      className="px-2 rounded-lg cursor-pointer  py-0.5 hover:dark:bg-lightGray/5 hover:bg-neutral-200/60 flex w-full items-center justify-start truncate"
     >
       <Checkbox
         checked={checked}
@@ -40,7 +40,7 @@ const DocumentListItem = ({
         <div className="ml-2 flex items-center justify-start">
           <span
             onClick={handleClick}
-            className="truncate text-lg  leading-tight tracking-tight hover:cursor-pointer "
+            className="truncate text-lg  leading-tight tracking-tight "
           >
             {document?.title || "Untitled"}
           </span>

@@ -16,9 +16,9 @@ const TransitionLayout = ({ children }: { children: React.ReactNode }) => {
         ease: "easeInOut",
       }}
     >
-      <ScrollArea className="relative h-full w-full overflow-y-auto px-4">
+      <ScrollArea className="relative h-full w-full overflow-y-auto px-4 pt-32">
         <GradientBottom />
-        <div className=" flex w-full items-center justify-center mt-28 h-full">
+        <div className=" flex w-full items-center justify-center h-full">
           <div className="flex w-full flex-col items-center justify-center h-full px-3  md:max-w-2xl md:p-0 lg:max-w-3xl xl:4xl">
             {children}
           </div>
