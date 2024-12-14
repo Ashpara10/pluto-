@@ -17,7 +17,7 @@ const ChatAssistant = () => {
   const { messages, setMessages, handleSubmit, input, handleInputChange } =
     useChat({
       body: {
-        ctx: `<context>${mdContext}</context>`,
+        ctx: mdContext,
       },
     });
 

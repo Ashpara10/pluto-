@@ -76,15 +76,6 @@ export async function setSession(user: NewUser) {
   setCookie("session", encryptedSession);
 }
 
-// const systemPrompt = `You are a flashcard generator. You generate flashcards based on the context provided by the user.
-// - Context will be provided in markdown format.
-// - Context will be provided inside of <context></context> tag.
-// - Generate minimum of 5 flashcards and maximum of 10 flashcards.
-
-// `;
-
-// Auth actions
-
 export const LoginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
