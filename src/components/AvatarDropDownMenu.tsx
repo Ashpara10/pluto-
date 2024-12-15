@@ -36,18 +36,6 @@ const AvatarDropDownMenu = () => {
       },
       separator: false,
     },
-    // {
-    //   icon: <Settings className="mr-2 h-4 w-4" />,
-    //   text: "Settings",
-    //   handleClick: () => {},
-    //   separator: false,
-    // },
-    // {
-    //   icon: <Keyboard className="mr-2 h-4 w-4" />,
-    //   text: "Keyboard shortcuts",
-    //   handleClick: () => {},
-    //   separator: true,
-    // },
     {
       icon:
         theme === "light" ? (

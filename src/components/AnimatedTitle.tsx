@@ -38,9 +38,6 @@ const AnimatedTitle: FC<AnimatedTitleProps> = ({ text, className }) => {
   // }, [controls]);
 
   return (
-    // <motion.span className={cn(className)}>
-    //   {text.split(" ").map((word, i) => {
-    //     return (
     <motion.span
       // ref={ref}
       className={cn(className)}
@@ -48,14 +45,9 @@ const AnimatedTitle: FC<AnimatedTitleProps> = ({ text, className }) => {
       aria-hidden="true"
       initial="hidden"
       animate={"visible"}
-      // key={i}
-      // transition={{ delay: i * 0.2 }}
     >
       {text}
     </motion.span>
-    //     );
-    //   })}
-    // </motion.span>
   );
 };
 
