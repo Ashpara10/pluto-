@@ -1,4 +1,5 @@
 "use client";
+import { getActiveWorkspace } from "@/lib/actions";
 import { Workspace } from "@/lib/db/schema";
 import { motion, Variants } from "framer-motion";
 import { ChevronRight } from "lucide-react";
@@ -7,8 +8,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import AnimatedTitle from "../AnimatedTitle";
-import { Button } from "../ui/button";
-import { getActiveWorkspace } from "@/lib/actions";
 
 const gradientVariants: Variants = {
   initial: {
@@ -62,41 +61,61 @@ const Landing = () => {
       setActiveWorkspace(w);
     })();
   }, []);
-  console.log({ activeWorkspace });
   return (
     <section
       id="hero"
       className="w-full h-full relative flex flex-col items-center justify-center"
     >
-      {/* <motion.div
+      <motion.div
         variants={gradientVariants}
         initial="initial"
         animate="animate"
-        className="bg-gradient-to-t from-red-400 via-rose-300 to-indigo-300 w-full max-w-5xl  h-[500px] md:h-[900px] -z-20 absolute   "
-      /> */}
-      {/* <div className="w-3/4 h-3/4 bg-gradient-to-bl from-red-400 via-indigo-300 to-transparent absolute blur-[140px" /> */}
-      {/* <div className="w-3/4 h-3/4 bg-indigo-300  absolute blur-[140px]" /> */}
-      <div className="w-full md:max-w-5xl xl:max-w-7xl mt-14 mb-10 min-h-screen flex flex-col items-center justify-center ">
-        <div className=" w-full min-h-[65vh] md:max-w-5xl flex flex-col items-center justify-center">
-          <h2 className="w-full flex flex-col items-center  justify-center text-3xl lg:text-4xl md:leading-snug xl:text-6xl tracking-tight relative leading-tight font-medium md:font-medium">
+        className="bg-gradient-to-t from-red-400 dark:from-red-600 dark:via-rose-500 dark:to-indigo-500 via-rose-300 to-indigo-300 w-full max-w-5xl  h-[500px] md:h-[900px] -z-20 absolute   "
+      />
+
+      <div className="w-full md:max-w-5xl xl:max-w-7xl mt-14 md:mb-10 min-h-screen flex flex-col items-center justify-center ">
+        <div className=" w-full min-h-[65vh] md:max-w-5xl flex flex-col items-center justify-center px-4 md:px-0">
+          <motion.div
+            initial={{
+              y: 100,
+              opacity: 0,
+              scale: 0.8,
+            }}
+            animate={{ y: 0, opacity: 1, scale: 1 }}
+            transition={{
+              duration: 1,
+              ease: [0.2, 0.65, 0.3, 0.9],
+              type: "spring",
+            }}
+            className="mb-8 md:mb-10 lg:mb-12 xl:mb-16"
+          >
+            <Image
+              src={"/landing/logo.svg"}
+              width={60}
+              height={60}
+              className="aspect-square size-10 md:size-12 lg:size-16  rounded-xl"
+              priority
+              alt="Pluto logo"
+            />
+          </motion.div>
+          <h2 className="w-full flex flex-col items-center  justify-center text-2xl lg:text-4xl md:leading-snug xl:text-6xl tracking-tight relative leading-tight font-medium md:font-medium">
             <AnimatedTitle text={"Create & Write Content"} />
             <AnimatedTitle text={"with AI-Powered Intelligent Tools"} />
           </h2>
           <AnimatedTitle
-            className="w-full md:text-lg flex  items-center justify-center leading-tight  opacity-80 mt-4 max-w-sm md:max-w-xl "
+            className="w-full text-sm sm:text-base md:text-lg flex  items-center justify-center leading-tight  text-opacity-70 mt-4 whitespace-pre-wrap max-w-sm md:max-w-xl"
             text={
               "Effortless document management meets AI-powered chat—Pluto revolutionizes the way you create, organize, and collaborate."
             }
           />
 
-          {/* <motion.div
+          <motion.div
             variants={imageVariants}
             initial="initial"
             animate="animate"
             className="mt-4 space-x-3"
           >
-            <Button
-              size={"lg"}
+            <button
               onClick={() => {
                 if (status === "authenticated" && activeWorkspace) {
                   router.push(`/w/${activeWorkspace?.id}`);
@@ -107,19 +126,14 @@ const Landing = () => {
                 }
                 router.push("/login");
               }}
-              className="px-8 tracking-normal py-2 hover:bg-opacity-80 transition-all rounded-full  "
+              className="pl-8 pr-6 tracking-normal text-white hover:text-white/80 bg-black flex items-center justify-center py-2 text-sm md:text-base transition-all rounded-xl  "
             >
-              {status === "authenticated" ? "Dashboard" : "Get Started"}
+              {status === "authenticated"
+                ? "Dashboard"
+                : "Get Started for free"}
               <ChevronRight className="ml-2 size-4 opacity-80" />
-            </Button>
-            <Button
-              variant={"outline"}
-              size={"lg"}
-              className="px-8 tracking-normal py-2 hover:bg-opacity-80 transition-all rounded-full  "
-            >
-              Star on Github
-            </Button>
-          </motion.div> */}
+            </button>
+          </motion.div>
         </div>
         <motion.div
           variants={imageVariants}
@@ -129,20 +143,20 @@ const Landing = () => {
           className=" w-full md:max-w-5xl p-3 flex flex-col items-center justify-center overflow-hidden"
         >
           <Image
-            src={"/landing/01.png"}
+            src={"/landing/final.png"}
             width={1400}
             quality={100}
             height={1000}
             className="hidden md:flex rounded-lg "
-            alt=""
+            alt="Pluto app interface showing a document editor with a clean, minimal design"
           />
           <Image
-            src={"/landing/mobile-shot-1.png"}
+            src={"/landing/mobile-2.png"}
             width={1200}
             quality={100}
             height={1000}
             className="scale-90 rounded-xl md:hidden"
-            alt=""
+            alt="Pluto app interface showing a document editor with a clean, minimal design"
           />
         </motion.div>
       </div>
