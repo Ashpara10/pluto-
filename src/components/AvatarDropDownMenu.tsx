@@ -68,7 +68,7 @@ const AvatarDropDownMenu = () => {
           isLoading={status === "loading"}
         />
       </DropdownMenuTrigger>
-      <DropdownMenuContent className=" translate-y-2 p-0 rounded-xl border  border-neutral-200/60 dark:border-lightGray/10 bg-white/70 shadow-black/10 dark:shadow-black/30 drop-shadow-xl backdrop-blur-lg dark:bg-neutral-900 w-full max-w-xs">
+      <DropdownMenuContent className=" translate-y-2 p-0 rounded-xl border  border-neutral-200/60 dark:border-lightGray/10 bg-white/70 shadow-black/10 dark:shadow-black/30 drop-shadow-xl backdrop-blur-lg dark:bg-neutral-900 w-full max-w-sm ">
         <div className="w-full flex px-3 py-4 flex-col items-start justify-center">
           <span className="text-sm font-medium">{user?.user?.name}</span>
           <span className="text-sm line-clamp-1 opacity-75 w-full">

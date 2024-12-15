@@ -6,12 +6,13 @@ import { $generateHtmlFromNodes } from "@lexical/html";
 import { $convertToMarkdownString, TRANSFORMERS } from "@lexical/markdown";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { useWindowEvent } from "@mantine/hooks";
-import { Loader } from "lucide-react";
+import { Loader, MoreVertical } from "lucide-react";
 import dynamic from "next/dynamic";
 import { FC, useState } from "react";
 import toast from "react-hot-toast";
 import TextareaAutosize from "react-textarea-autosize";
 import TransitionLayout from "../TransitionLayout";
+import { Button } from "../ui/button";
 
 type DocumentPageProps = {
   document: Document;
@@ -26,8 +27,10 @@ const DocumentPage: FC<DocumentPageProps> = ({ document }) => {
   const [data, setData] = useState<Document>(document);
   const [tags, setTags] = useState<string[]>(document?.tags || []);
   const [editor] = useLexicalComposerContext();
+  const [isSaving, setIsSaving] = useState(false);
 
   const onSave = async () => {
+    setIsSaving(true);
     let payload = {
       id: data?.id as string,
       title: data?.title as string,
@@ -35,18 +38,18 @@ const DocumentPage: FC<DocumentPageProps> = ({ document }) => {
       content: "",
       tags: tags,
     };
-    // console.log(payload?.title);
     editor?.read(() => {
       const html = $generateHtmlFromNodes(editor);
       const md = $convertToMarkdownString(TRANSFORMERS);
       payload = { ...payload, markdown: md, content: html };
-      // console.log({ tags: payload });
     });
 
     const { error } = await updateDocument(payload);
     if (error) {
+      setIsSaving(false);
       return toast.error(error);
     }
+    setIsSaving(false);
     toast.success("Document saved successfully");
     queryClient.refetchQueries(["documents-lists"]);
   };
@@ -72,14 +75,29 @@ const DocumentPage: FC<DocumentPageProps> = ({ document }) => {
           onChange={(e) => setData((p) => ({ ...p, title: e.target.value }))}
         />
         {/* <TagInput tags={tags!} setTags={(tags) => setTags(tags)} /> */}
-        <div className="w-full flex mt-1 items-center justify-start">
-          <span className="text-sm opacity-75">
-            {new Date(data?.createdAt as Date).toLocaleDateString("en-US", {
-              day: "2-digit",
-              month: "long",
-              year: "numeric",
-            })}
-          </span>
+        <div className="w-full flex mt-1 items-center justify-between mb-4">
+          <div>
+            <span className=" opacity-75">
+              {new Date(data?.createdAt as Date).toLocaleDateString("en-US", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+              })}
+            </span>
+          </div>
+          <div className="flex items-center justify-center gap-x-2">
+            <Button size={"sm"} variant={"outline"} onClick={onSave}>
+              {isSaving && (
+                <Loader className="mr-2 opacity-80 size-4 animate-spin" />
+              )}{" "}
+              Save
+            </Button>
+            <Button variant={"outline"} size={"smallIcon"}>
+              <MoreVertical className="opacity-80 size-4" />
+            </Button>
+          </div>
         </div>
         <Editor
           content={data?.content as string}
