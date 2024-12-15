@@ -93,7 +93,7 @@ const Landing = () => {
               src={"/landing/logo.svg"}
               width={60}
               height={60}
-              className="aspect-square size-10 md:size-12 lg:size-16 xl:size-20 rounded-xl"
+              className="aspect-square size-10 md:size-12 lg:size-16  rounded-xl"
               priority
               alt="Pluto logo"
             />
