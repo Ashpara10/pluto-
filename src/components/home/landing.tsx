@@ -66,15 +66,20 @@ const Landing = () => {
       id="hero"
       className="w-full h-full relative flex flex-col items-center justify-center"
     >
+      {/* <motion.div
+        variants={gradientVariants}
+        initial="initial"
+        animate="animate"
+        className="bg-gradient-to-t from-purple-400 dark:from-red-600 dark:via-rose-500 dark:to-indigo-500 via-purple-300 to-indigo-200 w-full h-[500px] md:h-[900px] -z-20 absolute   "
+      /> */}
       <motion.div
         variants={gradientVariants}
         initial="initial"
         animate="animate"
-        className="bg-gradient-to-t from-red-400 dark:from-red-600 dark:via-rose-500 dark:to-indigo-500 via-rose-300 to-indigo-300 w-full max-w-5xl  h-[500px] md:h-[900px] -z-20 absolute   "
+        className="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 bg-gradient-to-t from-indigo-600 via-indigo-400 to-transparent dark:from-indigo-700 dark:via-transparent dark:to-transparent"
       />
-
       <div className="w-full md:max-w-5xl xl:max-w-7xl mt-14 md:mb-10 min-h-screen flex flex-col items-center justify-center ">
-        <div className=" w-full min-h-[65vh] md:max-w-5xl flex flex-col items-center justify-center px-4 md:px-0">
+        <div className=" w-full md:max-w-5xl flex flex-col items-center justify-center px-4 md:px-0">
           <motion.div
             initial={{
               y: 100,
@@ -91,8 +96,8 @@ const Landing = () => {
           >
             <Image
               src={"/landing/logo.svg"}
-              width={60}
-              height={60}
+              width={50}
+              height={50}
               className="aspect-square size-10 md:size-12 lg:size-16  rounded-xl"
               priority
               alt="Pluto logo"
@@ -126,7 +131,7 @@ const Landing = () => {
                 }
                 router.push("/login");
               }}
-              className="pl-8 pr-6 tracking-normal text-white hover:text-white/80 bg-black flex items-center justify-center py-2 text-sm md:text-base transition-all rounded-xl  "
+              className="pl-8 pr-6 tracking-normal dark:text-black text-white hover:text-white/80 bg-black dark:bg-white flex items-center justify-center py-2 text-sm md:text-base transition-all rounded-xl  "
             >
               {status === "authenticated"
                 ? "Dashboard"
@@ -140,7 +145,7 @@ const Landing = () => {
           initial="initial"
           animate="animate"
           style={{ filter: "drop-shadow(4px 34px 24px #000000bb)" }}
-          className=" w-full md:max-w-5xl p-3 flex flex-col items-center justify-center overflow-hidden"
+          className=" w-full md:max-w-5xl mt-8 p-3 flex flex-col items-center justify-center overflow-hidden"
         >
           <Image
             src={"/landing/final.png"}
