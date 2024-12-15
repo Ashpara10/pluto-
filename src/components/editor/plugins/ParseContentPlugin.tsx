@@ -10,10 +10,6 @@ type TParseContentPlugin = {
   setContent?: any;
 };
 
-function cleanString(str: string) {
-  return str!.replace(/\s+/g, " ").replace(/\\/g, "");
-}
-
 const ParseContentPlugin: FC<TParseContentPlugin> = ({ content }) => {
   const [editor] = useLexicalComposerContext();
   const [isFirstRender, setIsFirstRender] = useState(true);
@@ -33,14 +29,6 @@ const ParseContentPlugin: FC<TParseContentPlugin> = ({ content }) => {
       setIsFirstRender(false);
     });
   }, [isFirstRender, content, editor]);
-
-  // const onChange = useCallback(
-  //   (editorState: EditorState, editor: LexicalEditor) => {
-  //     console.log(JSON.stringify(editorState));
-  //     setContent(JSON.stringify(editorState));
-  //   },
-  //   [setContent]
-  // );
 
   return <></>;
 };
