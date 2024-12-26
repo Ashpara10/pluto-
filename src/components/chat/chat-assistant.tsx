@@ -44,7 +44,7 @@ const ChatAssistant = () => {
                 .toString();
               return message?.role === "user" ? (
                 <span
-                  className="w-fit self-end rounded-2xl bg-neutral-200/60 px-5 py-3 leading-snug dark:bg-neutral-800"
+                  className="w-fit max-w-[60%] self-end rounded-2xl bg-neutral-200/60 px-5 py-3 leading-snug dark:bg-neutral-800"
                   key={index}
                 >
                   {message?.content}

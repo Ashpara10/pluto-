@@ -1,30 +1,30 @@
 import { getServerAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db/drizzle";
-import { collections, documents } from "@/lib/db/schema";
+import { documents } from "@/lib/db/schema";
 import { and, desc, eq } from "drizzle-orm";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
   const sessionData = await getServerAuthSession();
-  // console.log({ sessionData: sessionData?.user?.id });
-  const collection = req.nextUrl.searchParams?.get("collection");
+
   const workspace = req.nextUrl.searchParams?.get("workspace");
+  const sortBy = req.nextUrl.searchParams?.get("sortBy");
+  let sortDocumentsBy;
+  switch (sortBy) {
+    case "createdAt":
+      sortDocumentsBy = documents?.createdAt;
+      break;
+    case "updatedAt":
+      sortDocumentsBy = documents?.updatedAt;
+      break;
 
-  if (collection !== null) {
-    const collectionDocuments = await db
-      .select()
-      .from(collections)
-      .where(
-        and(
-          eq(collections.userId, sessionData?.user.id as string),
-          eq(collections?.slug, collection as string),
-          eq(collections?.workspaceId, workspace as string)
-        )
-      )
-      .leftJoin(documents, eq(documents?.collectionId, collections?.id));
+    case "favorites":
+      sortDocumentsBy = documents?.isFavorite;
+      break;
 
-    console.log({ collectionDocuments });
-    return Response.json({ data: collectionDocuments }, { status: 201 });
+    default:
+      sortDocumentsBy = documents?.createdAt;
+      break;
   }
 
   const workspaceDocuments = await db
@@ -36,7 +36,15 @@ export async function GET(req: NextRequest) {
         eq(documents?.authorId, sessionData?.user.id as string)
       )
     )
-    .orderBy(desc(documents?.createdAt));
-  // console.log({ workspaceDocuments });
-  return Response.json({ documents: workspaceDocuments }, { status: 201 });
+    .orderBy(desc(sortDocumentsBy));
+
+  return Response.json(
+    {
+      documents:
+        sortBy === "favourites"
+          ? workspaceDocuments?.filter((d) => d?.isFavorite)
+          : workspaceDocuments,
+    },
+    { status: 201 }
+  );
 }

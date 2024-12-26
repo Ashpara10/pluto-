@@ -28,6 +28,7 @@ const DeleteDocumentDialog = () => {
       return;
     }
     toast.success("Documents deleted successfully");
+    setSelectedDocuments!([]);
     await queryClient.refetchQueries(["documents-lists"]);
     setIsDeleteDocumentDialogOpen!(false);
   };

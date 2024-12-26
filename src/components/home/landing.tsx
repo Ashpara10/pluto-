@@ -64,20 +64,14 @@ const Landing = () => {
   return (
     <section
       id="hero"
-      className="w-full h-full relative flex flex-col items-center justify-center"
+      className="w-full h-full relative overflow-y-hidden flex flex-col items-center justify-center"
     >
       {/* <motion.div
         variants={gradientVariants}
         initial="initial"
         animate="animate"
-        className="bg-gradient-to-t from-purple-400 dark:from-red-600 dark:via-rose-500 dark:to-indigo-500 via-purple-300 to-indigo-200 w-full h-[500px] md:h-[900px] -z-20 absolute   "
+        className="absolute  w-full h-screen bottom-0 -z-10  items-center  bg-gradient-to-t from-indigo-600 via-indigo-500 to-indigo-300"
       /> */}
-      <motion.div
-        variants={gradientVariants}
-        initial="initial"
-        animate="animate"
-        className="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 bg-gradient-to-t from-indigo-600 via-indigo-400 to-transparent dark:from-indigo-700 dark:via-transparent dark:to-transparent"
-      />
       <div className="w-full md:max-w-5xl xl:max-w-7xl mt-14 md:mb-10 min-h-screen flex flex-col items-center justify-center ">
         <div className=" w-full md:max-w-5xl flex flex-col items-center justify-center px-4 md:px-0">
           <motion.div
@@ -108,7 +102,7 @@ const Landing = () => {
             <AnimatedTitle text={"with AI-Powered Intelligent Tools"} />
           </h2>
           <AnimatedTitle
-            className="w-full text-sm sm:text-base md:text-lg flex  items-center justify-center leading-tight  text-opacity-70 mt-4 whitespace-pre-wrap max-w-sm md:max-w-xl"
+            className="w-full text-sm sm:text-base md:text-lg text-center flex  items-center justify-center leading-tight text-neutral-800 dark:text-neutral-100/80 mt-4 whitespace-pre-wrap max-w-sm md:max-w-xl"
             text={
               "Effortless document management meets AI-powered chat—Pluto revolutionizes the way you create, organize, and collaborate."
             }

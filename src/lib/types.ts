@@ -34,3 +34,5 @@ export type RegisterUserPayload = {
   email: string;
   password: string;
 };
+
+export type SortDocumentBy = "createdAt" | "updatedAt" | "favourites";

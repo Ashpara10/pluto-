@@ -1,5 +1,12 @@
-import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+import { relations, sql } from "drizzle-orm";
+import {
+  boolean,
+  pgTable,
+  text,
+  timestamp,
+  uuid,
+  varchar,
+} from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
@@ -32,6 +39,7 @@ export const documents = pgTable("documents", {
   content: text("content"),
   tags: text("tags").array().default([]),
   markdown: text("markdown"),
+  isFavorite: boolean("is_favorite").default(false),
   authorId: uuid("author_id")
     .notNull()
     .references(() => users.id),

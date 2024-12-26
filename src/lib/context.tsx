@@ -16,6 +16,8 @@ type ContextStateType = {
   createDocumentDialogOpen: boolean;
   selectedDocuments?: string[];
   setSelectedDocuments?: React.Dispatch<React.SetStateAction<string[]>>;
+  selectedCollections?: string[];
+  setSelectedCollections?: React.Dispatch<React.SetStateAction<string[]>>;
   isCreateCollectionDialogOpen?: boolean;
   isMoveToFolderDialogOpen?: boolean;
   isCreateWorkspaceDialogOpen?: boolean;
@@ -40,6 +42,8 @@ const defaultContextState: ContextStateType = {
   createDocumentDialogOpen: false,
   selectedDocuments: [],
   setSelectedDocuments: () => {},
+  selectedCollections: [],
+  setSelectedCollections: () => {},
   isCreateCollectionDialogOpen: false,
   isMoveToFolderDialogOpen: false,
   isCreateWorkspaceDialogOpen: false,
@@ -110,6 +114,18 @@ export const useSelectedDocuments = () => {
     setSelectedDocuments: context[0].setSelectedDocuments,
   };
 };
+export const useSelectedCollections = () => {
+  const context = useContext(Context);
+
+  if (!context) {
+    throw new Error("Context error");
+  }
+
+  return {
+    selectedCollection: context[0].selectedCollections,
+    setSelectedCollections: context[0].setSelectedCollections,
+  };
+};
 
 export const useIsMoveToFolderDialog = () => {
   const context = useContext(Context);
@@ -176,6 +192,7 @@ export const useActiveView = () => {
 };
 const AppContextProvider = ({ children }: { children: ReactNode }) => {
   const [selectedDocuments, setSelectedDocuments] = useState<string[]>([]);
+  const [selectedCollections, setSelectedCollections] = useState<string[]>([]);
   const [activeView, setActiveView] = useState(
     getCookie("activeView") || "list"
   );
@@ -236,6 +253,8 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
           setSelectedDocuments,
           activeView,
           setActiveView,
+          selectedCollections,
+          setSelectedCollections,
         },
         {
           setSidebarOpen,

@@ -1,69 +1,64 @@
-import { instance } from "@/lib/axios";
-import { Collection, Document } from "@/lib/db/schema";
-import { useParams } from "next/navigation";
-import { useState } from "react";
+"use client";
+import { getAllCollections } from "@/lib/actions";
+import { useSelectedCollections } from "@/lib/context";
+import { Collection } from "@/lib/db/schema";
+import { FC } from "react";
 import { useQuery } from "react-query";
-import { Skeleton } from "../ui/skeleton";
-import CollectionCard from "./CollectionCard";
+import { DocumentCardViewSkeleton } from "../documents/DocumentCardView";
 import EmptyCollections from "../empty-collection";
-import toast from "react-hot-toast";
+import CollectionCard from "./CollectionCard";
 
-export const getAllCollections = async ({
-  workspace,
-}: {
+type AllCollectionsProps = {
   workspace: string;
-}) => {
-  const res = await instance(`/collection`, {
-    params: {
-      workspace: workspace,
-    },
-  });
-  if (res.status !== 200) {
-    // console.log(res?.data);
-    toast.error("Failed to fetch collections");
-    return;
-  }
-  return res.data.data as { collection: Collection; documents_count: string }[];
+  error: string | null;
+  collections: { collection: Collection; documents_count: string }[] | null;
 };
 
-const AllCollections = () => {
-  const params = useParams() as { workspace: string };
-  const { data, error, isLoading } = useQuery(
-    ["all-collections", params.workspace],
-    async () =>
-      await getAllCollections({
-        workspace: params.workspace!,
-      })
-  );
-  // console.log(data);
-  const [checked, setChecked] = useState<Record<string, boolean>>({});
+const AllCollections: FC<AllCollectionsProps> = ({
+  collections,
+  workspace,
+  error,
+}) => {
+  const { selectedCollection, setSelectedCollections } =
+    useSelectedCollections();
+  const { data, isFetching } = useQuery({
+    initialData: { data: collections, error: error },
+    queryKey: ["all-collections", workspace],
+    queryFn: async () => await getAllCollections(workspace),
+    refetchOnWindowFocus: false,
+  });
 
+  if (data?.data?.length === 0 && !isFetching) {
+    return <EmptyCollections />;
+  }
+  if (isFetching) {
+    return <DocumentCardViewSkeleton />;
+  }
   const handleCheckBoxChange = (checked: boolean, id: string) => {
-    setChecked((prev) => ({ ...prev, [id]: checked }));
+    setSelectedCollections!((prev) => {
+      const newSet = new Set(prev);
+      if (checked) {
+        newSet.add(id);
+      } else {
+        newSet.delete(id);
+      }
+      return Array.from(newSet);
+    });
   };
   return (
     <div>
-      {data?.length === 0 && <EmptyCollections />}
-      <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-        {isLoading
-          ? [...Array(9)].map((_, i) => {
-              return (
-                <Skeleton
-                  key={i}
-                  className="h-34  w-full animate-pulse rounded-lg bg-darkGray/60 dark:bg-lightGray/10"
-                />
-              );
-            })
-          : data?.map((data, i) => {
-              return (
-                <CollectionCard
-                  key={i}
-                  collection={data}
-                  checked={checked[data?.collection.id]}
-                  handleCheckChange={handleCheckBoxChange}
-                />
-              );
-            })}
+      {data?.data?.length === 0 && <EmptyCollections />}
+      <div className="w-full grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+        {data?.data?.map((data, i) => {
+          return (
+            <CollectionCard
+              key={i}
+              collection={data}
+              checked={selectedCollection?.includes(data?.collection.id)}
+              handleCheckChange={handleCheckBoxChange}
+            />
+          );
+        })}
       </div>
     </div>
   );

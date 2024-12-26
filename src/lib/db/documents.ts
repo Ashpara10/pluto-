@@ -3,10 +3,7 @@ import { revalidateDocumentData } from "@/app/(dashboard)/w/[workspace]/document
 import { eq } from "drizzle-orm";
 import { CreateDocumentPayload } from "../types";
 import { db } from "./drizzle";
-import { Document, documents } from "./schema";
-import toast from "react-hot-toast";
-import { instance } from "../axios";
-import { error } from "console";
+import { documents } from "./schema";
 
 export const getDocumentById = async (id: string) => {
   try {
@@ -46,6 +43,7 @@ export const updateDocument = async ({
         content: content,
         markdown: markdown,
         tags: tags,
+        updatedAt: new Date(),
       })
       .where(eq(documents.id, id))
       .returning();
@@ -60,6 +58,31 @@ export const updateDocument = async ({
     return { data: null, error: (error as Error).message };
   }
 };
+
+export const handleDocumentFavourites = async ({
+  id,
+  isFavorite,
+}: {
+  id: string;
+  isFavorite: boolean;
+}) => {
+  try {
+    const document = await db
+      .update(documents)
+      .set({
+        isFavorite: isFavorite,
+      })
+      .where(eq(documents.id, id))
+      .returning();
+    if (document.length === 0) {
+      throw new Error("Failed to add to favourites");
+    }
+    return { ok: true, data: document[0], error: null };
+  } catch (error) {
+    return { ok: false, data: null, error: (error as Error).message };
+  }
+};
+
 export const createDocument = async ({
   user,
   workspaceId,

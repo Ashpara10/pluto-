@@ -3,7 +3,14 @@ import {
   useIsMoveToFolderDialog,
   useSelectedDocuments,
 } from "@/lib/context";
-import { Command, Folder, Sparkles, Trash2, X } from "lucide-react";
+import {
+  Command,
+  Folder,
+  Sparkles,
+  SquareArrowOutUpRight,
+  Trash2,
+  X,
+} from "lucide-react";
 import { ReactNode } from "react";
 import {
   Tooltip,
@@ -73,6 +80,15 @@ export const SelectedDocumentsMenuFace = () => {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger
+              onClick={() => setIsMoveToFolderDialogOpen!(true)}
+              className=" rounded-lg border border-darkGray/80 bg-transparent p-1.5 dark:border-light-dark-border"
+            >
+              <SquareArrowOutUpRight className="size-4 opacity-80" />
+            </TooltipTrigger>
+            <TooltipContent>Add to Folder</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger
               onClick={() => setIsDeleteDocumentDialogOpen!(true)}
               className=" rounded-lg border border-darkGray/80 bg-transparent p-1.5 dark:border-light-dark-border"
             >
@@ -81,15 +97,6 @@ export const SelectedDocumentsMenuFace = () => {
             <TooltipContent>Move to Trash</TooltipContent>
           </Tooltip>
           {/* </span> */}
-          <Tooltip>
-            <TooltipTrigger
-              onClick={() => setIsMoveToFolderDialogOpen!(true)}
-              className=" rounded-lg border border-darkGray/80 bg-transparent p-1.5 dark:border-light-dark-border"
-            >
-              <Folder className="size-4 opacity-80" />
-            </TooltipTrigger>
-            <TooltipContent>Add to Folder</TooltipContent>
-          </Tooltip>
         </TooltipProvider>
       </div>
     </div>

@@ -19,6 +19,7 @@ const DocumentViewOptions: FC<DocumentViewOptionsProps> = ({
 }) => {
   const { data } = useSession();
   const { activeView, setActiveView } = useActiveView();
+
   const [displayOptions, setDisplayOptions] = useState(false);
   const onViewChange = (view: string) => {
     setActiveView!(view);

@@ -1,10 +1,13 @@
 "use client";
 import { Document } from "@/lib/db/schema";
 import { cn } from "@/lib/utils";
-import { Star, Trash2 } from "lucide-react";
+import { SquareArrowOutUpRight, Star, Trash2 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useOptimistic, useState } from "react";
 import { Checkbox } from "../ui/checkbox";
+import { deleteDocuments, handleDocumentFavourites } from "@/lib/db/documents";
+import toast from "react-hot-toast";
+import { queryClient } from "@/lib/session-provider";
 
 type DocumentListProps = {
   document: Document;
@@ -20,8 +23,48 @@ const DocumentListItem = ({
   const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
   const { workspace } = useParams();
+
+  const [optimisticDocument, addOptimistic] = useOptimistic(
+    document,
+    (state, newData: Document) => {
+      return { ...state, ...newData };
+    }
+  );
+
+  const handleFavourites = async () => {
+    addOptimistic({
+      ...optimisticDocument,
+      isFavorite: optimisticDocument?.isFavorite ? false : true,
+    });
+    const { ok, data, error } = await handleDocumentFavourites({
+      id: document.id,
+      isFavorite: !document?.isFavorite as boolean,
+    });
+    if (!ok && error) {
+      toast?.error(error);
+
+      return;
+    }
+
+    toast.success(
+      data?.isFavorite ? "Added to favourites" : "Removed from favourites"
+    );
+    // return data;
+  };
+
+  const handleDelete = async () => {
+    const { ok, error } = await deleteDocuments([optimisticDocument.id]);
+    if (!ok && error) {
+      toast?.error(error);
+      return;
+    }
+
+    toast.success("Document deleted successfully");
+    queryClient.refetchQueries(["documents-lists", workspace]);
+  };
+
   const handleClick = () => {
-    router.push(`/w/${workspace}/document/${document.id}`);
+    router.push(`/w/${workspace}/document/${optimisticDocument.id}`);
   };
   return (
     <div
@@ -33,7 +76,7 @@ const DocumentListItem = ({
         checked={checked}
         className={cn(`data-[state=checked]:bg-violet-600`)}
         onCheckedChange={(checked) => {
-          handleCheckChange(checked as boolean, document?.id);
+          handleCheckChange(checked as boolean, optimisticDocument?.id);
         }}
       />
       <div className="w-full flex items-center justify-between">
@@ -42,10 +85,10 @@ const DocumentListItem = ({
             onClick={handleClick}
             className="truncate text-lg  leading-tight tracking-tight "
           >
-            {document?.title || "Untitled"}
+            {optimisticDocument?.title || "Untitled"}
           </span>
           <span className="ml-2 text-sm opacity-80">
-            {new Date(document?.createdAt)?.toLocaleString("en-US", {
+            {new Date(optimisticDocument?.createdAt)?.toLocaleString("en-US", {
               month: "short",
               day: "numeric",
               year: "numeric",
@@ -58,10 +101,29 @@ const DocumentListItem = ({
             isHovered && "visible"
           )}
         >
-          <button className="p-1 rounded-lg hover:dark:bg-lightGray/10 hover:bg-neutral-200/30">
-            <Star strokeWidth={1.07} className="opacity-80 size-5" />
+          <button
+            onClick={handleFavourites}
+            className="p-1 rounded-lg hover:dark:bg-lightGray/10 hover:bg-neutral-200/30"
+          >
+            <Star
+              strokeWidth={1.07}
+              className={cn(
+                "opacity-80 size-5",
+                optimisticDocument?.isFavorite &&
+                  "opacity-100 fill-yellow-400 stroke-yellow-500"
+              )}
+            />
           </button>
           <button className="p-1 rounded-lg hover:dark:bg-lightGray/10 hover:bg-neutral-200/30">
+            <SquareArrowOutUpRight
+              strokeWidth={1.07}
+              className="opacity-80 size-5"
+            />
+          </button>
+          <button
+            onClick={handleDelete}
+            className="p-1 rounded-lg hover:dark:bg-lightGray/10 hover:bg-neutral-200/30"
+          >
             <Trash2 strokeWidth={1.07} className="opacity-80 size-5" />
           </button>
         </div>

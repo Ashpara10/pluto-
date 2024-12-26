@@ -3,6 +3,7 @@ import "./globals.css";
 import "./editor.css";
 import { ThemeProvider } from "next-themes";
 import localFont from "next/font/local";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 const inter = localFont({
   src: "./font/InterVariable.ttf",
@@ -23,7 +24,9 @@ export default function RootLayout({
     <html lang="en" className={`${inter.className}`}>
       <body className="h-screen w-full overflow-hidden bg-neutral-100 dark:bg-neutral-900">
         <ThemeProvider attribute="class" defaultTheme="system">
-          <NextAuthSessionProvider>{children}</NextAuthSessionProvider>
+          <NuqsAdapter>
+            <NextAuthSessionProvider>{children}</NextAuthSessionProvider>
+          </NuqsAdapter>
         </ThemeProvider>
       </body>
     </html>

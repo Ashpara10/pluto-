@@ -46,7 +46,7 @@ export default DocumentCardView;
 
 export const DocumentCardViewSkeleton = () => {
   return (
-    <div className="w-full  grid grid-cols-2 md:grid-cols-3 gap-3 ">
+    <div className="w-full  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 ">
       {[...Array(18)].map((_, i) => {
         return (
           <Skeleton
