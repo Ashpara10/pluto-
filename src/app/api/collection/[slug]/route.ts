@@ -1,21 +1,48 @@
 import { getServerAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db/drizzle";
 import { collections, Document, documents } from "@/lib/db/schema";
-import { and, eq, sql } from "drizzle-orm";
+import { and, eq, SQL, sql } from "drizzle-orm";
 import { NextRequest } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { slug: string } }
+  {
+    params,
+  }: {
+    params: { slug: string };
+  }
 ) {
   try {
     const slug = params?.slug;
     const session = await getServerAuthSession();
     const workspace = req.nextUrl.searchParams?.get("workspace");
+    const sortBy = req.nextUrl.searchParams?.get("sortBy");
+    let query: SQL;
+    switch (sortBy) {
+      case "createdAt":
+        query = sql<
+          Document[]
+        >`json_agg(documents ORDER BY documents."created_at" DESC)`;
+        break;
+      case "updatedAt":
+        query = sql<
+          Document[]
+        >`json_agg(documents ORDER BY documents."updated_at" DESC)`;
+        break;
+
+      case "favorites":
+        query = sql<
+          Document[]
+        >`json_agg(documents ORDER BY documents."is_favorite" DESC)`;
+        break;
+
+      default:
+        query = sql<Document[]>`json_agg(documents)`;
+        break;
+    }
     const [collectionDocuments] = await db
       .select({
-        collection: collections,
-        documents: sql`json_agg(documents)`,
+        documents: !sortBy ? sql<Document[]>`json_agg(documents)` : query,
       })
       .from(documents)
       .where(
@@ -25,10 +52,10 @@ export async function GET(
           eq(collections.slug, slug)
         )
       )
-      .leftJoin(collections, eq(documents?.collectionId, collections?.id))
-      .groupBy(collections.id);
+      .leftJoin(collections, eq(documents?.collectionId, collections?.id));
+    // .groupBy(collections.id);
 
-    console.log(collectionDocuments?.documents);
+    console.log({ collectionDocuments });
     return Response.json(
       {
         data: (collectionDocuments?.documents as any[])?.map((d) => ({

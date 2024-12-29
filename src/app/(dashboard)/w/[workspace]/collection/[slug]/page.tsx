@@ -3,21 +3,22 @@ import { getCollectionDocuments } from "@/lib/actions";
 import { FC } from "react";
 import { Document } from "@/lib/db/schema";
 import CollectionDocuments from "@/components/documents/CollectionDocuments";
+import { searchParamsCache } from "@/lib/nuqs";
+import { SortDocumentBy } from "@/lib/types";
 type PageProps = {
   params: Promise<{ workspace: string; slug: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-const Page: FC<PageProps> = async ({ params }) => {
+const Page: FC<PageProps> = async ({ params, searchParams }) => {
   console.log(params);
-  const { data, error } = await getCollectionDocuments(
-    (
-      await params
-    ).slug,
-    (
-      await params
-    ).workspace
-  );
+  const { q: query } = await searchParamsCache.parse(searchParams);
+  const { slug, workspace } = await params;
+  const { data, error } = await getCollectionDocuments({
+    slug,
+    workspace,
+    sortBy: query as SortDocumentBy,
+  });
 
   return (
     <div className="flex w-full flex-col items-center justify-center  pt-28 px-4">
@@ -25,8 +26,8 @@ const Page: FC<PageProps> = async ({ params }) => {
         <DocumentViewOptions title={`Documents`}>
           <CollectionDocuments
             documents={data as Document[]}
-            slug={(await params)?.slug}
-            workspace={(await params)?.workspace}
+            slug={slug}
+            workspace={workspace}
           />
         </DocumentViewOptions>
       </div>

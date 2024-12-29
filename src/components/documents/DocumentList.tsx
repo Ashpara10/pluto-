@@ -1,13 +1,15 @@
 "use client";
-import { Document } from "@/lib/db/schema";
+import { Document, documents } from "@/lib/db/schema";
 import { cn } from "@/lib/utils";
 import { SquareArrowOutUpRight, Star, Trash2 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { useOptimistic, useState } from "react";
+import { useEffect, useOptimistic, useState, useTransition } from "react";
 import { Checkbox } from "../ui/checkbox";
 import { deleteDocuments, handleDocumentFavourites } from "@/lib/db/documents";
 import toast from "react-hot-toast";
 import { queryClient } from "@/lib/session-provider";
+import { db } from "@/lib/db/drizzle";
+import { eq, not } from "drizzle-orm";
 
 type DocumentListProps = {
   document: Document;
@@ -23,6 +25,7 @@ const DocumentListItem = ({
   const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
   const { workspace } = useParams();
+  const [isPending, startTransition] = useTransition();
 
   const [optimisticDocument, addOptimistic] = useOptimistic(
     document,
@@ -30,26 +33,42 @@ const DocumentListItem = ({
       return { ...state, ...newData };
     }
   );
-
+  useEffect(() => {
+    console.log({ is: optimisticDocument.isFavorite });
+  }, [optimisticDocument]);
   const handleFavourites = async () => {
-    addOptimistic({
-      ...optimisticDocument,
-      isFavorite: optimisticDocument?.isFavorite ? false : true,
-    });
-    const { ok, data, error } = await handleDocumentFavourites({
-      id: document.id,
-      isFavorite: !document?.isFavorite as boolean,
-    });
-    if (!ok && error) {
-      toast?.error(error);
+    // Flip the optimistic state of `isFavorite`
+    const newFavoriteState = !optimisticDocument?.isFavorite;
+    startTransition(async () => {
+      try {
+        // Optimistically update the state
+        addOptimistic({
+          ...optimisticDocument,
+          isFavorite: !optimisticDocument.isFavorite,
+        });
 
-      return;
-    }
+        // Update the server
+        await db
+          .update(documents)
+          .set({ isFavorite: not(documents?.isFavorite) })
+          .where(eq(documents.id, optimisticDocument?.id))
+          .returning();
 
-    toast.success(
-      data?.isFavorite ? "Added to favourites" : "Removed from favourites"
-    );
-    // return data;
+        // Notify success
+        toast.success(
+          newFavoriteState ? "Added to favorites" : "Removed from favorites"
+        );
+      } catch (error) {
+        // Revert the optimistic update on error
+        // addOptimistic({
+        //   ...optimisticDocument,
+        //   isFavorite: !newFavoriteState,
+        // });
+
+        // Notify error
+        toast.error("Failed to update favorites. Please try again.");
+      }
+    });
   };
 
   const handleDelete = async () => {

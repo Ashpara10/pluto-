@@ -200,15 +200,22 @@ type GetCollectionDocumentsResponse = {
   documents: Document[];
 }[];
 
-export const getCollectionDocuments = async (
-  slug: string,
-  workspace: string
-) => {
+export const getCollectionDocuments = async ({
+  slug,
+  sortBy,
+  workspace,
+}: {
+  slug: string;
+  workspace: string;
+  sortBy: SortDocumentBy;
+}) => {
   const { data, status } = await instance.get(`/collection/${slug}`, {
     params: {
       workspace: workspace,
+      sortBy: sortBy,
     },
   });
+  console.log(data, status);
   if (status !== 201) {
     return { data: null, error: "Failed to fetch documents" };
   }

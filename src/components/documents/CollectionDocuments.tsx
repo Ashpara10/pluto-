@@ -25,12 +25,16 @@ const CollectionDocuments: FC<CollectionDocumentsProps> = ({
   const { activeView } = useActiveView();
   const { data, isFetching } = useQuery({
     initialData: { data: documents, error: null },
-    queryKey: ["collection-documents", slug, workspace],
-    queryFn: () => getCollectionDocuments(slug, workspace),
+    queryKey: ["collection-documents", slug, workspace, sortBy],
+    queryFn: () =>
+      getCollectionDocuments({
+        slug,
+        workspace,
+        sortBy: sortBy as SortDocumentBy,
+      }),
     refetchOnWindowFocus: false,
   });
-
-  if (data?.data?.length === 0) {
+  if (data === undefined || data?.data?.length === 0) {
     return <EmptyDocuments />;
   }
   if (isFetching) {

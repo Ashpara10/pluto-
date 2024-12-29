@@ -1,6 +1,6 @@
 "use server";
 import { revalidateDocumentData } from "@/app/(dashboard)/w/[workspace]/document/[id]/actions";
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { CreateDocumentPayload } from "../types";
 import { db } from "./drizzle";
 import { documents } from "./schema";
@@ -121,6 +121,20 @@ export const deleteDocuments = async (ids: string[]) => {
   }
 };
 
+export const getDocumentsById = async (ids: string[]) => {
+  try {
+    const data = await db
+      .select()
+      .from(documents)
+      .where(inArray(documents?.id, ids));
+    if (data?.length === 0) {
+      throw new Error("Documents not found");
+    }
+    return { data: data, error: null };
+  } catch (error) {
+    return { data: null, error: (error as Error)?.message };
+  }
+};
 // const movetoCollection = async ({
 //   documentsToMove,
 //   collectionId,

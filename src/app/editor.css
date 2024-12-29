@@ -68,7 +68,7 @@ h1 {
 }
 
 .editor-text-bold {
-  @apply font-bold;
+  @apply font-medium tracking-tight opacity-100;
 }
 
 .editor-text-italic {
@@ -97,11 +97,11 @@ h1 {
 }
 
 .editor-code {
-  @apply relative mt-6 block w-full overflow-x-auto whitespace-pre rounded-lg border border-lightGray/50 py-2.5 pl-8 pr-3 font-mono leading-normal  dark:border-darkGray/30;
+  @apply relative mt-6 block w-full overflow-x-auto whitespace-pre rounded-lg border border-neutral-200/80 py-2.5 pl-8 pr-3 font-mono leading-normal  dark:border-lightGray/10;
 }
 
 .editor-code:before {
-  @apply absolute left-0 top-0 whitespace-pre-wrap px-2 py-2.5 text-left  text-lightGray/50 content-[attr(data-gutter)] dark:text-darkGray/30;
+  @apply absolute left-0 top-0 whitespace-pre-wrap px-2 py-2.5 text-left  text-neutral-200 content-[attr(data-gutter)] dark:text-lightGray/10;
 }
 
 .editor-property,

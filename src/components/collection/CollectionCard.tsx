@@ -20,13 +20,12 @@ const CollectionCard: FC<CollectionCardProps> = ({
   checked,
 }) => {
   const router = useRouter();
-  const [icon, setIcon] = React.useState<string>("/folder.svg");
   const params = useParams() as { workspace: string };
   const handleClick = () => {
     router.push(`/w/${params?.workspace}/collection/${collection.slug}`);
   };
   return (
-    <Card className="rounded-xl relative group p-0 cursor-pointer">
+    <Card className="rounded-xl h-fit relative group p-0 cursor-pointer">
       <Checkbox
         checked={checked}
         className={cn(

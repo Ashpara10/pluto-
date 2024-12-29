@@ -80,6 +80,7 @@ const DocumentFilterOptions: FC<DocumentFilterOptionsProps> = ({
               })}
             </motion.div>
             <Separator />
+            <Separator />
 
             <motion.div layout className="w-full flex flex-col">
               {sort_options.map((option, i) => {
@@ -100,7 +101,7 @@ const DocumentFilterOptions: FC<DocumentFilterOptionsProps> = ({
                     {option?.icon}
                     <span
                       className={cn(
-                        "ml-2 opacity-80",
+                        "ml-2 opacity-80  text-sm",
                         sortBy === option?.key && "opacity-100"
                       )}
                     >

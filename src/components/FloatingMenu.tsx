@@ -83,6 +83,7 @@ const FloatingMenu = memo(() => {
       ),
       name: "Create Collection",
       onClick: () => {
+        setIsExpanded!(false);
         setCreateCollectionDialogOpen!(true);
       },
     },
@@ -279,7 +280,7 @@ const FloatingMenu = memo(() => {
         layoutId={`popover-${uniqueId}`}
         animate={isExpanded ? { opacity: 0 } : { opacity: 1 }}
         transition={{ duration: 0.2, ease: [0.32, 0.72, 0, 1] }}
-        className="bottom-3 z-30 flex min-w-[180px] cursor-pointer items-center justify-between border border-neutral-300 bg-white/70 px-4 py-2 backdrop-blur-lg dark:border-light-dark-border dark:bg-neutral-800/70"
+        className="bottom-3 z-30 flex min-w-[180px] cursor-pointer items-center justify-between border border-neutral-300 bg-white/80 px-4 py-2 backdrop-blur-lg dark:border-light-dark-border dark:bg-neutral-800/70 drop-shadow-2xl shadow-black/80"
         style={{
           borderRadius: "24px",
         }}

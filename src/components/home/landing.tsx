@@ -8,6 +8,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import AnimatedTitle from "../AnimatedTitle";
+import { useTheme } from "next-themes";
+import { Button } from "../ui/button";
 
 const gradientVariants: Variants = {
   initial: {
@@ -52,6 +54,7 @@ const Landing = () => {
   );
   const { status } = useSession();
   const router = useRouter();
+  const { theme } = useTheme();
   useEffect(() => {
     (async () => {
       const w = await getActiveWorkspace();
@@ -64,14 +67,14 @@ const Landing = () => {
   return (
     <section
       id="hero"
-      className="w-full h-full relative overflow-y-hidden flex flex-col items-center justify-center"
+      className="w-full h-full relative  flex flex-col items-center justify-center"
     >
-      {/* <motion.div
+      <motion.div
         variants={gradientVariants}
         initial="initial"
         animate="animate"
         className="absolute  w-full h-screen bottom-0 -z-10  items-center  bg-gradient-to-t from-indigo-600 via-indigo-500 to-indigo-300"
-      /> */}
+      />
       <div className="w-full md:max-w-5xl xl:max-w-7xl mt-14 md:mb-10 min-h-screen flex flex-col items-center justify-center ">
         <div className=" w-full md:max-w-5xl flex flex-col items-center justify-center px-4 md:px-0">
           <motion.div
@@ -125,7 +128,7 @@ const Landing = () => {
                 }
                 router.push("/login");
               }}
-              className="pl-8 pr-6 tracking-normal dark:text-black text-white hover:text-white/80 bg-black dark:bg-white flex items-center justify-center py-2 text-sm md:text-base transition-all rounded-xl  "
+              className="pl-8 pr-6 font-medium tracking-normal dark:text-black text-white hover:text-white/80 bg-black dark:bg-white flex items-center justify-center py-2 text-sm md:text-base transition-all rounded-xl  "
             >
               {status === "authenticated"
                 ? "Dashboard"
@@ -142,21 +145,21 @@ const Landing = () => {
           className=" w-full md:max-w-5xl mt-8 p-3 flex flex-col items-center justify-center overflow-hidden"
         >
           <Image
-            src={"/landing/final.png"}
+            src={"/landing/light-mode-chat.png"}
             width={1400}
             quality={100}
-            height={1000}
-            className="hidden md:flex rounded-lg "
+            height={1250}
+            className="w-full h-full flex rounded-xl "
             alt="Pluto app interface showing a document editor with a clean, minimal design"
           />
-          <Image
+          {/* <Image
             src={"/landing/mobile-2.png"}
             width={1200}
             quality={100}
             height={1000}
             className="scale-90 rounded-xl md:hidden"
             alt="Pluto app interface showing a document editor with a clean, minimal design"
-          />
+          /> */}
         </motion.div>
       </div>
     </section>

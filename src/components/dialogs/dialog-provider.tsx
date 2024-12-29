@@ -4,13 +4,14 @@ import CreateDocumentDialog from "./CreateDocumentDialog";
 import CreateWorkspaceDialog from "./CreateWorkspaceDialog";
 import DeleteDocumentDialog from "./DeleteDocumentDialog";
 import DeleteWorkspaceDialog from "./DeleteWorkspaceDialog";
+import AddToCollectionDialog from "./AddToCollection";
 
 const DialogProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <CreateDocumentDialog />
       <CreateCollectionDialog />
-      {/* <MoveToFolderDialog /> */}
+      <AddToCollectionDialog />
       <CreateWorkspaceDialog />
       <DeleteDocumentDialog />
       <DeleteWorkspaceDialog />

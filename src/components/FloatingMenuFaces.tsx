@@ -1,6 +1,6 @@
 import {
+  useAddToCollection,
   useDeleteDocumentDialog,
-  useIsMoveToFolderDialog,
   useSelectedDocuments,
 } from "@/lib/context";
 import {
@@ -61,7 +61,8 @@ export const DefaultFloatingMenuFace = () => {
 
 export const SelectedDocumentsMenuFace = () => {
   const { selectedDocuments, setSelectedDocuments } = useSelectedDocuments();
-  const { setIsMoveToFolderDialogOpen } = useIsMoveToFolderDialog();
+  const { isAddToCollectionDialogOpen, setIsAddToCollectionDialogOpen } =
+    useAddToCollection();
   const { setIsDeleteDocumentDialogOpen } = useDeleteDocumentDialog();
 
   return (
@@ -80,7 +81,7 @@ export const SelectedDocumentsMenuFace = () => {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger
-              onClick={() => setIsMoveToFolderDialogOpen!(true)}
+              onClick={() => setIsAddToCollectionDialogOpen!(true)}
               className=" rounded-lg border border-darkGray/80 bg-transparent p-1.5 dark:border-light-dark-border"
             >
               <SquareArrowOutUpRight className="size-4 opacity-80" />
