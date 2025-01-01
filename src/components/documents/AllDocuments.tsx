@@ -18,7 +18,7 @@ type AllDocumentsProps = {
 const AllDocuments: FC<AllDocumentsProps> = ({ workspace }) => {
   const [sortBy] = useQueryState("sortBy");
   const { activeView } = useActiveView();
-  let { data, isFetching } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ["documents-lists", workspace, sortBy],
     queryFn: () => fetchDocuments(workspace, sortBy as SortDocumentBy),
     refetchOnWindowFocus: false,

@@ -21,7 +21,7 @@ const Navbar = () => {
 
   useEffect(() => {
     setActiveTab(getActivePath() as TabType);
-  }, [path]);
+  }, [path, getActivePath]);
 
   const links = [
     {
