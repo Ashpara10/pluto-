@@ -2,7 +2,7 @@
 import { getActiveWorkspace } from "@/lib/actions";
 import { Workspace } from "@/lib/db/schema";
 import { motion, Variants } from "framer-motion";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Moon, Sun } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -54,7 +54,23 @@ const Landing = () => {
   );
   const { status } = useSession();
   const router = useRouter();
-  const { theme } = useTheme();
+  const { theme, setTheme } = useTheme();
+  const toggleTheme = [
+    {
+      id: "light",
+      name: "Light-Theme-Button",
+      icon: (
+        <Sun className="size-4 dark:stroke-white stroke-black  opacity-80" />
+      ),
+    },
+    {
+      id: "dark",
+      name: "Dark-Theme-Button",
+      icon: (
+        <Moon className="size-4 dark:stroke-white stroke-black  opacity-80" />
+      ),
+    },
+  ];
   useEffect(() => {
     (async () => {
       const w = await getActiveWorkspace();
@@ -128,7 +144,7 @@ const Landing = () => {
                 }
                 router.push("/login");
               }}
-              className="pl-8 pr-6 font-medium tracking-normal dark:text-black text-white hover:text-white/80 bg-black dark:bg-white flex items-center justify-center py-2 text-sm md:text-base transition-all rounded-xl  "
+              className="pl-8 pr-6 font-medium tracking-normal dark:text-black text-white hover:text-white/80 bg-black dark:bg-white  flex items-center justify-center py-2 text-sm md:text-base transition-all rounded-xl  "
             >
               {status === "authenticated"
                 ? "Dashboard"
@@ -142,16 +158,27 @@ const Landing = () => {
           initial="initial"
           animate="animate"
           style={{ filter: "drop-shadow(4px 34px 24px #000000bb)" }}
-          className=" w-full md:max-w-5xl mt-8 p-3 flex flex-col items-center justify-center overflow-hidden"
+          className=" w-full relative md:max-w-5xl mt-8 p-3 flex flex-col items-center justify-center "
         >
-          <Image
-            src={"/landing/light-mode-chat.png"}
-            width={1400}
-            quality={100}
-            height={1250}
-            className="w-full h-full flex rounded-xl "
-            alt="Pluto app interface showing a document editor with a clean, minimal design"
-          />
+          {theme === "dark" ? (
+            <Image
+              src={"/landing/light-mode-chat.png"}
+              width={1400}
+              quality={100}
+              height={1250}
+              className="w-full h-full flex rounded-xl "
+              alt="Pluto app interface showing a document editor with a clean, minimal design"
+            />
+          ) : (
+            <Image
+              src={"/landing/dark-mode-chat.png"}
+              width={1400}
+              quality={100}
+              height={1250}
+              className="w-full h-full flex rounded-xl "
+              alt="Pluto app interface showing a document editor with a clean, minimal design"
+            />
+          )}
           {/* <Image
             src={"/landing/mobile-2.png"}
             width={1200}
@@ -161,6 +188,32 @@ const Landing = () => {
             alt="Pluto app interface showing a document editor with a clean, minimal design"
           /> */}
         </motion.div>
+        <div className="max-w-5xl w-full flex items-center justify-center mt-8 px-3">
+          <motion.div
+            layout
+            className="w-fit overflow-hidden px-1 py-1 scale-90 md:scale-100 flex gap-2 items-center bg-neutral-200 dark:bg-neutral-800 justify-center relative rounded-xl"
+          >
+            {toggleTheme.map((t) => {
+              return (
+                <>
+                  <button
+                    key={t?.id}
+                    onClick={() => setTheme(t?.id)}
+                    className="relative p-2 aspect-square  flex items-center justify-center"
+                  >
+                    {t?.icon}
+                    {theme === t?.id && (
+                      <motion.span
+                        layoutId="theme-toggle"
+                        className="absolute inset-0 z-10 rounded-lg mix-blend-difference bg-black"
+                      />
+                    )}
+                  </button>
+                </>
+              );
+            })}
+          </motion.div>
+        </div>
       </div>
     </section>
   );

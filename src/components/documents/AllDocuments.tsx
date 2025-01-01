@@ -1,27 +1,24 @@
 "use client";
 
+import { fetchDocuments } from "@/lib/actions";
 import { useActiveView } from "@/lib/context";
 import { Document } from "@/lib/db/schema";
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { useQuery } from "react-query";
+import EmptyDocuments from "../empty-documents";
 import DocumentCardView, { DocumentCardViewSkeleton } from "./DocumentCardView";
 import DocumentListView, { DocumentListViewSkeleton } from "./DocumentListView";
-import EmptyDocuments from "../empty-documents";
-import { fetchDocuments } from "@/lib/actions";
-
-import { useQueryState, useQueryStates } from "nuqs";
 import { SortDocumentBy } from "@/lib/types";
+import { useQueryState } from "nuqs";
 
 type AllDocumentsProps = {
   workspace: string;
-  documents: Document[];
 };
 
-const AllDocuments: FC<AllDocumentsProps> = ({ workspace, documents }) => {
+const AllDocuments: FC<AllDocumentsProps> = ({ workspace }) => {
   const [sortBy] = useQueryState("sortBy");
   const { activeView } = useActiveView();
   let { data, isFetching } = useQuery({
-    initialData: { data: documents, error: null },
     queryKey: ["documents-lists", workspace, sortBy],
     queryFn: () => fetchDocuments(workspace, sortBy as SortDocumentBy),
     refetchOnWindowFocus: false,

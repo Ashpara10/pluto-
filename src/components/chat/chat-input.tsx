@@ -3,6 +3,7 @@ import TextArea from "react-textarea-autosize";
 import { Button } from "../ui/button";
 import {
   ArrowUp,
+  CircleStop,
   CornerRightUp,
   Paperclip,
   SendHorizonal,
@@ -34,6 +35,8 @@ const ChatInput: FC<ChatInputProps> = ({
   input,
   handleInputChange,
   handleSubmit,
+  stop,
+  isLoading,
 }) => {
   return (
     <form
@@ -56,24 +59,34 @@ const ChatInput: FC<ChatInputProps> = ({
         placeholder="Ask Assistant"
         className="mt-2 flex h-full w-full placeholder:opacity-50 cursor-pointer resize-none appearance-none border-none bg-transparent px-2 py-2 leading-tight text-opacity-80 focus-visible:outline-none "
       />
-      <div className="flex w-full flex-row items-center justify-between px-1.5 pb-1.5">
+      <div className="flex w-full flex-row items-center justify-end px-1.5 pb-1.5">
         {/* <div className="flex items-center justify-center"> */}
-        <Button
+        {/* <Button
           type="button"
           size={"smallIcon"}
           className="cursor-pointer rounded-xl"
           variant={"outline"}
         >
           <Paperclip className="size-4 opacity-80" />
-        </Button>
+        </Button> */}
         {/* </div> */}
         <Button
           type="submit"
+          onClick={() => {
+            if (isLoading) {
+              stop!();
+              return;
+            }
+          }}
           size={"smallIcon"}
           className="cursor-pointer rounded-xl"
           variant={"outline"}
         >
-          <ArrowUp className="size-4 opacity-80" />
+          {isLoading ? (
+            <CircleStop className="size-4 opacity-80" />
+          ) : (
+            <ArrowUp className="size-4 opacity-80" />
+          )}
         </Button>
       </div>
     </form>

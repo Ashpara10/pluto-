@@ -1,6 +1,6 @@
 "use server";
 import { revalidateDocumentData } from "@/app/(dashboard)/w/[workspace]/document/[id]/actions";
-import { eq, inArray } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { CreateDocumentPayload } from "../types";
 import { db } from "./drizzle";
 import { documents } from "./schema";
@@ -17,6 +17,20 @@ export const getDocumentById = async (id: string) => {
       throw new Error("Document not found");
     }
     return { data: res[0], error: null };
+  } catch (error) {
+    return { data: null, error: (error as Error).message };
+  }
+};
+
+export const getAllDocumentIds = async (user: string, workspace: string) => {
+  try {
+    const data = await db
+      .select({ id: documents.id })
+      .from(documents)
+      .where(
+        and(eq(documents.authorId, user), eq(documents.workspaceId, workspace))
+      );
+    return { data: data?.map((d) => d?.id), error: null };
   } catch (error) {
     return { data: null, error: (error as Error).message };
   }
@@ -98,6 +112,7 @@ export const createDocument = async ({
         authorId: user,
         workspaceId: workspaceId!,
         collectionId: collectionId!,
+        tags: [],
       })
       .returning();
 

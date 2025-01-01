@@ -185,7 +185,7 @@ export const getAllCollections = async (workspace: string) => {
       workspace: workspace,
     },
   });
-  console.log(res?.data);
+  // console.log(res?.data);
   if (!res.data) {
     return { data: null, error: "Failed to fetch collections" };
   }
@@ -215,7 +215,6 @@ export const getCollectionDocuments = async ({
       sortBy: sortBy,
     },
   });
-  console.log(data, status);
   if (status !== 201) {
     return { data: null, error: "Failed to fetch documents" };
   }

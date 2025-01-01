@@ -9,6 +9,7 @@ import {
   ResizablePanelGroup,
 } from "./ui/resizable";
 import { ScrollArea } from "./ui/scroll-area";
+import GradientBottom from "./editor/GradientBottom";
 
 const GlobalLayout = ({ children }: { children: ReactNode }) => {
   return (
@@ -16,7 +17,7 @@ const GlobalLayout = ({ children }: { children: ReactNode }) => {
       direction="horizontal"
       className="relative h-screen w-full overflow-hidden bg-white  dark:bg-dark"
     >
-      <ResizablePanel className="relative w-full">
+      <ResizablePanel className="relative w-full ">
         <div className="absolute left-0 right-0 flex w-full items-center justify-center ">
           <div className="fixed bottom-5 z-40 w-full ">
             <FloatingMenu />
@@ -27,7 +28,8 @@ const GlobalLayout = ({ children }: { children: ReactNode }) => {
             <Navbar />
           </div>
         </div>
-        <ScrollArea className="w-full overflow-y-auto h-screen">
+        <ScrollArea className="w-full  relative overflow-hidden overflow-y-auto h-screen">
+          <GradientBottom />
           {children}
         </ScrollArea>
       </ResizablePanel>

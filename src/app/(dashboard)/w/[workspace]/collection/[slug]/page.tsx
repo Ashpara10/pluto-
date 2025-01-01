@@ -22,7 +22,7 @@ const Page: FC<PageProps> = async ({ params, searchParams }) => {
 
   return (
     <div className="flex w-full flex-col items-center justify-center  pt-28 px-4">
-      <div className="w-full max-w-5xl">
+      <div className="w-full max-w-7xl">
         <DocumentViewOptions title={`Documents`}>
           <CollectionDocuments
             documents={data as Document[]}

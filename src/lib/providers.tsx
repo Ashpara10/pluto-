@@ -45,7 +45,6 @@ const Providers = ({ children }: { children: ReactNode }) => {
   const [config, setConfig] = useState(editorConfig);
   return (
     <AppContextProvider>
-      {/* <UserProvider> */}
       <LexicalConfigContext.Provider value={{ config, setConfig: setConfig }}>
         <LexicalComposer initialConfig={{ ...editorConfig }}>
           <GlobalKeybindProvider>
@@ -53,7 +52,6 @@ const Providers = ({ children }: { children: ReactNode }) => {
           </GlobalKeybindProvider>
         </LexicalComposer>
       </LexicalConfigContext.Provider>
-      {/* </UserProvider> */}
     </AppContextProvider>
   );
 };

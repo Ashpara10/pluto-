@@ -1,16 +1,16 @@
 "use client";
+import { deleteDocuments, handleDocumentFavourites } from "@/lib/db/documents";
 import { Document } from "@/lib/db/schema";
 import { useWorkspaces } from "@/lib/hooks/use-workspaces";
-import { cn } from "@/lib/utils";
-import { useParams, useRouter } from "next/navigation";
-import { Checkbox } from "../ui/checkbox";
-import { Card, CardHeader, CardTitle } from "../ui/card";
-import { useOptimistic, useState } from "react";
-import { deleteDocuments, handleDocumentFavourites } from "@/lib/db/documents";
-import toast from "react-hot-toast";
-import { SquareArrowOutUpRight, Star, Trash2 } from "lucide-react";
-import { Button } from "../ui/button";
 import { queryClient } from "@/lib/session-provider";
+import { cn } from "@/lib/utils";
+import { SquareArrowOutUpRight, Star, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useOptimistic, useState } from "react";
+import toast from "react-hot-toast";
+import { Button } from "../ui/button";
+import { Card, CardHeader, CardTitle } from "../ui/card";
+import { Checkbox } from "../ui/checkbox";
 
 type DocumentCardProps = {
   document: Document;
@@ -54,6 +54,8 @@ const DocumentCardItem = ({
   };
 
   const handleDelete = async () => {
+    const agree = confirm("Are you sure you want to delete this document?");
+    if (!agree) return;
     const { ok, error } = await deleteDocuments([optimisticDocument.id]);
     if (!ok && error) {
       toast?.error(error);
@@ -66,6 +68,10 @@ const DocumentCardItem = ({
 
   const handleClick = () => {
     router.push(`/w/${currentWorkspace?.id}/document/${optimisticDocument.id}`);
+  };
+
+  const handleMoveDocument = () => {
+    handleCheckChange(true, optimisticDocument?.id);
   };
   return (
     <Card
@@ -99,8 +105,8 @@ const DocumentCardItem = ({
             })}
           </span>
         </div>
-        <div className="w-full flex flex-wrap gap-1.5">
-          {optimisticDocument?.tags?.map((tag, i) => {
+        <div className="w-full flex flex-wrap  gap-1.5">
+          {optimisticDocument?.tags?.slice(0, 3)?.map((tag, i) => {
             return (
               <div
                 key={i}
@@ -136,6 +142,7 @@ const DocumentCardItem = ({
           />
         </Button>
         <Button
+          onClick={handleMoveDocument}
           variant={"outline"}
           size={"smallIcon"}
           className="p-1 rounded-lg hover:dark:bg-lightGray/10 bg-white"

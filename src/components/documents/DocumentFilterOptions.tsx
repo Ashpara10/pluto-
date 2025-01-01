@@ -51,7 +51,7 @@ const DocumentFilterOptions: FC<DocumentFilterOptionsProps> = ({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
-      <PopoverContent className="border  p-0 mr-3 border-neutral-200/60 bg-neutral-100/90 hover:bg-white  dark:border-lightGray/10 dark:bg-neutral-800/90 backdrop-blur-lg mt-2 ">
+      <PopoverContent className="border  p-0 mr-3 border-neutral-200/60  bg-white  dark:border-lightGray/10 dark:bg-neutral-800/90 backdrop-blur-lg mt-2 ">
         <div className="space-y-4">
           <div className="space-y-2 ">
             <motion.div

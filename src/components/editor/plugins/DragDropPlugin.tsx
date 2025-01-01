@@ -9,9 +9,7 @@ const ACCEPTED_FILE_TYPES = ["image/png", "image/jpeg", "image/webp"];
 
 const DragDropPlugin = () => {
   const [editor] = useLexicalComposerContext();
-  //   const handleDrop = (e: React.DragEvent) => {
-  //     console.log(e?.dataTransfer?.files);
-  //   };
+
   useEffect(() => {
     return mergeRegister(() => {
       editor.registerCommand(
@@ -20,7 +18,7 @@ const DragDropPlugin = () => {
           (async () => {
             const filesResult = await mediaFileReader(
               files,
-              [ACCEPTED_FILE_TYPES].flatMap((x) => x),
+              [ACCEPTED_FILE_TYPES].flatMap((x) => x)
             );
             for (const { file, result } of filesResult) {
               if (isMimeType(file, ACCEPTED_FILE_TYPES)) {
@@ -34,7 +32,7 @@ const DragDropPlugin = () => {
           })();
           return true;
         },
-        COMMAND_PRIORITY_LOW,
+        COMMAND_PRIORITY_LOW
       );
     });
   }, [editor]);

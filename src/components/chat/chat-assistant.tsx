@@ -6,8 +6,6 @@ import { useEffect, useRef, useState } from "react";
 import { ScrollArea } from "../ui/scroll-area";
 import ChatInput from "./chat-input";
 import { Card, CardContent } from "../ui/card";
-// import { remark } from "remark";
-// import html from "remark-html";
 import rehypeStringify from "rehype-stringify";
 import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
@@ -17,6 +15,7 @@ import { Button } from "../ui/button";
 import { Copy, CopyCheckIcon, FilePlus2, Plus, RefreshCcw } from "lucide-react";
 import { $getSelection } from "lexical";
 import { $generateNodesFromDOM } from "@lexical/html";
+import toast from "react-hot-toast";
 
 const ChatAssistant = () => {
   const chatInputContainerRef = useRef<HTMLDivElement>(null);
@@ -24,10 +23,11 @@ const ChatAssistant = () => {
   const [mdContext, setMdContext] = useState("");
   const [editor] = useLexicalComposerContext();
   const [isCopied, setIsCopied] = useState(false);
-
+  const [isAnswering, setIsAnswering] = useState(false);
   const {
     messages,
-    setMessages,
+    stop,
+    isLoading,
     reload,
     handleSubmit,
     input,
@@ -35,6 +35,15 @@ const ChatAssistant = () => {
   } = useChat({
     body: {
       ctx: mdContext,
+    },
+    onResponse(response) {
+      if (response.status === 429) {
+        toast.error("Too many requests, please try again later");
+      }
+      setIsAnswering(true);
+    },
+    onFinish() {
+      setIsAnswering(false);
     },
   });
 
@@ -63,6 +72,8 @@ const ChatAssistant = () => {
   const handleCopyBlock = (block: string) => {
     setIsCopied(true);
     navigator.clipboard.writeText(block);
+    toast.success("Copied to clipboard");
+
     setTimeout(() => {
       setIsCopied(false);
     }, 2000);
@@ -164,6 +175,8 @@ const ChatAssistant = () => {
               handleInputChange={handleInputChange}
               handleSubmit={handleSubmit}
               messages={messages}
+              stop={stop}
+              isLoading={isLoading}
             />
           </div>
         </ScrollArea>

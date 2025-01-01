@@ -19,6 +19,7 @@ import {
   Plus,
   Settings,
   Share2,
+  SquareArrowOutUpRightIcon,
   Sun,
   Trash2,
 } from "lucide-react";
@@ -33,6 +34,8 @@ import {
   SelectedDocumentsMenuFace,
 } from "./FloatingMenuFaces";
 import { DefaultMenuSlide, DocumentMenuSlide } from "./FloatingMenuSlides";
+import { $convertToMarkdownString } from "@lexical/markdown";
+import { useHotkeys } from "react-hotkeys-hook";
 
 const FloatingMenu = memo(() => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -47,6 +50,21 @@ const FloatingMenu = memo(() => {
   // const { setIsMoveToFolderDialogOpen } = useIsMoveToFolderDialog();
   const { theme, setTheme } = useTheme();
   const path = usePathname();
+
+  const handleExportMarkdown = () => {
+    editor.update(() => {
+      const md = $convertToMarkdownString();
+      const blob = new Blob([md], { type: "text/markdown" });
+      const a = Object.assign(document.createElement("a"), {
+        href: URL.createObjectURL(blob),
+        download: "content.md",
+      });
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+  };
+
+  useHotkeys("ctrl+alt+m", handleExportMarkdown);
 
   const defaultOptions = [
     {
@@ -159,32 +177,20 @@ const FloatingMenu = memo(() => {
           const parser = new DOMParser();
           const dom = parser.parseFromString(data!, "text/html");
           const nodes = $generateNodesFromDOM(editor, dom);
-          // console.log(nodes);
           $insertNodes([...nodes]);
         });
       },
-    },
-    {
-      kbd: <KeyboardItem keys="Shift,Del" ctrl={true} />,
-      icon: (
-        <Copy
-          strokeWidth={1.7}
-          className="size-4.5 stroke-black opacity-80 dark:stroke-white"
-        />
-      ),
-      name: "Generate Flashcards",
-      onClick: () => {},
     },
 
     {
       kbd: <KeyboardItem keys="Shift,C" ctrl={true} />,
       icon: (
-        <FolderPlus
+        <SquareArrowOutUpRightIcon
           strokeWidth={1.7}
           className="size-4.5 stroke-black opacity-80 dark:stroke-white"
         />
       ),
-      name: "Add To Collection",
+      name: "Move To Collection",
       onClick: () => {},
     },
     {
@@ -207,7 +213,7 @@ const FloatingMenu = memo(() => {
         />
       ),
       name: "Export Markdown",
-      onClick: () => {},
+      onClick: handleExportMarkdown,
     },
     {
       kbd: <KeyboardItem keys="Shift,Del" ctrl={true} />,
@@ -259,6 +265,7 @@ const FloatingMenu = memo(() => {
     }
     if (e.key === "k" && (e.ctrlKey || e.metaKey)) {
       e.preventDefault();
+      if (selectedDocuments!.length > 0) return;
       setIsExpanded(!isExpanded);
       return;
     }

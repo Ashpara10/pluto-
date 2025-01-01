@@ -1,15 +1,15 @@
 "use client";
+import { deleteDocuments } from "@/lib/db/documents";
+import { db } from "@/lib/db/drizzle";
 import { Document, documents } from "@/lib/db/schema";
+import { queryClient } from "@/lib/session-provider";
 import { cn } from "@/lib/utils";
+import { eq, not } from "drizzle-orm";
 import { SquareArrowOutUpRight, Star, Trash2 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useOptimistic, useState, useTransition } from "react";
-import { Checkbox } from "../ui/checkbox";
-import { deleteDocuments, handleDocumentFavourites } from "@/lib/db/documents";
+import { useOptimistic, useState, useTransition } from "react";
 import toast from "react-hot-toast";
-import { queryClient } from "@/lib/session-provider";
-import { db } from "@/lib/db/drizzle";
-import { eq, not } from "drizzle-orm";
+import { Checkbox } from "../ui/checkbox";
 
 type DocumentListProps = {
   document: Document;
@@ -29,23 +29,18 @@ const DocumentListItem = ({
 
   const [optimisticDocument, addOptimistic] = useOptimistic(
     document,
-    (state, newData: Document) => {
-      return { ...state, ...newData };
+    (state, isFavourite: boolean) => {
+      return { ...state, isFavorite: isFavourite };
     }
   );
-  useEffect(() => {
-    console.log({ is: optimisticDocument.isFavorite });
-  }, [optimisticDocument]);
+
   const handleFavourites = async () => {
     // Flip the optimistic state of `isFavorite`
     const newFavoriteState = !optimisticDocument?.isFavorite;
     startTransition(async () => {
       try {
         // Optimistically update the state
-        addOptimistic({
-          ...optimisticDocument,
-          isFavorite: !optimisticDocument.isFavorite,
-        });
+        addOptimistic(!optimisticDocument.isFavorite);
 
         // Update the server
         await db
@@ -59,19 +54,14 @@ const DocumentListItem = ({
           newFavoriteState ? "Added to favorites" : "Removed from favorites"
         );
       } catch (error) {
-        // Revert the optimistic update on error
-        // addOptimistic({
-        //   ...optimisticDocument,
-        //   isFavorite: !newFavoriteState,
-        // });
-
-        // Notify error
         toast.error("Failed to update favorites. Please try again.");
       }
     });
   };
 
   const handleDelete = async () => {
+    const agree = confirm("Are you sure you want to delete this document?");
+    if (!agree) return;
     const { ok, error } = await deleteDocuments([optimisticDocument.id]);
     if (!ok && error) {
       toast?.error(error);
@@ -84,6 +74,10 @@ const DocumentListItem = ({
 
   const handleClick = () => {
     router.push(`/w/${workspace}/document/${optimisticDocument.id}`);
+  };
+
+  const handleMoveDocument = () => {
+    handleCheckChange(true, optimisticDocument?.id);
   };
   return (
     <div
@@ -133,7 +127,10 @@ const DocumentListItem = ({
               )}
             />
           </button>
-          <button className="p-1 rounded-lg hover:dark:bg-lightGray/10 hover:bg-neutral-200/30">
+          <button
+            onClick={handleMoveDocument}
+            className="p-1 rounded-lg hover:dark:bg-lightGray/10 hover:bg-neutral-200/30"
+          >
             <SquareArrowOutUpRight
               strokeWidth={1.07}
               className="opacity-80 size-5"

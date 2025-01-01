@@ -24,7 +24,7 @@ const DocumentListView: FC<DocumentListViewProps> = ({ data }) => {
     });
   };
   return (
-    <section className="">
+    <section className="w-full">
       {data?.map((doc, i) => {
         const isChecked = selectedDocuments?.includes(doc?.id);
         return (
