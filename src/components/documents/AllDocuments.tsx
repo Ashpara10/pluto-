@@ -1,30 +1,33 @@
 "use client";
 
+import { fetchDocuments } from "@/lib/actions";
 import { useActiveView } from "@/lib/context";
 import { Document } from "@/lib/db/schema";
 import { FC } from "react";
 import { useQuery } from "react-query";
+import EmptyDocuments from "../empty-documents";
 import DocumentCardView, { DocumentCardViewSkeleton } from "./DocumentCardView";
 import DocumentListView, { DocumentListViewSkeleton } from "./DocumentListView";
-import EmptyDocuments from "../empty-documents";
-import { fetchDocuments } from "@/lib/actions";
+import { SortDocumentBy } from "@/lib/types";
+import { useQueryState } from "nuqs";
 
 type AllDocumentsProps = {
   workspace: string;
-  documents: Document[];
 };
 
-const AllDocuments: FC<AllDocumentsProps> = ({ workspace, documents }) => {
+const AllDocuments: FC<AllDocumentsProps> = ({ workspace }) => {
+  const [sortBy] = useQueryState("sortBy");
   const { activeView } = useActiveView();
   const { data, isFetching } = useQuery({
-    initialData: { data: documents, error: null },
-    queryKey: ["documents-lists", workspace],
-    queryFn: () => fetchDocuments(workspace),
+    queryKey: ["documents-lists", workspace, sortBy],
+    queryFn: () => fetchDocuments(workspace, sortBy as SortDocumentBy),
     refetchOnWindowFocus: false,
   });
-  if (data?.data?.length === 0) {
+
+  if (data?.data?.length === 0 && !isFetching) {
     return <EmptyDocuments />;
   }
+
   if (isFetching) {
     return activeView === "list" ? (
       <DocumentListViewSkeleton />

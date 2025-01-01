@@ -18,8 +18,9 @@ export const INSERT_ASSISTANT_RESPONSE: LexicalCommand<string> = createCommand(
 );
 
 const generateAssistantResponse = async (q: string) => {
+  console.log({ q });
   const result = await generateText({
-    model: google("models/gemini-1.5-pro-latest"),
+    model: google("gemini-1.5-flash"),
     system: `You are a content writer assistant. generate content based on users query
       To Generate Content:
       - Answer concisely and clearly
@@ -28,12 +29,10 @@ const generateAssistantResponse = async (q: string) => {
       - Answer must be in text format
       - Each answer must have a Introduction,Explanation amd Justification
       
-      
       `,
-    //   - Keep the content short and to the point
-    //   - Use bullet points and lists headings italics and bold to enhance readability
     prompt: q,
   });
+  console.log(result?.text);
   return result;
 };
 

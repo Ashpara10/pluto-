@@ -55,15 +55,28 @@ const CreateWorkspace = () => {
       open={isCreateWorkspaceDialogOpen}
       onOpenChange={setIsCreateWorkspaceDialogOpen}
     >
-      <DialogContent className="max-w-md block bg-neutral-100 border border-neutral-200/60 dark:border-lightGray/10 dark:bg-neutral-900 ">
+      {/* <DialogContent className="max-w-md block bg-neutral-100 border border-neutral-200/60 dark:border-lightGray/10 dark:bg-neutral-900 ">
         <DialogHeader>
           <DialogTitle className="font-medium">Name Your Workspace</DialogTitle>
           <DialogDescription>
             A Workspace is a virtual space where you can collaborate, create and
             plan with your team.
           </DialogDescription>
+        </DialogHeader> */}
+      <DialogContent
+        style={{ borderRadius: 30 }}
+        className="w-full border border-neutral-300/60 dark:border-lightGray/10 max-w-md  p-0 overflow-hidden bg-neutral-100 backdrop-blur-2xl dark:bg-neutral-900"
+      >
+        <DialogHeader className=" border-b border-neutral-300/60 dark:border-lightGray/10  px-8 pt-6 pb-4">
+          <DialogTitle className="text-xl font-medium tracking-tight leading-tight">
+            Create Workspace
+          </DialogTitle>
+          <DialogDescription>
+            A Workspace is a virtual space where you can collaborate, create and
+            plan with your team.
+          </DialogDescription>
         </DialogHeader>
-        <div className="mt-4">
+        <div className="mt-4 px-8 mb-8">
           <form
             className="block w-full"
             onSubmit={handleSubmit(async ({ title }) => {
@@ -84,7 +97,7 @@ const CreateWorkspace = () => {
               ]);
             })}
           >
-            <label htmlFor="workspace-image-input">
+            <label>
               <Image
                 className="size-14 rounded-lg "
                 width={56}

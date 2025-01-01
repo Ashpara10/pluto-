@@ -9,6 +9,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Button } from "../ui/button";
+import { signIn } from "next-auth/react";
 
 const Register = () => {
   const router = useRouter();
@@ -27,6 +28,12 @@ const Register = () => {
   });
 
   const [show, setShow] = React.useState(false);
+
+  const handleOAuthSignUp = async (provider: "google" | "github") => {
+    const res = await signIn(provider, { redirect: false });
+    console.log({ res });
+  };
+
   return (
     <div className="flex w-full z-20 max-w-md flex-col px-6 py-10 ">
       <div className="mb-4">
@@ -34,6 +41,7 @@ const Register = () => {
       </div>
       <div className="flex w-full flex-col space-y-2">
         <Button
+          onClick={() => handleOAuthSignUp("github")}
           className="w-full border-neutral-300 bg-white"
           variant={"outline"}
         >
@@ -50,6 +58,7 @@ const Register = () => {
         </Button>
         <Button
           variant={"outline"}
+          onClick={() => handleOAuthSignUp("google")}
           className="w-full border-neutral-300 bg-white"
         >
           <Image
@@ -77,7 +86,17 @@ const Register = () => {
             toast.error(error);
             return;
           }
-          router.push(`/login`);
+          const resp = await signIn("credentials", {
+            email: res?.email,
+            password: data?.password,
+            redirect: false,
+          });
+          if (!resp?.ok && resp?.error) {
+            toast.error(resp?.error);
+            return;
+          }
+          toast.success("Signed up successfully");
+          router.push("/workspace");
         })}
         className="flex w-full  flex-col "
       >

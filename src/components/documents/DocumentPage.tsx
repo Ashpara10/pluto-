@@ -13,6 +13,7 @@ import toast from "react-hot-toast";
 import TextareaAutosize from "react-textarea-autosize";
 import TransitionLayout from "../TransitionLayout";
 import { Button } from "../ui/button";
+import { TagInput } from "../ui/tag-input";
 
 type DocumentPageProps = {
   document: Document;
@@ -74,7 +75,7 @@ const DocumentPage: FC<DocumentPageProps> = ({ document }) => {
           value={data?.title as string}
           onChange={(e) => setData((p) => ({ ...p, title: e.target.value }))}
         />
-        {/* <TagInput tags={tags!} setTags={(tags) => setTags(tags)} /> */}
+
         <div className="w-full flex mt-1 items-center justify-between mb-4">
           <div>
             <span className=" opacity-75">
@@ -98,6 +99,14 @@ const DocumentPage: FC<DocumentPageProps> = ({ document }) => {
               <MoreVertical className="opacity-80 size-4" />
             </Button>
           </div>
+        </div>
+        <div className="w-full">
+          <TagInput
+            tags={tags}
+            setTags={setTags}
+            placeholder="Add tags..."
+            className="w-full"
+          />
         </div>
         <Editor
           content={data?.content as string}

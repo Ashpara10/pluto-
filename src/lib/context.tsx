@@ -16,11 +16,13 @@ type ContextStateType = {
   createDocumentDialogOpen: boolean;
   selectedDocuments?: string[];
   setSelectedDocuments?: React.Dispatch<React.SetStateAction<string[]>>;
+  selectedCollections?: string[];
+  setSelectedCollections?: React.Dispatch<React.SetStateAction<string[]>>;
   isCreateCollectionDialogOpen?: boolean;
-  isMoveToFolderDialogOpen?: boolean;
   isCreateWorkspaceDialogOpen?: boolean;
   isDeleteWorkspaceDialogOpen?: boolean;
   isDeleteDocumentDialogOpen?: boolean;
+  isAddToCollectionDialogOpen?: boolean;
 };
 type setContextType = [
   ContextStateType,
@@ -28,7 +30,7 @@ type setContextType = [
     setSidebarOpen: UpdateStateFunctionType;
     setCreateDocumentDialogOpen: UpdateStateFunctionType;
     setIsCreateCollectionDialogOpen?: UpdateStateFunctionType;
-    setIsMoveToFolderDialogOpen?: UpdateStateFunctionType;
+    setIsAddToCollectionDialogOpen?: UpdateStateFunctionType;
     setIsCreateWorkspaceDialogOpen?: UpdateStateFunctionType;
     setIsDeleteWorkspaceDialogOpen?: UpdateStateFunctionType;
     setIsDeleteDocumentDialogOpen?: UpdateStateFunctionType;
@@ -40,8 +42,10 @@ const defaultContextState: ContextStateType = {
   createDocumentDialogOpen: false,
   selectedDocuments: [],
   setSelectedDocuments: () => {},
+  selectedCollections: [],
+  setSelectedCollections: () => {},
   isCreateCollectionDialogOpen: false,
-  isMoveToFolderDialogOpen: false,
+  isAddToCollectionDialogOpen: false,
   isCreateWorkspaceDialogOpen: false,
   isDeleteWorkspaceDialogOpen: false,
   isDeleteDocumentDialogOpen: false,
@@ -53,7 +57,7 @@ export const Context = createContext([
     setSidebarOpen: () => {},
     setCreateDocumentDialogOpen: () => {},
     setIsCreateCollectionDialogOpen: () => {},
-    setIsMoveToFolderDialogOpen: () => {},
+    setIsAddToCollectionDialogOpen: () => {},
     setIsCreateWorkspaceDialogOpen: () => {},
     setIsDeleteWorkspaceDialogOpen: () => {},
     setIsDeleteDocumentDialogOpen: () => {},
@@ -110,8 +114,7 @@ export const useSelectedDocuments = () => {
     setSelectedDocuments: context[0].setSelectedDocuments,
   };
 };
-
-export const useIsMoveToFolderDialog = () => {
+export const useSelectedCollections = () => {
   const context = useContext(Context);
 
   if (!context) {
@@ -119,8 +122,21 @@ export const useIsMoveToFolderDialog = () => {
   }
 
   return {
-    isMoveToFolderDialogOpen: context[0].isMoveToFolderDialogOpen,
-    setIsMoveToFolderDialogOpen: context[1].setIsMoveToFolderDialogOpen,
+    selectedCollection: context[0].selectedCollections,
+    setSelectedCollections: context[0].setSelectedCollections,
+  };
+};
+
+export const useAddToCollection = () => {
+  const context = useContext(Context);
+
+  if (!context) {
+    throw new Error("Context error");
+  }
+
+  return {
+    isAddToCollectionDialogOpen: context[0].isAddToCollectionDialogOpen,
+    setIsAddToCollectionDialogOpen: context[1].setIsAddToCollectionDialogOpen,
   };
 };
 export const useWorkspaceDialog = () => {
@@ -176,6 +192,7 @@ export const useActiveView = () => {
 };
 const AppContextProvider = ({ children }: { children: ReactNode }) => {
   const [selectedDocuments, setSelectedDocuments] = useState<string[]>([]);
+  const [selectedCollections, setSelectedCollections] = useState<string[]>([]);
   const [activeView, setActiveView] = useState(
     getCookie("activeView") || "list"
   );
@@ -215,9 +232,9 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
     },
     [openContext, setOpenContext]
   );
-  const setIsMoveToFolderDialogOpen = useCallback(
+  const setIsAddToCollectionDialogOpen = useCallback(
     (isOpen: boolean) => {
-      setOpenContext({ ...openContext, isMoveToFolderDialogOpen: isOpen });
+      setOpenContext({ ...openContext, isAddToCollectionDialogOpen: isOpen });
     },
     [openContext, setOpenContext]
   );
@@ -236,13 +253,15 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
           setSelectedDocuments,
           activeView,
           setActiveView,
+          selectedCollections,
+          setSelectedCollections,
         },
         {
           setSidebarOpen,
           setCreateDocumentDialogOpen,
           setIsCreateWorkspaceDialogOpen,
           setIsCreateCollectionDialogOpen,
-          setIsMoveToFolderDialogOpen,
+          setIsAddToCollectionDialogOpen,
           setIsDeleteWorkspaceDialogOpen,
           setIsDeleteDocumentDialogOpen,
         },

@@ -212,8 +212,9 @@ export default function ComponentPickerPlugin(): JSX.Element {
           keywords: ["ai", "ask", "ask ai", "assistant", "copilot"],
           onSelect: async () => {
             const query = prompt("Ask Assistant?");
-            if (!query) return false;
-            editor.dispatchCommand(INSERT_ASSISTANT_RESPONSE, query);
+            console.log(query);
+            if (query?.length === 0) return false;
+            editor.dispatchCommand(INSERT_ASSISTANT_RESPONSE, query!);
           },
         }
       ),

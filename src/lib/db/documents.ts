@@ -1,12 +1,9 @@
 "use server";
 import { revalidateDocumentData } from "@/app/(dashboard)/w/[workspace]/document/[id]/actions";
-import { eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { CreateDocumentPayload } from "../types";
 import { db } from "./drizzle";
-import { Document, documents } from "./schema";
-import toast from "react-hot-toast";
-import { instance } from "../axios";
-import { error } from "console";
+import { documents } from "./schema";
 
 export const getDocumentById = async (id: string) => {
   try {
@@ -20,6 +17,20 @@ export const getDocumentById = async (id: string) => {
       throw new Error("Document not found");
     }
     return { data: res[0], error: null };
+  } catch (error) {
+    return { data: null, error: (error as Error).message };
+  }
+};
+
+export const getAllDocumentIds = async (user: string, workspace: string) => {
+  try {
+    const data = await db
+      .select({ id: documents.id })
+      .from(documents)
+      .where(
+        and(eq(documents.authorId, user), eq(documents.workspaceId, workspace))
+      );
+    return { data: data?.map((d) => d?.id), error: null };
   } catch (error) {
     return { data: null, error: (error as Error).message };
   }
@@ -46,6 +57,7 @@ export const updateDocument = async ({
         content: content,
         markdown: markdown,
         tags: tags,
+        updatedAt: new Date(),
       })
       .where(eq(documents.id, id))
       .returning();
@@ -60,6 +72,31 @@ export const updateDocument = async ({
     return { data: null, error: (error as Error).message };
   }
 };
+
+export const handleDocumentFavourites = async ({
+  id,
+  isFavorite,
+}: {
+  id: string;
+  isFavorite: boolean;
+}) => {
+  try {
+    const document = await db
+      .update(documents)
+      .set({
+        isFavorite: isFavorite,
+      })
+      .where(eq(documents.id, id))
+      .returning();
+    if (document.length === 0) {
+      throw new Error("Failed to add to favourites");
+    }
+    return { ok: true, data: document[0], error: null };
+  } catch (error) {
+    return { ok: false, data: null, error: (error as Error).message };
+  }
+};
+
 export const createDocument = async ({
   user,
   workspaceId,
@@ -75,6 +112,7 @@ export const createDocument = async ({
         authorId: user,
         workspaceId: workspaceId!,
         collectionId: collectionId!,
+        tags: [],
       })
       .returning();
 
@@ -98,6 +136,20 @@ export const deleteDocuments = async (ids: string[]) => {
   }
 };
 
+export const getDocumentsById = async (ids: string[]) => {
+  try {
+    const data = await db
+      .select()
+      .from(documents)
+      .where(inArray(documents?.id, ids));
+    if (data?.length === 0) {
+      throw new Error("Documents not found");
+    }
+    return { data: data, error: null };
+  } catch (error) {
+    return { data: null, error: (error as Error)?.message };
+  }
+};
 // const movetoCollection = async ({
 //   documentsToMove,
 //   collectionId,

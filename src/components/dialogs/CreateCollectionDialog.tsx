@@ -18,6 +18,8 @@ import {
 import { Input } from "../ui/input";
 import { TagInput } from "../ui/tag-input";
 import { Label } from "../ui/label";
+import { queryClient } from "@/lib/session-provider";
+import { useParams } from "next/navigation";
 
 const CreateCollectionPayloadSchema = z.object({
   name: z.string(),
@@ -28,7 +30,7 @@ const CreateCollectionDialog = () => {
   const { createCollectionDialogOpen, setCreateCollectionDialogOpen } =
     useCreateCollectionDialog();
 
-  const { register, handleSubmit } = useForm<
+  const { register, handleSubmit, reset } = useForm<
     z.infer<typeof CreateCollectionPayloadSchema>
   >({
     defaultValues: {
@@ -37,7 +39,7 @@ const CreateCollectionDialog = () => {
     resolver: zodResolver(CreateCollectionPayloadSchema),
   });
   const [tags, setTags] = React.useState<string[]>([]);
-  const { workspaces } = useWorkspaces();
+  const { workspace } = useParams();
   return (
     <Dialog
       open={createCollectionDialogOpen}
@@ -47,7 +49,7 @@ const CreateCollectionDialog = () => {
         style={{ borderRadius: 30 }}
         className="w-full border border-neutral-300/60 dark:border-lightGray/10 max-w-md  p-0 overflow-hidden bg-neutral-100 backdrop-blur-2xl dark:bg-neutral-900"
       >
-        <DialogHeader className="bg-white border-b border-neutral-300/60 dark:border-lightGray/10 dark:bg-neutral-900 px-8 pt-6 pb-4">
+        <DialogHeader className=" border-b border-neutral-300/60 dark:border-lightGray/10  px-8 pt-6 pb-4">
           <DialogTitle className="text-xl font-medium tracking-tight leading-tight">
             Create Collection
           </DialogTitle>
@@ -58,9 +60,9 @@ const CreateCollectionDialog = () => {
         </DialogHeader>
         <div className="w-full  px-8 pt-2 pb-8">
           <form
+            className="flex flex-col"
             onSubmit={handleSubmit(async (values) => {
               try {
-                // console.log("inside");
                 const resp = await instance.post(
                   "/collection",
                   {
@@ -74,12 +76,14 @@ const CreateCollectionDialog = () => {
                     },
                   }
                 );
-                // console.log({ resp });
                 if (resp.status !== 201) {
                   toast.error(JSON.stringify(resp?.data));
                   return;
                 }
                 toast.success("Collection created successfully");
+                reset();
+                setTags([]);
+                queryClient.refetchQueries(["all-collections", workspace]);
               } catch (error) {
                 if (error instanceof AxiosError) {
                   console.log(error);
@@ -88,13 +92,16 @@ const CreateCollectionDialog = () => {
               }
             })}
           >
+            <Label className="mb-2 mt-2">Collection Name</Label>
             <Input
               className=" py-2"
               {...register("name")}
               placeholder="Enter collection name"
             />
+            <Label className="mt-4 ">Collection Tags</Label>
             <TagInput
               tags={tags}
+              className="mt-1"
               placeholder="Select Tags..."
               setTags={setTags}
             />

@@ -1,4 +1,10 @@
-import { Document, NewUser, users, Workspace } from "@/lib/db/schema";
+import {
+  Collection,
+  Document,
+  NewUser,
+  users,
+  Workspace,
+} from "@/lib/db/schema";
 import { compare, hash } from "bcryptjs";
 import { getCookie, setCookie } from "cookies-next";
 import { and, eq, isNull } from "drizzle-orm";
@@ -9,6 +15,7 @@ import { getUserWorkspaces } from "./db/workspaces";
 import { getAvatarByUserInitials } from "./utils";
 import { NextRequest } from "next/server";
 import { instance } from "./axios";
+import { SortDocumentBy } from "./types";
 
 const key = new TextEncoder().encode("532d15e19a1c159dda7474c6c773ff87");
 const SALT_ROUNDS = 10;
@@ -172,11 +179,61 @@ export const setActiveWorkspace = async (payload: Workspace) => {
 };
 
 // Collection actions
+export const getAllCollections = async (workspace: string) => {
+  const res = await instance.get(`/collection`, {
+    params: {
+      workspace: workspace,
+    },
+  });
+  // console.log(res?.data);
+  if (!res.data) {
+    return { data: null, error: "Failed to fetch collections" };
+  }
+  return { data: res.data.data, error: null } as {
+    data: { collection: Collection; documents_count: string }[];
+    error: null;
+  };
+};
+
+type GetCollectionDocumentsResponse = {
+  collection: Collection;
+  documents: Document[];
+}[];
+
+export const getCollectionDocuments = async ({
+  slug,
+  sortBy,
+  workspace,
+}: {
+  slug: string;
+  workspace: string;
+  sortBy: SortDocumentBy;
+}) => {
+  const { data, status } = await instance.get(`/collection/${slug}`, {
+    params: {
+      workspace: workspace,
+      sortBy: sortBy,
+    },
+  });
+  if (status !== 201) {
+    return { data: null, error: "Failed to fetch documents" };
+  }
+
+  return {
+    data: data?.data,
+    error: null,
+  };
+};
+
 // Document actions
-export const fetchDocuments = async (workspace: string) => {
+export const fetchDocuments = async (
+  workspace: string,
+  sortBy: SortDocumentBy
+) => {
   const res = await instance.get("/document", {
     params: {
       workspace: workspace,
+      sortBy: sortBy,
     },
   });
   if (!res?.data) {

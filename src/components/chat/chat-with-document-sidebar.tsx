@@ -5,7 +5,7 @@ const ChatWithDocumentSidebar = () => {
   return (
     <ResizablePanel
       id="chat-with-document-sidebar"
-      className="relative hidden h-screen md:flex "
+      className="relative hidden z-20 h-screen md:flex "
       maxSize={35}
     >
       <ChatAssistant />

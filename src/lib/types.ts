@@ -34,3 +34,7 @@ export type RegisterUserPayload = {
   email: string;
   password: string;
 };
+
+export type TabType = "documents" | "collections" | "tags";
+
+export type SortDocumentBy = "createdAt" | "updatedAt" | "favourites";

@@ -1,26 +1,45 @@
+import Link from "next/link";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import AvatarDropDownMenu from "./AvatarDropDownMenu";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 import WorkspaceSwitcher from "./WorkspaceSwitcher";
+import { useEffect, useState } from "react";
+import { TabType } from "@/lib/types";
 
 const Navbar = () => {
   const router = useRouter();
   const { workspace } = useParams();
-
+  const [activeTab, setActiveTab] = useState<TabType>("documents");
   const path = usePathname();
+
   const getActivePath = () => {
-    switch (path) {
-      case `/w/${workspace}`:
-        return "documents";
-      case `/w/${workspace}/collection`:
-        return "collections";
-      case `/w/${workspace}/tags`:
-        return "tags";
-      default:
-        return "documents";
-    }
+    if (path === `/w/${workspace}`) return "documents";
+    else if (path.includes(`/w/${workspace}/collection`)) return "collections";
+    else if (path.includes(`/w/${workspace}/tags`)) return "tags";
+    else return "documents";
   };
 
+  useEffect(() => {
+    setActiveTab(getActivePath() as TabType);
+  }, [path, getActivePath]);
+
+  const links = [
+    {
+      name: "Docs",
+      link: `/w/${workspace}`,
+      value: "documents",
+    },
+    {
+      name: "Collection",
+      link: `/w/${workspace}/collection`,
+      value: "collections",
+    },
+    {
+      name: "Tags",
+      link: `/w/${workspace}/tags`,
+      value: "tags",
+    },
+  ];
   return (
     <header className=" flex w-full flex-col  items-center justify-center ">
       <div className="flex w-full max-w-7xl items-center justify-end md:justify-between  ">
@@ -33,29 +52,23 @@ const Navbar = () => {
       </div>
       <nav className="sticky hidden md:flex top-0  w-full items-center justify-center">
         <div className="flex w-full items-center justify-center px-3">
-          <Tabs defaultValue={getActivePath()}>
+          <Tabs
+            value={activeTab}
+            onValueChange={(tab) => setActiveTab(tab as TabType)}
+          >
             <TabsList className="rounded-lg bg-neutral-200/60 dark:bg-lightGray/10">
-              <TabsTrigger
-                className="rounded-lg data-[state=active]:bg-white dark:data-[state=active]:bg-neutral-900"
-                value="documents"
-                onClick={() => router.push(`/w/${workspace}`)}
-              >
-                Docs
-              </TabsTrigger>
-              <TabsTrigger
-                className="rounded-lg data-[state=active]:bg-white dark:data-[state=active]:bg-neutral-900"
-                value="collections"
-                onClick={() => router.push(`/w/${workspace}/collection`)}
-              >
-                Collection
-              </TabsTrigger>
-              <TabsTrigger
-                className="rounded-lg data-[state=active]:bg-white dark:data-[state=active]:bg-neutral-900"
-                value="tags"
-                onClick={() => router.push(`/w/${workspace}/tags`)}
-              >
-                Tags
-              </TabsTrigger>
+              {links.map((link, i) => {
+                return (
+                  <TabsTrigger
+                    key={i}
+                    className="rounded-lg data-[state=active]:bg-white dark:data-[state=active]:bg-neutral-900"
+                    value={link?.value}
+                    onClick={() => router.push(link?.link)}
+                  >
+                    {link?.name}
+                  </TabsTrigger>
+                );
+              })}
             </TabsList>
           </Tabs>
         </div>
