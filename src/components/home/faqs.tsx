@@ -41,7 +41,7 @@ const Faqs = () => {
   return (
     <section
       id="faqs"
-      className="w-full h-full relative  flex flex-col items-center justify-center"
+      className="w-full h-full relative  mt-20 flex flex-col items-center justify-center"
     >
       <div className="max-w-5xl mt-10 md:mt-16  w-full flex px-3 flex-col items-center justify-center">
         <h3 className="text-2xl lg:text-3xl  lg:font-semibold tracking-tight">
