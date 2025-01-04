@@ -4,7 +4,7 @@ import { FC, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 
 const Features = () => {
-  const [ref, inView, entry] = useInView({ threshold: 1 });
+  const [ref, inView] = useInView({ threshold: 0.2 });
   const controls = useAnimation();
   const features = [
     {
@@ -42,24 +42,24 @@ const Features = () => {
   }, [inView, controls]);
   const boxVariant = {
     hidden: {
-      x: "-100vw", //move out of the site
+      x: "-100vw",
     },
     visible: {
-      x: 0, // bring it back to nrmal
+      x: 0,
       transition: {
         delay: 0.5,
-        when: "beforeChildren", //use this instead of delay
-        staggerChildren: 0.25, //apply stagger on the parent tag
+        when: "beforeChildren",
+        staggerChildren: 0.25,
       },
     },
   };
   const listVariant = {
     hidden: {
-      y: 10, //move out of the site
+      y: 10,
       opacity: 0,
     },
     visible: {
-      y: 0, // bring it back to nrmal
+      y: 0,
       opacity: 1,
     },
   };

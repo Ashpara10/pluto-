@@ -1,10 +1,9 @@
-import Link from "next/link";
+import { TabType } from "@/lib/types";
 import { useParams, usePathname, useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 import AvatarDropDownMenu from "./AvatarDropDownMenu";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 import WorkspaceSwitcher from "./WorkspaceSwitcher";
-import { useEffect, useState } from "react";
-import { TabType } from "@/lib/types";
 
 const Navbar = () => {
   const router = useRouter();
@@ -12,12 +11,12 @@ const Navbar = () => {
   const [activeTab, setActiveTab] = useState<TabType>("documents");
   const path = usePathname();
 
-  const getActivePath = () => {
+  const getActivePath = useCallback(() => {
     if (path === `/w/${workspace}`) return "documents";
     else if (path.includes(`/w/${workspace}/collection`)) return "collections";
     else if (path.includes(`/w/${workspace}/tags`)) return "tags";
     else return "documents";
-  };
+  }, [path, workspace]);
 
   useEffect(() => {
     setActiveTab(getActivePath() as TabType);
