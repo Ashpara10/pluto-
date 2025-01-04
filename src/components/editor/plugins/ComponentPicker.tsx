@@ -213,8 +213,8 @@ export default function ComponentPickerPlugin(): JSX.Element {
           onSelect: async () => {
             const query = prompt("Ask Assistant?");
             console.log(query);
-            if (query?.length === 0) return false;
-            editor.dispatchCommand(INSERT_ASSISTANT_RESPONSE, query!);
+            if (query === null) return;
+            editor.dispatchCommand(INSERT_ASSISTANT_RESPONSE, query);
           },
         }
       ),

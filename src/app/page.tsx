@@ -1,5 +1,6 @@
 "use client";
 
+import Faqs from "@/components/home/faqs";
 import Features from "@/components/home/features";
 import Footer from "@/components/home/footer";
 import Landing from "@/components/home/landing";
@@ -12,6 +13,7 @@ export default function Home() {
         <div className="w-full h-full pb-20 flex flex-col items-center justify-center">
           <Landing />
           <Features />
+          <Faqs />
           <Footer />
         </div>
       </ScrollArea>

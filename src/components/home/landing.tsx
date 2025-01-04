@@ -52,6 +52,7 @@ const Landing = () => {
   const [activeWorkspace, setActiveWorkspace] = useState<Workspace | null>(
     null
   );
+
   const { status } = useSession();
   const router = useRouter();
   const { theme, setTheme } = useTheme();
@@ -166,6 +167,7 @@ const Landing = () => {
               width={1400}
               quality={100}
               height={1250}
+              priority
               className="w-full h-full flex rounded-xl "
               alt="Pluto app interface showing a document editor with a clean, minimal design"
             />
@@ -175,6 +177,7 @@ const Landing = () => {
               width={1400}
               quality={100}
               height={1250}
+              priority
               className="w-full h-full flex rounded-xl "
               alt="Pluto app interface showing a document editor with a clean, minimal design"
             />
@@ -203,7 +206,7 @@ const Landing = () => {
                   >
                     {t?.icon}
                     {theme === t?.id && (
-                      <motion.span
+                      <motion.div
                         layoutId="theme-toggle"
                         className="absolute inset-0 z-10 rounded-lg mix-blend-difference bg-black"
                       />

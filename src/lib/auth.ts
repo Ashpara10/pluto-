@@ -3,10 +3,11 @@ import { DefaultSession, getServerSession, NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
-import { comparePasswords } from "./actions";
+import { comparePasswords, register } from "./actions";
 import { db } from "./db/drizzle";
 import { users } from "./db/schema";
 import { getUserByEmail } from "./db/user";
+import { generatePassword } from "./utils";
 
 declare module "next-auth" {
   interface Session {
@@ -23,6 +24,30 @@ export const auth = {
     maxAge: 30 * 24 * 60 * 60,
   },
   callbacks: {
+    async signIn({ user, profile }) {
+      const { data, error } = await getUserByEmail(
+        profile?.email || (user?.email as string)
+      );
+      // console.log({ data, error });
+      if (!data) {
+        const { data: newUser, error } = await register({
+          email: user.email as string,
+          name: user.name as string,
+
+          password: generatePassword(user.email as string),
+        });
+        // console.log({ newUser, error });
+        if (error) {
+          return false;
+        }
+        if (!newUser) {
+          return false;
+        }
+        return true;
+      }
+      return true;
+    },
+
     async jwt({ token, user }) {
       if (user) {
         const u = await getUserByEmail(user.email!);
@@ -72,7 +97,7 @@ export const auth = {
         }
         const passwordMatch = await comparePasswords(
           credentials?.password,
-          user[0]?.passwordHash
+          user[0]?.passwordHash as string
         );
         if (!passwordMatch) {
           throw new Error(`User ${credentials?.email} not macth`);

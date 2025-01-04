@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { instance } from "./axios";
+import { createHash } from "crypto";
 
 export const key = new TextEncoder().encode(process?.env.JWT_SECRET);
 
@@ -23,6 +24,7 @@ export function isValidUUID(uuid: string) {
     /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   return uuidRegex.test(uuid);
 }
+
 export function getSlug(str: string) {
   str = str.replace(/^\s+|\s+$/g, ""); // trim
   str = str.toLowerCase();
@@ -51,4 +53,16 @@ export const getAvatarByUserInitials = (name: string) => {
     throw new Error("Name is required to create an avatar");
   }
   return `https://api.dicebear.com/9.x/initials/svg?seed=${name}&scale=100`;
+};
+
+export const generatePassword = (email: string, length = 8) => {
+  if (!email) {
+    throw new Error("Email is required to generate a password");
+  }
+
+  // Create a hash using SHA256
+  const hash = createHash("sha256").update(email).digest("hex");
+
+  // Truncate or extend the hash to the desired length
+  return hash.slice(0, length);
 };

@@ -177,6 +177,7 @@ const FloatingMenu = memo(() => {
           const parser = new DOMParser();
           const dom = parser.parseFromString(data!, "text/html");
           const nodes = $generateNodesFromDOM(editor, dom);
+          console.log(nodes);
           $insertNodes([...nodes]);
         });
       },
