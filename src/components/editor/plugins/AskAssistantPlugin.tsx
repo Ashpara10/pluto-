@@ -21,16 +21,17 @@ const generateAssistantResponse = async (q: string) => {
   console.log({ q });
   const result = await generateText({
     model: google("gemini-1.5-flash"),
-    system: `You are a content writer assistant. generate content based on users query
+    prompt: `You are a content writer assistant. generate content based on users query
       To Generate Content:
       - Answer concisely and clearly
       - Use simple language
       - Use the same tone and style as the input
       - Answer must be in text format
       - Each answer must have a Introduction,Explanation amd Justification
-      
+
+      ${q}
+
       `,
-    prompt: q,
   });
   console.log(result?.text);
   return result;

@@ -91,6 +91,7 @@ export const RegisterSchema = z.object({
   name: z.string().min(5),
   email: z.string().email(),
   password: z.string().min(6),
+  image: z.string().optional(),
 });
 
 export const login = async (payload: z.infer<typeof LoginSchema>) => {
@@ -136,7 +137,7 @@ export const login = async (payload: z.infer<typeof LoginSchema>) => {
 };
 
 export const register = async (payload: z.infer<typeof RegisterSchema>) => {
-  const { email, name, password } = payload;
+  const { email, image, name, password } = payload;
   const existingUser = await db
     .select()
     .from(users)
@@ -147,10 +148,8 @@ export const register = async (payload: z.infer<typeof RegisterSchema>) => {
     return { data: null, error: "Failed to create user. Please try again." };
   }
   const passwordHash = await hashPassword(password);
-  const avatar = getAvatarByUserInitials(name);
-  // console.log({ passwordHash, avatar });
   const newUser: NewUser = {
-    image: avatar || null,
+    image: image || getAvatarByUserInitials(name) || null,
     name,
     email,
     passwordHash,
