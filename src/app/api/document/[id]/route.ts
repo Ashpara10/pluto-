@@ -1,4 +1,3 @@
-import { getUserFromCookies } from "@/lib/actions";
 import { db } from "@/lib/db/drizzle";
 import { documents } from "@/lib/db/schema";
 import { and, eq } from "drizzle-orm";
@@ -9,8 +8,6 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const user = await getUserFromCookies(req);
-    // console.log(user);
     const { id } = params;
     const doc = await db
       .select()

@@ -10,6 +10,7 @@ import DocumentCardView, { DocumentCardViewSkeleton } from "./DocumentCardView";
 import DocumentListView, { DocumentListViewSkeleton } from "./DocumentListView";
 import { SortDocumentBy } from "@/lib/types";
 import { useQueryState } from "nuqs";
+import { useSession } from "next-auth/react";
 
 type AllDocumentsProps = {
   workspace: string;
@@ -23,6 +24,8 @@ const AllDocuments: FC<AllDocumentsProps> = ({ workspace }) => {
     queryFn: () => fetchDocuments(workspace, sortBy as SortDocumentBy),
     refetchOnWindowFocus: false,
   });
+  const session = useSession();
+  console.log({ w: session?.data?.user?.activeWorkspace });
 
   if (data?.data?.length === 0 && !isFetching) {
     return <EmptyDocuments />;

@@ -1,9 +1,9 @@
 "use client";
-import { getActiveWorkspace } from "@/lib/actions";
+import { delay } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { EyeIcon, EyeOffIcon, Loader } from "lucide-react";
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -32,32 +32,23 @@ const Login = () => {
   const handleLogin = handleSubmit(async (values) => {
     setIsLoading(true);
     const res = await signIn("credentials", {
-      redirect: false,
+      redirect: true,
+      callbackUrl: "/workspace",
       email: values.email,
       password: values.password,
     });
-    // console.log({ res });
     if (!res?.ok && res?.error) {
       setIsLoading(false);
       toast.error(res?.error);
       return;
     }
-    const activeWorkspace = await getActiveWorkspace();
-    toast.success("LoggedIn successfully");
-    if (!activeWorkspace) {
-      setIsLoading(false);
-      router.push("/workspace");
-      return;
-    }
     setIsLoading(false);
-
-    router.push(`/w/${activeWorkspace.id}`);
+    toast.success("LoggedIn successfully");
   });
   const handleOauthLogin = async (provider: string) => {
-    const activeWorkspace = await getActiveWorkspace();
     const res = await signIn(provider, {
-      callbackUrl: activeWorkspace ? `/w/${activeWorkspace?.id}` : "/workspace",
       redirect: true,
+      callbackUrl: "/workspace",
     });
     if (!res?.ok && res?.error) {
       toast.error(res?.error);

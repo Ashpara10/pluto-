@@ -3,13 +3,13 @@ import { RegisterSchema, register as signUp } from "@/lib/actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { EyeIcon, EyeOffIcon, Loader } from "lucide-react";
+import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Button } from "../ui/button";
-import { signIn } from "next-auth/react";
 
 const Register = () => {
   const router = useRouter();
@@ -28,10 +28,21 @@ const Register = () => {
   });
 
   const [show, setShow] = React.useState(false);
+  const { data } = useSession();
 
   const handleOAuthSignUp = async (provider: "google" | "github") => {
-    const res = await signIn(provider, { redirect: false });
-    console.log({ res });
+    try {
+      const res = await signIn(provider, {
+        redirect: false,
+      });
+      if (!res?.ok && res?.error) {
+        throw new Error(res.error);
+      }
+      toast.success("Signed up successfully");
+      router.push("/workspace");
+    } catch (error) {
+      toast.error((error as Error).message);
+    }
   };
 
   return (
@@ -41,6 +52,7 @@ const Register = () => {
       </div>
       <div className="flex w-full flex-col space-y-2">
         <Button
+          type="button"
           onClick={() => handleOAuthSignUp("github")}
           className="w-full border-neutral-300 bg-white"
           variant={"outline"}
@@ -58,6 +70,7 @@ const Register = () => {
         </Button>
         <Button
           variant={"outline"}
+          type="button"
           onClick={() => handleOAuthSignUp("google")}
           className="w-full border-neutral-300 bg-white"
         >

@@ -55,14 +55,6 @@ const CreateWorkspace = () => {
       open={isCreateWorkspaceDialogOpen}
       onOpenChange={setIsCreateWorkspaceDialogOpen}
     >
-      {/* <DialogContent className="max-w-md block bg-neutral-100 border border-neutral-200/60 dark:border-lightGray/10 dark:bg-neutral-900 ">
-        <DialogHeader>
-          <DialogTitle className="font-medium">Name Your Workspace</DialogTitle>
-          <DialogDescription>
-            A Workspace is a virtual space where you can collaborate, create and
-            plan with your team.
-          </DialogDescription>
-        </DialogHeader> */}
       <DialogContent
         style={{ borderRadius: 30 }}
         className="w-full border border-neutral-300/60 dark:border-lightGray/10 max-w-md  p-0 overflow-hidden bg-neutral-100 backdrop-blur-2xl dark:bg-neutral-900"
@@ -89,7 +81,7 @@ const CreateWorkspace = () => {
                 toast.error("Failed to create workspace" + error);
                 return;
               }
-              toast.success(`Workspace ${data![0]?.name} created successfully`);
+              toast.success(`Workspace ${data?.name} created successfully`);
               setIsCreateWorkspaceDialogOpen!(false);
               await queryClient.refetchQueries([
                 "get-workspaces",

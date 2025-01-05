@@ -1,5 +1,4 @@
 "use client";
-import { getActiveWorkspace } from "@/lib/actions";
 import { createDocument } from "@/lib/db/documents";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
@@ -30,10 +29,9 @@ const EmptyDocuments = () => {
             size={"sm"}
             variant={"default"}
             onClick={async () => {
-              const workspace = await getActiveWorkspace();
               const { data, error } = await createDocument({
                 user: user?.user?.id as string,
-                workspaceId: workspace?.id as string,
+                workspaceId: user?.user?.activeWorkspace?.id as string,
               });
               // console.log({ data, error });
               if (error) {
@@ -41,7 +39,9 @@ const EmptyDocuments = () => {
                 return;
               }
               toast.success("Document created successfully");
-              router.push(`/w/${workspace?.id}/document/${data?.id}`);
+              router.push(
+                `/w/${user?.user?.activeWorkspace?.id}/document/${data?.id}`
+              );
             }}
           >
             Create Document

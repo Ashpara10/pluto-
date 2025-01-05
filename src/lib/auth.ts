@@ -3,16 +3,20 @@ import { DefaultSession, getServerSession, NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
-import { comparePasswords, register } from "./actions";
+import { comparePasswords } from "./actions";
 import { db } from "./db/drizzle";
-import { users } from "./db/schema";
+import { AuthProvider, users } from "./db/schema";
 import { getUserByEmail } from "./db/user";
-import { generatePassword } from "./utils";
 
 declare module "next-auth" {
   interface Session {
     user: {
       id?: string;
+      activeWorkspace: null | {
+        id: string;
+        name: string;
+        slug: string;
+      };
     } & DefaultSession["user"];
   }
 }
@@ -24,44 +28,52 @@ export const auth = {
     maxAge: 30 * 24 * 60 * 60,
   },
   callbacks: {
-    async signIn({ user, profile }) {
-      const { data, error } = await getUserByEmail(
-        profile?.email || (user?.email as string)
-      );
-      // console.log({ data, error });
-      if (!data) {
-        const { data: newUser, error } = await register({
-          email: user.email as string,
-          name: user.name as string,
+    async signIn(params) {
+      const { user, account } = params;
+      console.log("signIn");
+      try {
+        const existingUser = await db
+          .select()
+          .from(users)
+          .where(eq(users.email, user.email as string))
+          .limit(1);
 
-          password: generatePassword(user.email as string),
-        });
-        // console.log({ newUser, error });
-        if (error) {
-          return false;
+        if (!existingUser[0]) {
+          console.log("inserting user");
+          await db.insert(users).values({
+            email: user.email as string,
+            name: user.name as string,
+            image: user.image as string,
+            ...(account && {
+              authProvider: account?.provider as AuthProvider,
+            }),
+          });
         }
-        if (!newUser) {
-          return false;
-        }
+
         return true;
+      } catch (error) {
+        console.log(error);
+        return false;
       }
-      return true;
     },
 
-    async jwt({ token, user }) {
-      if (user) {
-        const u = await getUserByEmail(user.email!);
-        if (!u.data) {
-          return token;
-        }
-        token.id = u.data.id;
-        token.picture = u.data.image;
+    async jwt(params) {
+      const { token, trigger, session } = params;
+      const { data, error } = await getUserByEmail(token?.email as string);
+      if (trigger === "update" && session) {
+        token.activeWorkspace = session.user?.activeWorkspace;
       }
+      token.id = data?.id;
+      token.picture = data?.image;
+
       return token;
     },
-    async session({ session, token }) {
+    async session(params) {
+      const { session, token } = params;
       if (token) {
         session.user.id = token.id as string;
+        session.user.image = token.picture as string;
+        session.user.activeWorkspace = token.activeWorkspace as any;
       }
       return session;
     },

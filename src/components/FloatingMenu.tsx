@@ -1,18 +1,16 @@
 "use client";
-import { getActiveWorkspace } from "@/lib/actions";
 import { useCreateCollectionDialog, useSelectedDocuments } from "@/lib/context";
 import { createDocument } from "@/lib/db/documents";
 import { getArticleDataByURL } from "@/lib/utils";
 import { $generateNodesFromDOM } from "@lexical/html";
+import { $convertToMarkdownString } from "@lexical/markdown";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { useClickOutside, useWindowEvent } from "@mantine/hooks";
 import { AnimatePresence, motion, useAnimation } from "framer-motion";
 import { $insertNodes } from "lexical";
 import {
-  Copy,
   Download,
   Folder,
-  FolderPlus,
   Link2,
   Moon,
   Network,
@@ -28,14 +26,13 @@ import { useTheme } from "next-themes";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { memo, useEffect, useId, useState } from "react";
 import toast from "react-hot-toast";
+import { useHotkeys } from "react-hotkeys-hook";
 import {
   DefaultFloatingMenuFace,
   KeyboardItem,
   SelectedDocumentsMenuFace,
 } from "./FloatingMenuFaces";
 import { DefaultMenuSlide, DocumentMenuSlide } from "./FloatingMenuSlides";
-import { $convertToMarkdownString } from "@lexical/markdown";
-import { useHotkeys } from "react-hotkeys-hook";
 
 const FloatingMenu = memo(() => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -77,11 +74,9 @@ const FloatingMenu = memo(() => {
       ),
       name: "Create Document",
       onClick: async () => {
-        // console.log({ user });
-        const workspace = await getActiveWorkspace();
         const { data, error } = await createDocument({
           user: user?.user?.id as string,
-          workspaceId: workspace?.id as string,
+          workspaceId: user?.user?.activeWorkspace?.id as string,
         });
         if (error) {
           toast?.error(error);

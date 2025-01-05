@@ -1,6 +1,6 @@
 {
-  "id": "21a446ef-4501-4902-95e3-d6490b2bdbb1",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "e9191582-b6b7-4127-bac3-a9651bf0c732",
+  "prevId": "21a446ef-4501-4902-95e3-d6490b2bdbb1",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -262,14 +262,6 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
-        },
-        "auth_provider": {
-          "name": "auth_provider",
-          "type": "auth_provider",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'credentials'"
         },
         "created_at": {
           "name": "created_at",
