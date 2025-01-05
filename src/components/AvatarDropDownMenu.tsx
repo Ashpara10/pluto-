@@ -61,7 +61,6 @@ const AvatarDropDownMenu = () => {
       icon: <LogOut className="mr-2 h-4 w-4" />,
       text: "Logout",
       handleClick: () => {
-        deleteCookie("active-workspace");
         signOut({ redirect: true, callbackUrl: "/login" });
       },
       separator: false,

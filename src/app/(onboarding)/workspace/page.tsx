@@ -2,7 +2,6 @@
 import CreateWorkspace from "@/components/onboarding/create-workspace";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { setActiveWorkspace } from "@/lib/actions";
 import { Workspace } from "@/lib/db/schema";
 import { deleteWorkspace } from "@/lib/db/workspaces";
 import { useWorkspaces } from "@/lib/hooks/use-workspaces";
@@ -14,10 +13,15 @@ import toast from "react-hot-toast";
 
 const Page = () => {
   const { workspaces, isLoading } = useWorkspaces();
-  const { data } = useSession();
+  const { data, update } = useSession();
 
   const handleWorkspaceClick = (workspace: Workspace) => {
-    setActiveWorkspace(workspace);
+    const w = {
+      id: workspace?.id,
+      name: workspace?.name,
+      slug: workspace?.slug,
+    };
+    update({ ...data, user: { ...data?.user, activeWorkspace: w } });
   };
 
   return (

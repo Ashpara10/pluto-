@@ -1,15 +1,11 @@
 "use client";
-import { getActiveWorkspace } from "@/lib/actions";
-import { Workspace } from "@/lib/db/schema";
 import { motion, Variants } from "framer-motion";
 import { ChevronRight, Moon, Sun } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { useTheme } from "next-themes";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import AnimatedTitle from "../AnimatedTitle";
-import { useTheme } from "next-themes";
-import { Button } from "../ui/button";
 
 const gradientVariants: Variants = {
   initial: {
@@ -49,11 +45,7 @@ const imageVariants: Variants = {
 };
 
 const Landing = () => {
-  const [activeWorkspace, setActiveWorkspace] = useState<Workspace | null>(
-    null
-  );
-
-  const { status } = useSession();
+  const { status, data } = useSession();
   const router = useRouter();
   const { theme, setTheme } = useTheme();
   const toggleTheme = [
@@ -72,15 +64,7 @@ const Landing = () => {
       ),
     },
   ];
-  useEffect(() => {
-    (async () => {
-      const w = await getActiveWorkspace();
-      if (!w) {
-        return;
-      }
-      setActiveWorkspace(w);
-    })();
-  }, []);
+
   return (
     <section
       id="hero"
@@ -136,10 +120,13 @@ const Landing = () => {
           >
             <button
               onClick={() => {
-                if (status === "authenticated" && activeWorkspace) {
-                  router.push(`/w/${activeWorkspace?.id}`);
+                if (status === "authenticated" && data?.user?.activeWorkspace) {
+                  router.push(`/w/${data?.user?.activeWorkspace?.id}`);
                   return;
-                } else if (status === "authenticated" && !activeWorkspace) {
+                } else if (
+                  status === "authenticated" &&
+                  !data?.user?.activeWorkspace
+                ) {
                   router.push("/workspace");
                   return;
                 }

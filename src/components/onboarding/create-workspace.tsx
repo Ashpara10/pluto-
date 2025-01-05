@@ -1,6 +1,4 @@
 "use client";
-import { setActiveWorkspace } from "@/lib/actions";
-import { Workspace } from "@/lib/db/schema";
 import { createWorkspace } from "@/lib/db/workspaces";
 import { queryClient } from "@/lib/session-provider";
 import { capitalizeFirstLetter } from "@/lib/utils";
@@ -23,8 +21,7 @@ const NewWorkspaceSchema = z.object({
 
 const CreateWorkspace = () => {
   const router = useRouter();
-  const { data: user } = useSession();
-  // console.log({ user });
+  const { data: user, update } = useSession();
   const workspaceName =
     user?.user?.name &&
     `${capitalizeFirstLetter(
@@ -59,26 +56,22 @@ const CreateWorkspace = () => {
       name: values?.name as string,
       user: user?.user?.id as string,
     });
-    if (error) {
+    if (error && !data) {
       toast.error("Failed to create workspace" + error);
       return;
     }
     toast.success("Workspace created successfully");
-    setActiveWorkspace(data![0] as Workspace);
+    const w = {
+      id: data?.id,
+      name: data?.name,
+      slug: data?.slug,
+    };
+    await update({ ...user, user: { ...user?.user, activeWorkspace: w } });
     await queryClient.refetchQueries([
       "get-workspaces",
       user?.user?.id as string,
     ]);
-    router.push(`/w/${data![0]?.id}`);
-    // const res = await instance.post("/workspace", {
-    //   name: values?.name!,
-    //   slug: getSlug(values!?.name!),
-    // } as Pick<NewWorkspace, "name" | "slug">);
-    // if (res?.status !== 201) {
-    //   toast.error("Failed to create workspace");
-    //   return;
-    // }
-    // await queryClient.refetchQueries(["get-workspaces", user?.user?.id!]);
+    router.push(`/w/${data?.id}`);
   });
   return (
     <motion.form

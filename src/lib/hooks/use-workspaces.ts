@@ -4,19 +4,13 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useQuery } from "react-query";
-import { setActiveWorkspace } from "../actions";
 import { Workspace } from "../db/schema";
 import { getUserWorkspaces, getWorkspaceByID } from "../db/workspaces";
 import { isValidUUID } from "../utils";
 
-// type GetWorkspacesResponse = {
-//   workspaces: Workspace[];
-//   currentWorkspace: Workspace | null;
-// };
-
-const cachedGetUserWorkspaces = async (user: string) => getUserWorkspaces(user);
+const cachedGetUserWorkspaces = async () => getUserWorkspaces();
 export const useWorkspaces = () => {
-  const { data: user } = useSession();
+  const { data: user, update } = useSession();
   const router = useRouter();
   const [currentWorkspace, setCurrentWorkspace] = useState<Workspace | null>(
     null
@@ -24,7 +18,7 @@ export const useWorkspaces = () => {
   const { workspace: workspaceId } = useParams();
   const { data, isLoading, refetch } = useQuery(
     ["get-workspaces", user?.user?.id as string],
-    async () => await cachedGetUserWorkspaces(user?.user?.id as string),
+    async () => await cachedGetUserWorkspaces(),
     { enabled: false }
   );
 
@@ -44,12 +38,17 @@ export const useWorkspaces = () => {
         toast.error(workspace?.error);
         return;
       }
-      if (workspace.data?.length === 0) {
+      if (!workspace.data) {
         router.push("/workspace");
         return;
       }
-      setActiveWorkspace(workspace?.data![0]);
-      setCurrentWorkspace(workspace?.data![0]);
+      const w = {
+        id: workspace?.data?.id,
+        name: workspace?.data?.name as string,
+        slug: workspace?.data?.slug as string,
+      };
+      update({ ...user, user: { ...user?.user, activeWorkspace: w } });
+      setCurrentWorkspace(workspace?.data);
     })();
   }, [workspaceId, router]);
 

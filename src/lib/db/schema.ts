@@ -1,6 +1,8 @@
 import { relations } from "drizzle-orm";
 import {
   boolean,
+  customType,
+  pgEnum,
   pgTable,
   text,
   timestamp,
@@ -8,13 +10,21 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
+export type AuthProvider = "google" | "github" | "credentials";
+
+const authProvider = customType<{ data: AuthProvider }>({
+  dataType() {
+    return "text";
+  },
+});
+
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   name: varchar("name", { length: 100 }),
   image: varchar("image"),
   email: varchar("email", { length: 255 }).notNull().unique(),
   passwordHash: text("password_hash"),
-  role: varchar("role", { length: 20 }).notNull().default("member"),
+  authProvider: authProvider("auth_provider").notNull().default("credentials"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
   deletedAt: timestamp("deleted_at"),
@@ -27,7 +37,7 @@ export const workspaces = pgTable("workspaces", {
   image: text("image"),
   user: uuid("user")
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
   deletedAt: timestamp("deleted_at"),

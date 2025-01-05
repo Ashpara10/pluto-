@@ -1,9 +1,9 @@
 "use client";
-import { setActiveWorkspace } from "@/lib/actions";
 import { useWorkspaceDialog } from "@/lib/context";
 import { Workspace } from "@/lib/db/schema";
 import { useWorkspaces } from "@/lib/hooks/use-workspaces";
 import { ChevronsUpDown, Plus } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -14,15 +14,21 @@ import { Skeleton } from "./ui/skeleton";
 const WorkspaceSwitcher = () => {
   const router = useRouter();
   const [show, setShow] = React.useState(false);
+  const { update, data } = useSession();
   const { setIsCreateWorkspaceDialogOpen } = useWorkspaceDialog();
   const { workspaces, isLoading, currentWorkspace } = useWorkspaces();
   if (isLoading)
     return (
       <Skeleton className="h-10 w-full animate-pulse rounded-lg bg-neutral-200/60 dark:bg-lightGray/10" />
     );
-  const handleWorkspaceClick = (workspace: Workspace) => {
+  const handleWorkspaceClick = async (workspace: Workspace) => {
     if (workspace?.id === currentWorkspace?.id) return;
-    setActiveWorkspace(workspace);
+    const w = {
+      id: workspace?.id,
+      name: workspace?.name,
+      slug: workspace?.slug,
+    };
+    await update({ ...data, user: { ...data?.user, activeWorkspace: w } });
     router.replace(`/w/${workspace?.id}`);
   };
   return (

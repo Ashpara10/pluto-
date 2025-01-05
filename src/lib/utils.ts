@@ -66,3 +66,5 @@ export const generatePassword = (email: string, length = 8) => {
   // Truncate or extend the hash to the desired length
   return hash.slice(0, length);
 };
+
+export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
