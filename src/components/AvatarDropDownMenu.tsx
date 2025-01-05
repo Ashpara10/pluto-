@@ -1,10 +1,10 @@
-// "use client";
+"use client";
 import { useWorkspaces } from "@/lib/hooks/use-workspaces";
-import { deleteCookie } from "cookies-next";
 import { Layout, LogOut, Moon, Network, Sun, User } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
+import { memo } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,7 +13,7 @@ import {
 } from "./ui/dropdown-menu";
 import UserAvatar from "./UserAvatar";
 
-const AvatarDropDownMenu = () => {
+const AvatarDropDownMenu = memo(function AvatarDropDownMenu() {
   const router = useRouter();
   const { data: user, status } = useSession();
   const { currentWorkspace } = useWorkspaces();
@@ -97,6 +97,6 @@ const AvatarDropDownMenu = () => {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-};
+});
 
 export default AvatarDropDownMenu;

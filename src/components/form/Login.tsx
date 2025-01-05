@@ -32,7 +32,8 @@ const Login = () => {
   const handleLogin = handleSubmit(async (values) => {
     setIsLoading(true);
     const res = await signIn("credentials", {
-      redirect: false,
+      redirect: true,
+      callbackUrl: "/workspace",
       email: values.email,
       password: values.password,
     });
@@ -43,18 +44,17 @@ const Login = () => {
     }
     setIsLoading(false);
     toast.success("LoggedIn successfully");
-    router.push("/workspace");
   });
   const handleOauthLogin = async (provider: string) => {
     const res = await signIn(provider, {
-      redirect: false,
+      redirect: true,
+      callbackUrl: "/workspace",
     });
     if (!res?.ok && res?.error) {
       toast.error(res?.error);
       return;
     }
     toast.success("LoggedIn successfully");
-    router.push("/workspace");
   };
 
   return (

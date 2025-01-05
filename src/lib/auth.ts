@@ -30,8 +30,8 @@ export const auth = {
   callbacks: {
     async signIn(params) {
       const { user, account } = params;
+      console.log("signIn");
       try {
-        // Check if user exists
         const existingUser = await db
           .select()
           .from(users)
@@ -52,6 +52,7 @@ export const auth = {
 
         return true;
       } catch (error) {
+        console.log(error);
         return false;
       }
     },
