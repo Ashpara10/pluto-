@@ -1,0 +1,135 @@
+RESPONSES
+
+
+Google:-
+
+{
+  user: {
+    id: '103094399165516426699',
+    name: 'ashwin parande',
+    email: 'ashwinparande1156610c@gmail.com',
+    image: 'https://lh3.googleusercontent.com/a/ACg8ocIz77cwJ74v43xH9B1nhK0_bTMs1y6nNxAmh4EZxGKk2g1bMQY=s96-c'   
+  },
+  account: {
+    provider: 'google',
+    type: 'oauth',
+    providerAccountId: '103094399165516426699',
+    access_token: 'ya29.a0ARW5m75Yk96ZhrRbWiZT-Z0_pgBCrlO5Z1GlNRxgtBogUe75yK-pDSa6XnexWv9V7ingi7buTkH8c5idIHTD_CMTNE1RplVA2JL2TslRz6cSw3PG2SYtRkgNY0JLpgziz3dI1wGU8wE1WRgJ5b4qMvpRAWdcDjoBEzdE0L-maCgYKAYwSARISFQHGX2MiBMteo9w5cmPUEgWqj7ubVw0175',
+    expires_at: 1736002344,
+    scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile openid',
+    token_type: 'Bearer',
+    id_token: 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImFiODYxNGZmNjI4OTNiYWRjZTVhYTc5YTc3MDNiNTk2NjY1ZDI0NzgiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI0MTU5MzAwNDI4NjUtbzJ1NTU3ZXVtMG1pa2NnY3Y3cHIyZzU2a2o5dTBxbXMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI0MTU5MzAwNDI4NjUtbzJ1NTU3ZXVtMG1pa2NnY3Y3cHIyZzU2a2o5dTBxbXMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDMwOTQzOTkxNjU1MTY0MjY2OTkiLCJlbWFpbCI6ImFzaHdpbnBhcmFuZGUxMTU2NjEwY0BnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiYXRfaGFzaCI6InpsNFBpcDhVbVFXZHdFOFNNWF9KT1EiLCJuYW1lIjoiYXNod2luIHBhcmFuZGUiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jSXo3N2N3Sjc0djQzeEg5QjFuaEswX2JUTXMxeTZuTnhBbWg0RVp4R0trMmcxYk1RWT1zOTYtYyIsImdpdmVuX25hbWUiOiJhc2h3aW4iLCJmYW1pbHlfbmFtZSI6InBhcmFuZGUiLCJpYXQiOjE3MzU5OTg3NDUsImV4cCI6MTczNjAwMjM0NX0.XBplRM2aS3QvQnrBpHbYr8BxO3293kLQan5JbTFI39DLuqfk8Z3-Wy5BJ9JWIunPjwowzVVenMjwgc5uaKXzhrB5noM1TpzpQOzRpU7QZygmy-dNpazQ4WzEMv2cIc8E78hdv3m04_q9CN0lbip26aEJthtYr20RgrcRRuImVDEsD523auvqEKyrHTRMN7-VQvtn5yzfgV5Soq5lqCogC3T_ovQATzhTI3lcHjKlT3eX_v6-8HJfj-CZkjerVks7nlds9-_irlqcuxA_9RmEqRA5c90eEUq0Ydkgsh2Frd_o17l1ymu_rijtdsJ5M8VlfeVdv4qxY-pBML8veeAExw'
+  },
+  profile: {
+    iss: 'https://accounts.google.com',
+    azp: '415930042865-o2u557eum0mikcgcv7pr2g56kj9u0qms.apps.googleusercontent.com',
+    aud: '415930042865-o2u557eum0mikcgcv7pr2g56kj9u0qms.apps.googleusercontent.com',
+    sub: '103094399165516426699',
+    email: 'ashwinparande1156610c@gmail.com',
+    email_verified: true,
+    at_hash: 'zl4Pip8UmQWdwE8SMX_JOQ',
+    name: 'ashwin parande',
+    picture: 'https://lh3.googleusercontent.com/a/ACg8ocIz77cwJ74v43xH9B1nhK0_bTMs1y6nNxAmh4EZxGKk2g1bMQY=s96-c',
+    given_name: 'ashwin',
+    family_name: 'parande',
+    iat: 1735998745,
+    exp: 1736002345
+  }
+}
+
+GITHUB:-{
+  user: {
+    id: "96837241",
+    name: "Ashwin parande",
+    email: "ashwinparande1156610c@gmail.com",
+    image: "https://avatars.githubusercontent.com/u/96837241?v=4",
+  },
+  account: {
+    provider: "github",
+    type: "oauth",
+    providerAccountId: "96837241",
+    access_token: "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",
+    token_type: "bearer",
+    scope: "read:user,user:email",
+  },
+  profile: {
+    login: "Ashpara10",
+    id: 96837241,
+    node_id: "U_kgDOBcWeeQ",
+    avatar_url: "https://avatars.githubusercontent.com/u/96837241?v=4",
+    gravatar_id: "",
+    url: "https://api.github.com/users/Ashpara10",
+    html_url: "https://github.com/Ashpara10",
+    followers_url: "https://api.github.com/users/Ashpara10/followers",
+    following_url:
+      "https://api.github.com/users/Ashpara10/following{/other_user}",
+    gists_url: "https://api.github.com/users/Ashpara10/gists{/gist_id}",
+    starred_url:
+      "https://api.github.com/users/Ashpara10/starred{/owner}{/repo}",
+    subscriptions_url: "https://api.github.com/users/Ashpara10/subscriptions",
+    organizations_url: "https://api.github.com/users/Ashpara10/orgs",
+    repos_url: "https://api.github.com/users/Ashpara10/repos",
+    events_url: "https://api.github.com/users/Ashpara10/events{/privacy}",
+    received_events_url:
+      "https://api.github.com/users/Ashpara10/received_events",
+    type: "User",
+    user_view_type: "private",
+    site_admin: false,
+    name: "Ashwin parande",
+    company: null,
+    blog: "",
+    location: "India",
+    email: "ashwinparande1156610c@gmail.com",
+    hireable: null,
+    bio: "I like tech",
+    twitter_username: null,
+    notification_email: null,
+    public_repos: 17,
+    public_gists: 0,
+    followers: 2,
+    following: 11,
+    created_at: "2021-12-29T16:49:07Z",
+    updated_at: "2024-12-17T13:29:16Z",
+    private_gists: 4,
+    total_private_repos: 1,
+    owned_private_repos: 1,
+    disk_usage: 191419,
+    collaborators: 0,
+    two_factor_authentication: true,
+    plan: {
+      name: "pro",
+      space: 976562499,
+      collaborators: 0,
+      private_repos: 9999,
+    },
+  },
+};
+
+
+CREDENTIALS:-
+
+  user: {
+    id: '79388e93-d7e5-4483-8d0f-4bd50da652e4',
+    name: 'Ashwin Parande',
+    image: 'https://api.dicebear.com/9.x/initials/svg?seed=Ashwin Parande&scale=100',
+    email: 'ashwinparande1156610c@gmail.com',
+    passwordHash: '$2a$10$OUQgZ.pFQccNIYMAQikPbumUAaEvPdyK56dTNeNrXPSmG2EJTEXdW',
+    authProvider: 'credentials',
+    createdAt: 2024-10-26T17:27:48.430Z,
+    updatedAt: 2024-10-26T17:27:48.430Z,
+    deletedAt: null
+  },
+  account: {
+    providerAccountId: '79388e93-d7e5-4483-8d0f-4bd50da652e4',
+    type: 'credentials',
+    provider: 'credentials'
+  },
+  credentials: {
+    redirect: 'false',
+    email: 'ashwinparande1156610c@gmail.com',
+    password: 'ashwin123',
+    csrfToken: 'c59944d7a053a1cabb0dd1967a5b2f08898afb1b54c4f3e79db59eb8c60a9f50',
+    callbackUrl: 'http://localhost:3000/login',
+    json: 'true'
+  }
+};

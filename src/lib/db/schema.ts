@@ -2,7 +2,6 @@ import { relations } from "drizzle-orm";
 import {
   boolean,
   customType,
-  pgEnum,
   pgTable,
   text,
   timestamp,
@@ -32,8 +31,8 @@ export const users = pgTable("users", {
 
 export const workspaces = pgTable("workspaces", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
-  name: text("name").notNull().unique(),
-  slug: text("slug"),
+  name: text("name").notNull(),
+  slug: text("slug").unique(),
   image: text("image"),
   user: uuid("user")
     .notNull()
